@@ -1,0 +1,10 @@
+{
+  "name": "shipshape-skills",
+  "description": "Disciplined development workflow for Claude Code — TDD, code review, planning, E2E testing, and bug learning skills.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Muki Wu"
+  },
+  "repository": "https://github.com/mukiwu/shipshape-skills",
+  "license": "MIT"
+}
