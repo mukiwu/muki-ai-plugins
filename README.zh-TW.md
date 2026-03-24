@@ -1,6 +1,6 @@
 # shipshape-skills
 
-給 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的紀律化開發工作流 plugin。靈感來自 [obra/superpowers](https://github.com/obra/superpowers)。
+給 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的紀律化開發工作流 plugin。靈感來自 [obra/superpowers](https://github.com/obra/superpowers) 和 [affaan-m/everything-claude-code](https://github.com/affaan-m/everything-claude-code)。
 
 ## 安裝
 

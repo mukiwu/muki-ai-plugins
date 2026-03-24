@@ -2,7 +2,7 @@
 
 [繁體中文版](README.zh-TW.md)
 
-Disciplined development workflow plugin for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Inspired by [obra/superpowers](https://github.com/obra/superpowers).
+Disciplined development workflow plugin for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Inspired by [obra/superpowers](https://github.com/obra/superpowers) and [affaan-m/everything-claude-code](https://github.com/affaan-m/everything-claude-code).
 
 ## Install
 
