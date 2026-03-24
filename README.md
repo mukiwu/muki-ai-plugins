@@ -49,20 +49,22 @@ Disciplined development workflow plugin for [Claude Code](https://docs.anthropic
 
 The core workflow follows a disciplined development cycle:
 
-```
-Stage 0: Brainstorming (Socratic questioning, YAGNI)
-Stage 1: Planning (atomic tasks, file paths, expected behavior)
-Stage 2: UI/UX Design (3 proposals, optional)
-Stage 3: Interface Design (TypeScript types, function signatures)
-Stage 4: Write Tests (TDD Red, with rationalization prevention)
-Stage 5: Implement (TDD Green, verify no regression)
-Stage 5.5: Refactor (improve without changing behavior)
-Stage 6: Auto-improve Tests (iterate to >= 9.2 score)
-Stage 7: E2E Tests (Playwright, optional)
-Stage 8: Code Review (two-stage: spec compliance -> code quality)
-```
+| Stage | Description | Skill / Agent | Skippable |
+|-------|-------------|---------------|-----------|
+| 0 | Brainstorming — Socratic questioning, YAGNI | — | ✅ If requirements are already clear |
+| 1 | Planning — atomic tasks, file paths, expected behavior | `planner` agent | ❌ |
+| 2 | UI/UX Design — 3 proposals | `frontend-design` skill* | ✅ No UI changes |
+| 3 | Interface Design — TypeScript types, function signatures | `tdd-guide` agent | ✅ ≤ 2 files, simple logic |
+| 4 | Write Tests — TDD Red, rationalization prevention | `tdd-guide` agent | ✅ Pure UI, no business logic |
+| 5 | Implement — TDD Green, verify no regression | — | ❌ |
+| 5.5 | Refactor — improve without changing behavior | — | ✅ Nothing to refactor |
+| 6 | Auto-improve Tests — iterate to >= 9.2 score | `auto-improve-tests` skill | ✅ Pure UI, no business logic |
+| 7 | E2E Tests — Playwright | `e2e-runner` agent | ✅ Small scope, manual verify |
+| 8 | Code Review — spec compliance, then code quality | `code-reviewer` agent | ❌ |
 
-Each stage pauses for user confirmation. Stages can be skipped based on complexity — the user decides which to run after seeing the skip suggestions.
+*`frontend-design` is a separate plugin, not bundled with shipshape-skills.
+
+Each stage pauses for user confirmation. After Stage 1, skip suggestions are provided — the user decides which stages to run.
 
 ## How to use
 
