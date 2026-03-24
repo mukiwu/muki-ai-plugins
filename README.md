@@ -1,5 +1,7 @@
 # shipshape-skills
 
+[繁體中文版](README.zh-TW.md)
+
 Disciplined development workflow plugin for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Inspired by [obra/superpowers](https://github.com/obra/superpowers).
 
 ## Install
