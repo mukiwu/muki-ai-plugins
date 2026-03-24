@@ -1,6 +1,6 @@
 ---
 name: bug-learning
-description: 當使用者回報錯誤或發現 bug 時自動觸發，修復後判斷是否需要更新 cookbook 或 memory，防止同類錯誤再次發生。觸發關鍵字：發現錯誤、這裡有錯、bug、壞了、不對、做錯、寫錯。
+description: 當使用者描述程式行為與預期不符時觸發 — 不論是明確說「有 bug」，還是隱含的「為什麼會這樣」「明明應該 X 卻 Y」「這裡怪怪的」。修復後判斷根因是否值得沉澱到 cookbook、memory 或 workflow，防止同類錯誤再次發生。只要使用者的描述暗示了「現狀 ≠ 預期」，就應該考慮觸發此 skill。
 ---
 
 # Bug Learning — 錯誤學習與知識沉澱
