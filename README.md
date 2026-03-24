@@ -63,6 +63,46 @@ Stage 8: Code Review (two-stage: spec compliance -> code quality)
 
 Each stage pauses for user confirmation. Stages can be skipped based on complexity — the user decides which to run after seeing the skip suggestions.
 
+## How to use
+
+You don't need to remember command names. Just describe what you want in natural language — shipshape will activate the right workflow.
+
+### Feature development
+
+| You say | What happens |
+|---------|-------------|
+| "Add a dark mode toggle" | `/feature` — full workflow from brainstorming to code review |
+| "I want to build a new dashboard" | `/feature` — starts with Socratic questioning to clarify requirements |
+| "Add a simple util function" | `/feature` — suggests skipping UI/UX and E2E stages |
+
+### Testing
+
+| You say | What happens |
+|---------|-------------|
+| "Write tests for UserService" | `/tdd` — scaffold interface, write tests first, then implement |
+| "Improve test quality for this file" | `auto-improve-tests` — iterates until score >= 9.2 |
+| "Test the login flow end to end" | `/e2e` — generates Playwright test with POM pattern |
+
+### Planning & review
+
+| You say | What happens |
+|---------|-------------|
+| "Plan the refactoring of the auth module" | `/plan` — atomic task breakdown with risk assessment |
+| "Review my changes" | `code-reviewer` — two-stage review (spec compliance → code quality) |
+| "The build is broken" | `/build-fix` — diagnose and fix build/type errors |
+
+### Bug fixing
+
+| You say | What happens |
+|---------|-------------|
+| "This is broken", "Found a bug", "This isn't working" | `bug-learning` — after fixing, decides where to document the root cause |
+
+### Tips
+
+- **Be specific about scope** — "Add a button to the header" triggers `/feature` with skip suggestions for heavy stages.
+- **Mention testing explicitly** — "Write tests for X" triggers `/tdd` directly instead of the full `/feature` flow.
+- **You can use commands directly** — `/feature`, `/tdd`, `/plan`, `/e2e`, `/build-fix` all work as slash commands.
+
 ## Key principles
 
 Borrowed from [obra/superpowers](https://github.com/obra/superpowers):
