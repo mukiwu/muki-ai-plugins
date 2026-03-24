@@ -11,6 +11,65 @@ Disciplined development workflow plugin for [Claude Code](https://docs.anthropic
 /plugin install shipshape-skills
 ```
 
+## Getting started
+
+After installing, run `/init` to let shipshape learn about your project:
+
+```bash
+/shipshape-skills:init
+```
+
+It reads your `package.json`, asks a few questions, then generates a `CLAUDE.md` and project-specific skills. Here's a real example:
+
+### Example: React + Ant Design project
+
+**AI detects the tech stack and only asks what it can't infer:**
+
+```
+⏺ From package.json I can see:
+  - React 18 + React Router 6
+  - Ant Design 5 + @ant-design/icons
+  - Tailwind CSS + Emotion
+  - ECharts 5, Axios, Vite, Day.js
+
+  No test framework found.
+  First question: what do you use for testing? (Vitest, Jest, Playwright… or none?)
+
+❯ No tests yet
+
+⏺ Any project-specific conventions you'd like AI to know? (can skip)
+
+❯ None for now
+```
+
+**Generates `CLAUDE.md` (project overview):**
+
+```markdown
+# my-project
+
+## Tech Stack
+
+- Framework: React 18
+- UI Library: Ant Design 5
+- CSS: Tailwind CSS + Emotion
+- Charts: ECharts 5
+- HTTP: Axios
+- Build: Vite
+...
+```
+
+**Suggests and creates project skills:**
+
+```
+.claude/skills/
+├── antd-patterns/
+│   └── SKILL.md       ← antd 5 component patterns, Table/Form, style overrides
+├── project-api/
+│   └── SKILL.md       ← Axios interceptor conventions, token refresh, error handling
+```
+
+Once initialized, running `/feature` to develop new features will automatically reference this project knowledge.
+
 ## What's included
 
 ### Skills

@@ -9,6 +9,65 @@
 /plugin install shipshape-skills
 ```
 
+## 開始使用
+
+安裝後建議先執行 `/init`，讓 shipshape 認識你的專案：
+
+```bash
+/shipshape-skills:init
+```
+
+它會讀取 `package.json` 推斷技術棧，問幾個問題，然後幫你產生 `CLAUDE.md` 和專案專屬的 skills。以下是一個實際案例：
+
+### 範例：React + Ant Design 專案
+
+**AI 自動偵測技術棧，只問它無法推斷的問題：**
+
+```
+⏺ 從 package.json 看到你用的是：
+  - React 18 + React Router 6
+  - Ant Design 5 + @ant-design/icons
+  - Tailwind CSS + Emotion
+  - ECharts 5、Axios、Vite、Day.js
+
+  沒有看到測試框架的依賴。
+  第一個問題：測試用什麼？（Vitest、Jest、Playwright⋯還是目前沒有測試？）
+
+❯ 目前沒有寫測試
+
+⏺ 有什麼專案特有的規範或慣例想讓 AI 知道的？（可以跳過）
+
+❯ 目前沒有
+```
+
+**產生 `CLAUDE.md`（專案總覽）：**
+
+```markdown
+# my-project
+
+## 技術棧
+
+- 框架：React 18
+- UI 元件庫：Ant Design 5
+- CSS：Tailwind CSS + Emotion
+- 圖表：ECharts 5
+- HTTP：Axios
+- 建置工具：Vite
+...
+```
+
+**建議並建立專案 skills：**
+
+```
+.claude/skills/
+├── antd-patterns/
+│   └── SKILL.md       ← antd 5 元件用法、Table/Form 模式、樣式覆寫策略
+├── project-api/
+│   └── SKILL.md       ← Axios interceptor 慣例、token refresh、錯誤處理
+```
+
+初始化完成後，執行 `/feature` 開發新功能時就會自動參考這些專案知識。
+
 ## 包含什麼
 
 ### Skills
