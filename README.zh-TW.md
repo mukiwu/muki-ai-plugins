@@ -113,13 +113,20 @@
 
 ## 客製化
 
-shipshape-skills 提供通用的工作流。專案特定的需求這樣處理：
+shipshape-skills 的流程是通用的，不綁定特定框架。你可以透過專案的 `CLAUDE.md` 和額外的 skills 讓流程具備框架知識。
 
-1. 安裝 shipshape-skills 作為基礎
-2. 在專案的 `.claude/skills/` 目錄加入專案專屬的 skills（會覆寫 shipshape 的同名 skill）
-3. 在 `CLAUDE.md` 定義專案規範 — agents 會自動參考
+假設你的專案用 **Element Plus**：
 
-例如：專案用 Element Plus，就在專案的 `.claude/skills/element-plus/SKILL.md` 建立專屬指引。shipshape 的 `/feature` 指令會搭配專案的 skills 一起運作。
+```
+你的專案/
+├── .claude/
+│   ├── CLAUDE.md          ← 寫「本專案使用 Element Plus + Vue 3」
+│   └── skills/
+│       └── element-plus/
+│           └── SKILL.md   ← Element Plus 元件用法、命名慣例等
+```
+
+這樣執行 `/feature` 時，shipshape 會在通用流程中自動參考這些專案知識，產出的程式碼就會使用正確的框架元件。如果專案的 skill 和 shipshape 內建的同名，**專案版本優先**。
 
 ## 授權
 

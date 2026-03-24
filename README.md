@@ -115,13 +115,20 @@ Borrowed from [obra/superpowers](https://github.com/obra/superpowers):
 
 ## Customization
 
-shipshape-skills provides generic workflows. For project-specific needs:
+shipshape-skills workflows are generic and not tied to any specific framework. You can add framework knowledge through your project's `CLAUDE.md` and additional skills.
 
-1. Install shipshape-skills as a base
-2. Add project-specific skills in your `.claude/skills/` directory (they override shipshape)
-3. Define project conventions in `CLAUDE.md` — agents will automatically reference it
+Say your project uses **Element Plus**:
 
-Example: if your project uses Element Plus, create `.claude/skills/element-plus/SKILL.md` in your project. shipshape's generic `/feature` command will work with your project-specific skills.
+```
+your-project/
+├── .claude/
+│   ├── CLAUDE.md          ← "This project uses Element Plus + Vue 3"
+│   └── skills/
+│       └── element-plus/
+│           └── SKILL.md   ← Element Plus component usage, naming conventions, etc.
+```
+
+When you run `/feature`, shipshape automatically references your project knowledge alongside its generic workflow, so the generated code uses the correct framework components. If a project skill has the same name as a built-in one, **the project version takes priority**.
 
 ## License
 
