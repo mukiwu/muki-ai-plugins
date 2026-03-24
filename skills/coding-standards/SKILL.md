@@ -14,15 +14,22 @@ Universal coding standards applicable across all projects.
 - Enforcing naming, formatting, or structural consistency
 - Setting up linting, formatting, or type-checking rules
 
-## Reference Files
+## Framework-Specific Patterns
 
-Read the relevant reference file based on the task at hand:
+If the task involves a specific framework, use the dedicated skill instead of this file:
+
+| Framework | Skill | Covers |
+|-----------|-------|--------|
+| React | `skill: react-patterns` | Components, Hooks, Zustand, performance, anti-patterns |
+| Vue 3 | `skill: vue-patterns` | Composition API, Pinia, composables, performance, anti-patterns |
+
+This skill focuses on **framework-agnostic** standards: naming, types, error handling, file organization, API design.
+
+## Reference Files
 
 | Topic | File | When to read |
 |-------|------|-------------|
-| React | `references/react.md` | Working with React components, hooks, state |
 | API Design | `references/api-design.md` | Designing REST APIs, response formats, validation |
-| Performance | `references/performance.md` | Optimizing memoization, lazy loading, DB queries |
 | Testing & Code Smells | `references/testing.md` | Writing tests, detecting anti-patterns |
 
 ## Code Quality Principles
