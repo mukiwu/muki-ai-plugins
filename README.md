@@ -7,7 +7,7 @@ Disciplined development workflow plugin for [Claude Code](https://docs.anthropic
 ## Install
 
 ```bash
-/plugin marketplace add mukiwu/shipshape-skills
+/plugin marketplace add mukiwu/muki-ai-plugins
 /plugin install shipshape-skills
 ```
 

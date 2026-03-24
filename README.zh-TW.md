@@ -5,7 +5,7 @@
 ## 安裝
 
 ```bash
-/plugin marketplace add mukiwu/shipshape-skills
+/plugin marketplace add mukiwu/muki-ai-plugins
 /plugin install shipshape-skills
 ```
 

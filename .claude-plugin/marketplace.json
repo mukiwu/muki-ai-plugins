@@ -1,0 +1,16 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "muki-ai-plugins",
+  "description": "Muki's Claude Code plugins — disciplined development workflows, testing, and code quality tools.",
+  "owner": {
+    "name": "Muki Wu"
+  },
+  "plugins": [
+    {
+      "name": "shipshape-skills",
+      "description": "Disciplined development workflow — TDD, code review, planning, E2E testing, and bug learning skills.",
+      "source": "./plugins/shipshape-skills",
+      "category": "development"
+    }
+  ]
+}
