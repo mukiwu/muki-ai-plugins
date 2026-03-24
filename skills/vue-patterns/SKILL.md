@@ -1,6 +1,6 @@
 ---
 name: vue-patterns
-description: Vue 3 前端開發模式，涵蓋 Composition API、Pinia 狀態管理、composables 與效能優化
+description: Vue 3 前端開發模式，涵蓋 Composition API、Pinia 狀態管理、composables 與效能優化。當建構 Vue 3 元件、管理狀態、撰寫 composables 或優化效能時觸發。即使使用者沒有明確提到 Vue patterns，只要涉及 Vue 3 開發就應該使用此 skill。
 ---
 
 # Vue 3 Frontend Patterns

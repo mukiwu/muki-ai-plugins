@@ -1,3 +1,7 @@
+---
+description: Diagnose and incrementally fix build and type errors with minimal changes. Use when the build is broken, TypeScript reports errors, or CI fails due to compilation issues.
+---
+
 # Build and Fix
 
 Incrementally fix build and type errors with minimal, safe changes.

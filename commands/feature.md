@@ -1,3 +1,7 @@
+---
+description: Full development workflow for new features — 8 stages from brainstorming to code review, with skip suggestions based on complexity. Use when the user wants to build a new feature, add functionality, or implement a user story.
+---
+
 # 新功能開發流程
 
 依序執行以下階段，每個階段完成後**暫停等待使用者確認**再進入下一階段。

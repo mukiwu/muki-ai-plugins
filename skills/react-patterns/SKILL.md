@@ -1,6 +1,6 @@
 ---
 name: react-patterns
-description: React 前端開發模式，涵蓋 Hooks、狀態管理、Custom Hooks、效能優化與常見反模式
+description: React 前端開發模式，涵蓋 Hooks、狀態管理、Custom Hooks、效能優化與常見反模式。當建構 React 元件、撰寫自定義 Hook、管理狀態或優化效能時觸發。即使使用者沒有明確提到 React patterns，只要涉及 React 開發就應該使用此 skill。
 ---
 
 # React Frontend Patterns
