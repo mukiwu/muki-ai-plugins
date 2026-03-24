@@ -28,6 +28,7 @@ Disciplined development workflow plugin for [Claude Code](https://docs.anthropic
 
 | Command | Description |
 |---------|-------------|
+| `/init` | Interactive project setup — generates `CLAUDE.md` and suggests project-specific skills |
 | `/feature` | Full development workflow: brainstorming, planning, TDD, implementation, code review |
 | `/tdd` | Test-Driven Development: scaffold interfaces, write tests first, then implement |
 | `/plan` | Create step-by-step implementation plan with risk assessment |
@@ -129,6 +130,8 @@ your-project/
 ```
 
 When you run `/feature`, shipshape automatically references your project knowledge alongside its generic workflow, so the generated code uses the correct framework components. If a project skill has the same name as a built-in one, **the project version takes priority**.
+
+Not sure how to write `CLAUDE.md`? Run `/init` — it reads your `package.json`, asks a few questions, and generates one for you.
 
 ## License
 
