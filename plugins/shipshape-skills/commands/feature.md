@@ -1,5 +1,5 @@
 ---
-description: Full development workflow for new features — 8 stages from brainstorming to code review, with skip suggestions based on complexity. Use when the user wants to build a new feature, add functionality, or implement a user story.
+description: Full development workflow for new features — 9 stages from brainstorming to code review, with skip suggestions based on complexity. Use when the user wants to build a new feature, add functionality, or implement a user story.
 ---
 
 # 新功能開發流程
@@ -12,7 +12,7 @@ description: Full development workflow for new features — 8 stages from brains
 
 階段 1 規劃完成後，除了產出實作計畫外，**必須**額外提供跳過建議：
 
-1. 列出所有階段（0~8）
+1. 列出所有階段（0~9）
 2. 針對每個階段標註 `建議執行` 或 `建議跳過`，並附上理由
 3. 等使用者確認哪些階段要執行、哪些要跳過
 
@@ -20,12 +20,12 @@ description: Full development workflow for new features — 8 stages from brains
 
 | 條件 | 可建議跳過的階段 |
 |------|----------------|
-| 不涉及 UI 變更 | 階段 2（UI/UX 設計） |
+| 不涉及 UI 變更 | 階段 2（UI/UX 設計）、階段 6（UIUX 審查） |
 | 改動 ≤ 2 個檔案且邏輯明確 | 階段 3（介面設計） |
-| 純 UI 調整（無業務邏輯） | 階段 4（單元測試）、階段 6（優化測試） |
-| 改動範圍小、手動可驗證 | 階段 7（E2E 測試） |
+| 純 UI 調整（無業務邏輯） | 階段 4（單元測試）、階段 7（優化測試） |
+| 改動範圍小、手動可驗證 | 階段 8（E2E 測試） |
 
-**不可建議跳過的階段**：階段 1（規劃）、階段 5（實作）、階段 8（Code Review）。
+**不可建議跳過的階段**：階段 1（規劃）、階段 5（實作）、階段 9（Code Review）。
 
 ## 階段 0：需求釐清（蘇格拉底式提問）
 
@@ -168,7 +168,36 @@ description: Full development workflow for new features — 8 stages from brains
 
 此階段可與階段 5 合併報告，不需要額外暫停。
 
-## 階段 6：自動優化測試（Auto Improve Tests）
+## 階段 6：UIUX 審查（涉及畫面變更時）
+
+> 跳過條件：功能不涉及 UI 變更（純邏輯、API 串接、資料處理等）
+
+使用 **uiux-reviewer** agent 以真實使用者的角度審查實作結果。
+
+### 執行方式
+
+1. 提供目標 URL 給 uiux-reviewer agent
+2. Agent 會自動檢查 `claude-in-chrome` 是否可用——若不可用會自動跳過並告知原因，直接進入下一階段
+3. Agent 從前面階段的對話 context 取得功能規格，進行五維度審查（視覺層級、文字與可讀性、版面配置、操作直覺、規格符合度）
+
+### 迭代修正循環
+
+審查結果出來後，進入修正循環：
+
+1. **審查** — uiux-reviewer 產出審查報告
+2. **修正** — 根據報告中的 CRITICAL 和 HIGH 問題修改程式碼
+3. **驗證** — 修改後再次執行 uiux-reviewer 確認問題已解決
+4. **重複** — 若仍有 CRITICAL 或 HIGH 問題，回到步驟 2 繼續修正
+
+循環結束條件（滿足任一即可）：
+- uiux-reviewer 判定為 **PASS**（無 CRITICAL 或 HIGH 問題）
+- 使用者明確表示**目前版本可以接受**
+
+> 每輪修正後都要執行 `npx vitest run` 確認測試仍然通過，避免 UI 修正引入 regression。
+
+完成後**暫停**，向使用者展示最終審查結果，確認後進入下一階段。
+
+## 階段 7：自動優化測試（Auto Improve Tests）
 
 使用 **auto-improve-tests** skill 迭代優化單元測試：
 - 目標分數：>= 9.2/10
@@ -179,7 +208,7 @@ description: Full development workflow for new features — 8 stages from brains
 
 完成後報告最終分數與迭代次數，**暫停**等使用者確認。
 
-## 階段 7：E2E 測試
+## 階段 8：E2E 測試
 
 使用 **e2e-runner** agent：
 - 測試位置：`src/tests/e2e/`
@@ -188,7 +217,7 @@ description: Full development workflow for new features — 8 stages from brains
 
 產出後**暫停**，等使用者確認 E2E 涵蓋範圍。
 
-## 階段 8：Code Review（兩階段審查）
+## 階段 9：Code Review（兩階段審查）
 
 使用 **code-reviewer** agent 進行**兩階段**審查：
 
