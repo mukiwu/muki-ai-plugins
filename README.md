@@ -99,6 +99,7 @@ Once initialized, running `/feature` to develop new features will automatically 
 | Agent | Description |
 |-------|-------------|
 | `code-reviewer` | Two-stage review: spec compliance first, then code quality |
+| `uiux-reviewer` | Visual UI/UX review via claude-in-chrome — evaluates layout, typography, readability, visual hierarchy, and spec compliance from a real user's perspective |
 | `tdd-guide` | TDD coaching with rationalization prevention |
 | `planner` | Feature planning with atomic task breakdown |
 | `build-error-resolver` | Build and TypeScript error resolution |
@@ -112,14 +113,15 @@ The core workflow follows a disciplined development cycle:
 |-------|-------------|---------------|-----------|
 | 0 | Brainstorming — Socratic questioning, YAGNI | — | ✅ If requirements are already clear |
 | 1 | Planning — atomic tasks, file paths, expected behavior | `planner` agent | ❌ |
-| 2 | UI/UX Design — 3 proposals | `frontend-design` skill* | ✅ No UI changes |
+| 2 | UI/UX Design — 3 proposals, iterative refinement | `frontend-design` skill* | ✅ No UI changes |
 | 3 | Interface Design — TypeScript types, function signatures | `tdd-guide` agent | ✅ ≤ 2 files, simple logic |
 | 4 | Write Tests — TDD Red, rationalization prevention | `tdd-guide` agent | ✅ Pure UI, no business logic |
 | 5 | Implement — TDD Green, verify no regression | — | ❌ |
 | 5.5 | Refactor — improve without changing behavior | — | ✅ Nothing to refactor |
-| 6 | Auto-improve Tests — iterate to >= 9.2 score | `auto-improve-tests` skill | ✅ Pure UI, no business logic |
-| 7 | E2E Tests — Playwright | `e2e-runner` agent | ✅ Small scope, manual verify |
-| 8 | Code Review — spec compliance, then code quality | `code-reviewer` agent | ❌ |
+| 6 | UIUX Review — visual inspection loop via browser | `uiux-reviewer` agent | ✅ No UI changes |
+| 7 | Auto-improve Tests — iterate to >= 9.2 score | `auto-improve-tests` skill | ✅ Pure UI, no business logic |
+| 8 | E2E Tests — Playwright | `e2e-runner` agent | ✅ Small scope, manual verify |
+| 9 | Code Review — spec compliance, then code quality, iterative fix | `code-reviewer` agent | ❌ |
 
 *`frontend-design` is a separate plugin, not bundled with shipshape-skills.
 

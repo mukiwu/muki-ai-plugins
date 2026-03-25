@@ -97,6 +97,7 @@
 | Agent | 說明 |
 |-------|------|
 | `code-reviewer` | 兩階段審查：先確認規格符合性，再看程式碼品質 |
+| `uiux-reviewer` | 透過 claude-in-chrome 以真實使用者視角審查 Web 介面 — 評估版面配置、文字可讀性、視覺層級與規格符合度 |
 | `tdd-guide` | TDD 教練，含理性化預防（反駁跳過測試的藉口） |
 | `planner` | 功能規劃，將任務拆解為可獨立執行的原子步驟 |
 | `build-error-resolver` | 建置與 TypeScript 型別錯誤修復 |
@@ -110,14 +111,15 @@
 |------|------|---------------------|--------|
 | 0 | 需求釐清 — 蘇格拉底式提問、YAGNI 原則 | — | ✅ 需求已明確 |
 | 1 | 規劃 — 原子步驟、具體到檔案路徑與預期行為 | `planner` agent | ❌ |
-| 2 | UI/UX 設計 — 產出 3 個方案 | `frontend-design` skill* | ✅ 不涉及 UI |
+| 2 | UI/UX 設計 — 產出 3 個方案，迭代修正至確認 | `frontend-design` skill* | ✅ 不涉及 UI |
 | 3 | 介面設計 — TypeScript 型別、函式簽名 | `tdd-guide` agent | ✅ ≤ 2 個檔案、邏輯明確 |
 | 4 | 寫測試 — TDD Red，含理性化預防 | `tdd-guide` agent | ✅ 純 UI、無業務邏輯 |
 | 5 | 實作 — TDD Green，驗證無 regression | — | ❌ |
 | 5.5 | 重構 — 改善結構但不改變行為 | — | ✅ 無需重構 |
-| 6 | 優化測試 — 迭代至 >= 9.2 分 | `auto-improve-tests` skill | ✅ 純 UI、無業務邏輯 |
-| 7 | E2E 測試 — Playwright | `e2e-runner` agent | ✅ 改動範圍小、手動可驗證 |
-| 8 | Code Review — 規格符合性 → 程式碼品質 | `code-reviewer` agent | ❌ |
+| 6 | UIUX 審查 — 透過瀏覽器視覺檢查，迭代修正 | `uiux-reviewer` agent | ✅ 不涉及 UI |
+| 7 | 優化測試 — 迭代至 >= 9.2 分 | `auto-improve-tests` skill | ✅ 純 UI、無業務邏輯 |
+| 8 | E2E 測試 — Playwright | `e2e-runner` agent | ✅ 改動範圍小、手動可驗證 |
+| 9 | Code Review — 規格符合性 → 程式碼品質，迭代修正 | `code-reviewer` agent | ❌ |
 
 *`frontend-design` 是獨立的 plugin，不包含在 shipshape-skills 中。
 
