@@ -72,6 +72,21 @@ description: Full development workflow for new features — 9 stages from brains
 
 產出 3 個方案後**暫停**，等使用者選擇方案或提出修改意見。
 
+### 迭代修正循環
+
+使用者選定方案後，若提出修改意見，進入修正循環：
+
+1. **展示** — 呈現當前設計方案
+2. **收集回饋** — 使用者指出要調整的地方
+3. **修正** — 根據回饋調整設計，產出新版 mockup
+4. **重複** — 若使用者仍有修改意見，回到步驟 2
+
+循環結束條件（滿足任一即可）：
+- 使用者明確表示**設計方案確認，可以進入下一階段**
+- 使用者表示**目前版本可以接受**
+
+> 每輪修正只改使用者提出的部分，不要自行發散加入未被要求的變更。
+
 ## 階段 3：介面設計（TDD Red）
 
 使用 **tdd-guide** agent：
@@ -234,8 +249,20 @@ description: Full development workflow for new features — 9 stages from brains
 
 - 檢查程式碼品質、安全性、可維護性
 - 標記 CRITICAL / HIGH / MEDIUM 問題
-- 修復 CRITICAL 和 HIGH 問題
-- 報告最終審查結果
+- 報告審查結果
+
+### 迭代修正循環
+
+審查結果出來後，若有 CRITICAL 或 HIGH 問題，進入修正循環：
+
+1. **審查** — code-reviewer 產出審查報告
+2. **修正** — 根據報告中的 CRITICAL 和 HIGH 問題修改程式碼
+3. **驗證** — 執行 `npx vitest run` 確認測試通過，再次執行 code-reviewer 確認問題已解決
+4. **重複** — 若仍有 CRITICAL 或 HIGH 問題，回到步驟 2 繼續修正
+
+循環結束條件（滿足任一即可）：
+- code-reviewer 判定為 **Approve**（無 CRITICAL 或 HIGH 問題）
+- 使用者明確表示**目前版本可以接受**
 
 ### Cookbook 對照檢查（強制）
 
