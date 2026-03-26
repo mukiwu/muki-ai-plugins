@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "muki-ai-plugins",
-  "description": "Muki's Claude Code plugins — disciplined development workflows, testing, and code quality tools.",
+  "description": "Muki's Claude Code plugins — disciplined development workflows, visual regression testing, and code quality tools.",
   "owner": {
     "name": "Muki Wu"
   },
@@ -11,6 +11,12 @@
       "description": "Disciplined development workflow — TDD, code review, planning, E2E testing, and bug learning skills.",
       "source": "./plugins/shipshape-skills",
       "category": "development"
+    },
+    {
+      "name": "figma-visual-reviewer",
+      "description": "Visual regression testing — compare Figma designs against live web pages with pixel-level diff and AI vision.",
+      "source": "./plugins/figma-visual-reviewer",
+      "category": "design"
     }
   ]
 }
