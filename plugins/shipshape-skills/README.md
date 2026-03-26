@@ -118,12 +118,14 @@ The core workflow follows a disciplined development cycle:
 | 4 | Write Tests — TDD Red, rationalization prevention | `tdd-guide` agent | ✅ Pure UI, no business logic |
 | 5 | Implement — TDD Green, verify no regression | — | ❌ |
 | 5.5 | Refactor — improve without changing behavior | — | ✅ Nothing to refactor |
-| 6 | UIUX Review — visual inspection loop via browser | `uiux-reviewer` agent | ✅ No UI changes |
+| 6 | UIUX Review — Figma pixel diff or AI visual inspection | `visual-reviewer` / `uiux-reviewer` agent** | ✅ No UI changes |
 | 7 | Auto-improve Tests — iterate to >= 9.2 score | `auto-improve-tests` skill | ✅ Pure UI, no business logic |
 | 8 | E2E Tests — Playwright | `e2e-runner` agent | ✅ Small scope, manual verify |
 | 9 | Code Review — spec compliance, then code quality, iterative fix | `code-reviewer` agent | ❌ |
 
 *`frontend-design` is a separate plugin, not bundled with shipshape-skills.
+
+**Stage 6 supports two modes: (A) Figma pixel diff via [`figma-visual-reviewer`](../figma-visual-reviewer/) plugin when installed and Figma design is available, or (B) AI visual review via `claude-in-chrome`. Automatically selects the best available mode.
 
 Each stage pauses for user confirmation. After Stage 1, skip suggestions are provided — the user decides which stages to run.
 
