@@ -116,12 +116,14 @@
 | 4 | 寫測試 — TDD Red，含理性化預防 | `tdd-guide` agent | ✅ 純 UI、無業務邏輯 |
 | 5 | 實作 — TDD Green，驗證無 regression | — | ❌ |
 | 5.5 | 重構 — 改善結構但不改變行為 | — | ✅ 無需重構 |
-| 6 | UIUX 審查 — 透過瀏覽器視覺檢查，迭代修正 | `uiux-reviewer` agent | ✅ 不涉及 UI |
+| 6 | UIUX 審查 — Figma 像素比對或 AI 視覺檢查 | `visual-reviewer` / `uiux-reviewer` agent** | ✅ 不涉及 UI |
 | 7 | 優化測試 — 迭代至 >= 9.2 分 | `auto-improve-tests` skill | ✅ 純 UI、無業務邏輯 |
 | 8 | E2E 測試 — Playwright | `e2e-runner` agent | ✅ 改動範圍小、手動可驗證 |
 | 9 | Code Review — 規格符合性 → 程式碼品質，迭代修正 | `code-reviewer` agent | ❌ |
 
 *`frontend-design` 是獨立的 plugin，不包含在 shipshape-skills 中。
+
+**階段 6 支援兩種模式：(A) 當 [`figma-visual-reviewer`](../figma-visual-reviewer/) plugin 已安裝且有 Figma 設計稿時，使用像素級比對；(B) 當 `claude-in-chrome` 可用時，使用 AI 視覺審查。自動選擇最佳可用模式。
 
 每個階段完成後暫停等待使用者確認。階段 1 完成後會列出跳過建議，由使用者決定哪些階段要執行。
 
