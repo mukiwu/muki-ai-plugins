@@ -116,9 +116,29 @@ pip install Pillow numpy scipy requests
 ```
 
 取得 Figma API 權限：
-1. 前往 Figma → Settings → Personal access tokens
-2. 產生一個 token
-3. 設定 `FIGMA_ACCESS_TOKEN` 環境變數
+1. 前往 [Figma](https://www.figma.com) → Settings → Personal access tokens
+2. 產生一個新 token（名稱可以取 `visual-reviewer`）
+3. 用以下任一方式設定 token：
+
+**方式 A — 專案 `.env` 檔（推薦）：**
+```bash
+# 加到專案的 .env 檔
+FIGMA_ACCESS_TOKEN=figd_你的token
+```
+
+**方式 B — Claude Code 設定：**
+```bash
+# 在 Claude Code 中執行
+/update-config
+# 然後把 FIGMA_ACCESS_TOKEN 加到環境變數
+```
+
+**方式 C — Shell export（暫時）：**
+```bash
+export FIGMA_ACCESS_TOKEN=figd_你的token
+```
+
+Token 會被 `figma-export.py` 用來呼叫 [Figma REST API](https://www.figma.com/developers/api)，導出設計稿的 frame 為 PNG 圖片。沒有 token 也可以使用 plugin，改成手動提供設計稿截圖即可。
 
 ## 授權
 
