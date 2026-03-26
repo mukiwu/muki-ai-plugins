@@ -93,13 +93,14 @@ python scripts/figma-export.py "<figma_url>" --output design.png
 ### Step 4：像素比對
 
 ```bash
-python scripts/pixel-diff.py design.png screenshot.png --output diff.png --threshold 5
+python scripts/pixel-diff.py design.png screenshot.png --output diff.png --threshold 5 > stats.json
 ```
 
 此腳本會產出：
 - `diff.png`：差異視覺化圖（紅色標記差異區域）
-- 差異百分比數據
-- 差異區域座標清單
+- `stats.json`（stdout）：差異百分比、區域座標等統計數據
+
+將 stdout 的 JSON 存為 `stats.json` 供後續使用。
 
 ### Step 5：AI 視覺判斷
 
@@ -115,16 +116,39 @@ python scripts/pixel-diff.py design.png screenshot.png --output diff.png --thres
    - 判斷原因（CSS 問題、字型問題、內容差異）
    - 給出修復建議
 
-### Step 6：RWD 多尺寸檢查（選擇性）
+### Step 6：產出 HTML 報告（強制）
+
+**此步驟為必要步驟，每次審查結束都必須執行。**
+
+```bash
+python scripts/generate-report.py \
+  --design design.png \
+  --screenshot screenshot.png \
+  --diff diff.png \
+  --stats stats.json \
+  --output visual-report.html
+```
+
+產出的 `visual-report.html` 是獨立的 HTML 檔案（圖片嵌入為 base64），可以直接用瀏覽器開啟。報告包含：
+- 設計稿、截圖、diff 三欄並排比對
+- 差異百分比和統計數據
+- 差異區域清單
+- Verdict 判定結果
+
+產出後告知使用者報告路徑，並建議用瀏覽器打開檢視。
+
+### Step 7：RWD 多尺寸檢查（選擇性）
 
 如果使用者要求，依序檢查：
 - Desktop: 1440px
 - Tablet: 768px
 - Mobile: 375px
 
-每個尺寸都重新截圖並比對。
+每個尺寸都重新截圖並比對，每個尺寸各產出一份 HTML 報告（命名為 `visual-report-{width}.html`）。
 
 ## 審查輸出格式
+
+除了 HTML 報告之外，在對話中也輸出文字摘要：
 
 ```
 ## Visual Review Report
@@ -146,6 +170,7 @@ python scripts/pixel-diff.py design.png screenshot.png --output diff.png --thres
 - Design: `design.png`
 - Implementation: `screenshot.png`
 - Diff overlay: `diff.png`
+- **HTML Report: `visual-report.html`** ← 用瀏覽器打開查看完整比對
 
 ### Verdict: [PASS / WARNING / BLOCK]
 
@@ -160,4 +185,5 @@ python scripts/pixel-diff.py design.png screenshot.png --output diff.png --thres
 1. 列出需要修復的項目
 2. 等待使用者（或 shipshape feature 工作流）修復
 3. 修復後重新截圖比對
-4. 重複直到 PASS 或使用者說 OK
+4. **重新產出 HTML 報告**
+5. 重複直到 PASS 或使用者說 OK
