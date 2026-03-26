@@ -118,9 +118,29 @@ pip install Pillow numpy scipy requests
 ```
 
 For Figma API access:
-1. Go to Figma → Settings → Personal access tokens
-2. Generate a token
-3. Set `FIGMA_ACCESS_TOKEN` in your environment
+1. Go to [Figma](https://www.figma.com) → Settings → Personal access tokens
+2. Generate a new token (name it something like `visual-reviewer`)
+3. Set the token as an environment variable using one of these methods:
+
+**Option A — Project `.env` file (recommended):**
+```bash
+# Add to your project's .env file
+FIGMA_ACCESS_TOKEN=figd_your_token_here
+```
+
+**Option B — Claude Code settings:**
+```bash
+# Run in Claude Code
+/update-config
+# Then add FIGMA_ACCESS_TOKEN to environment variables
+```
+
+**Option C — Shell export (temporary):**
+```bash
+export FIGMA_ACCESS_TOKEN=figd_your_token_here
+```
+
+The token is used by `figma-export.py` to call the [Figma REST API](https://www.figma.com/developers/api) and export design frames as PNG images. Without it, you can still use the plugin by manually providing design screenshots.
 
 ## License
 
