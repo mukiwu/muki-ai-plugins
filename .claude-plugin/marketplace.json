@@ -17,6 +17,12 @@
       "description": "Visual regression testing — compare Figma designs against live web pages with pixel-level diff and AI vision.",
       "source": "./plugins/figma-visual-reviewer",
       "category": "design"
+    },
+    {
+      "name": "ios-visual-reviewer",
+      "description": "Visual regression testing for iOS apps — compare Figma designs against iOS Simulator screenshots with pixel-level diff and AI vision.",
+      "source": "./plugins/ios-visual-reviewer",
+      "category": "design"
     }
   ]
 }
