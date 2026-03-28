@@ -1,0 +1,29 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/pre-edit-cookbook-check.sh\"",
+            "timeout": 10,
+            "statusMessage": "Checking cookbook & memory..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/post-stop-bug-learning.sh\"",
+            "timeout": 10,
+            "statusMessage": "Checking if bug learning is needed..."
+          }
+        ]
+      }
+    ]
+  }
+}
