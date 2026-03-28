@@ -31,11 +31,11 @@ if [ "$BUG_LEARNING_DONE" -gt 0 ]; then
   exit 0
 fi
 
-# 注入提醒
+# 用 continue + stopReason 強制 Claude 繼續回覆，主動詢問使用者
 cat <<EOF
 {
   "continue": true,
-  "systemMessage": "📝 Bug Learning 提醒：這次對話中似乎有修復 bug。根據 shipshape-skills 規範，修復完成後應執行 bug-learning 流程：\n1. 分析根因（是什麼錯了？為什麼？是否有通用性？）\n2. 判斷沉澱方向（Cookbook / Memory / Workflow / 不沉澱）\n3. 執行沉澱並回報\n\n請詢問使用者是否要進行 bug learning。"
+  "stopReason": "📝 Bug Learning 提醒：這次對話中似乎有修復 bug。根據 shipshape-skills 規範，修復完成後應執行 bug-learning 流程：1. 分析根因（是什麼錯了？為什麼？是否有通用性？）2. 判斷沉澱方向（Cookbook / Memory / Workflow / 不沉澱）3. 執行沉澱並回報。請詢問使用者是否要進行 bug learning。"
 }
 EOF
 
