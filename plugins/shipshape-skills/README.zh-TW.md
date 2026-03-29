@@ -68,6 +68,25 @@
 
 初始化完成後，執行 `/feature` 開發新功能時就會自動參考這些專案知識。
 
+## 客製化
+
+shipshape-skills 的流程是通用的，不綁定特定框架。你可以透過專案的 `CLAUDE.md` 和額外的 skills 讓流程具備框架知識。
+
+假設你的專案用 **Element Plus**：
+
+```
+你的專案/
+├── .claude/
+│   ├── CLAUDE.md          ← 寫「本專案使用 Element Plus + Vue 3」
+│   └── skills/
+│       └── element-plus/
+│           └── SKILL.md   ← Element Plus 元件用法、命名慣例等
+```
+
+這樣執行 `/feature` 時，shipshape 會在通用流程中自動參考這些專案知識，產出的程式碼就會使用正確的框架元件。如果專案的 skill 和 shipshape 內建的同名，**專案版本優先**。
+
+不知道 `CLAUDE.md` 怎麼寫？執行 `/init`，它會讀取 `package.json`、問幾個問題，自動幫你產生。
+
 ## `/feature` 工作流
 
 核心的開發流程遵循紀律化的循環：
@@ -185,25 +204,6 @@
 - **理性化預防** — TDD 階段列出常見的跳過測試藉口，並逐一反駁。
 - **兩階段 Code Review** — 先確認方向對（規格符合性），再談品質。不要花時間打磨不該存在的 code。
 - **Mock 三鐵律** — 不測 mock 行為、不在 production code 加 test-only method、mock 前先理解依賴。
-
-## 客製化
-
-shipshape-skills 的流程是通用的，不綁定特定框架。你可以透過專案的 `CLAUDE.md` 和額外的 skills 讓流程具備框架知識。
-
-假設你的專案用 **Element Plus**：
-
-```
-你的專案/
-├── .claude/
-│   ├── CLAUDE.md          ← 寫「本專案使用 Element Plus + Vue 3」
-│   └── skills/
-│       └── element-plus/
-│           └── SKILL.md   ← Element Plus 元件用法、命名慣例等
-```
-
-這樣執行 `/feature` 時，shipshape 會在通用流程中自動參考這些專案知識，產出的程式碼就會使用正確的框架元件。如果專案的 skill 和 shipshape 內建的同名，**專案版本優先**。
-
-不知道 `CLAUDE.md` 怎麼寫？執行 `/init`，它會讀取 `package.json`、問幾個問題，自動幫你產生。
 
 ## 授權
 

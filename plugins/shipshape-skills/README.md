@@ -70,6 +70,25 @@ It reads your `package.json`, asks a few questions, then generates a `CLAUDE.md`
 
 Once initialized, running `/feature` to develop new features will automatically reference this project knowledge.
 
+## Customization
+
+shipshape-skills workflows are generic and not tied to any specific framework. You can add framework knowledge through your project's `CLAUDE.md` and additional skills.
+
+Say your project uses **Element Plus**:
+
+```
+your-project/
+├── .claude/
+│   ├── CLAUDE.md          ← "This project uses Element Plus + Vue 3"
+│   └── skills/
+│       └── element-plus/
+│           └── SKILL.md   ← Element Plus component usage, naming conventions, etc.
+```
+
+When you run `/feature`, shipshape automatically references your project knowledge alongside its generic workflow, so the generated code uses the correct framework components. If a project skill has the same name as a built-in one, **the project version takes priority**.
+
+Not sure how to write `CLAUDE.md`? Run `/init` — it reads your `package.json`, asks a few questions, and generates one for you.
+
 ## `/feature` workflow
 
 The core workflow follows a disciplined development cycle:
@@ -187,25 +206,6 @@ Borrowed from [obra/superpowers](https://github.com/obra/superpowers):
 - **Rationalization prevention** — common excuses for skipping tests are listed and rebutted in the TDD stage.
 - **Two-stage code review** — check spec compliance before code quality. Don't polish code that shouldn't exist.
 - **Mock three laws** — never test mock behavior, never add test-only methods to production code, never mock without understanding dependencies.
-
-## Customization
-
-shipshape-skills workflows are generic and not tied to any specific framework. You can add framework knowledge through your project's `CLAUDE.md` and additional skills.
-
-Say your project uses **Element Plus**:
-
-```
-your-project/
-├── .claude/
-│   ├── CLAUDE.md          ← "This project uses Element Plus + Vue 3"
-│   └── skills/
-│       └── element-plus/
-│           └── SKILL.md   ← Element Plus component usage, naming conventions, etc.
-```
-
-When you run `/feature`, shipshape automatically references your project knowledge alongside its generic workflow, so the generated code uses the correct framework components. If a project skill has the same name as a built-in one, **the project version takes priority**.
-
-Not sure how to write `CLAUDE.md`? Run `/init` — it reads your `package.json`, asks a few questions, and generates one for you.
 
 ## License
 
