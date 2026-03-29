@@ -70,6 +70,30 @@ It reads your `package.json`, asks a few questions, then generates a `CLAUDE.md`
 
 Once initialized, running `/feature` to develop new features will automatically reference this project knowledge.
 
+## `/feature` workflow
+
+The core workflow follows a disciplined development cycle:
+
+| Stage | Description | Skill / Agent | Skippable |
+|-------|-------------|---------------|-----------|
+| 0 | Brainstorming — Socratic questioning, YAGNI | — | ✅ If requirements are already clear |
+| 1 | Planning — atomic tasks, file paths, expected behavior | `planner` agent | ❌ |
+| 2 | UI/UX Design — 3 proposals, iterative refinement | `frontend-design` skill* | ✅ No UI changes |
+| 3 | Interface Design — TypeScript types, function signatures | `tdd-guide` agent | ✅ ≤ 2 files, simple logic |
+| 4 | Write Tests — TDD Red, rationalization prevention | `tdd-guide` agent | ✅ Pure UI, no business logic |
+| 5 | Implement — TDD Green, verify no regression | — | ❌ |
+| 5.5 | Refactor — improve without changing behavior | — | ✅ Nothing to refactor |
+| 6 | UIUX Review — Figma pixel diff or AI visual inspection | `visual-reviewer` / `uiux-reviewer` agent** | ✅ No UI changes |
+| 7 | Auto-improve Tests — iterate to >= 9.2 score | `auto-improve-tests` skill | ✅ Pure UI, no business logic |
+| 8 | E2E Tests — Playwright | `e2e-runner` agent | ✅ Small scope, manual verify |
+| 9 | Code Review — spec compliance, then code quality, iterative fix | `code-reviewer` agent | ❌ |
+
+*`frontend-design` is a separate plugin, not bundled with shipshape-skills.
+
+**Stage 6 supports two modes: (A) Figma pixel diff via [`figma-visual-reviewer`](../figma-visual-reviewer/) plugin when installed and Figma design is available, or (B) AI visual review via `claude-in-chrome`. Automatically selects the best available mode.
+
+Each stage pauses for user confirmation. After Stage 1, skip suggestions are provided — the user decides which stages to run.
+
 ## What's included
 
 ### Skills
@@ -105,29 +129,14 @@ Once initialized, running `/feature` to develop new features will automatically 
 | `build-error-resolver` | Build and TypeScript error resolution |
 | `e2e-runner` | E2E test generation, execution, and flaky test management |
 
-## `/feature` workflow
+### Hooks
 
-The core workflow follows a disciplined development cycle:
-
-| Stage | Description | Skill / Agent | Skippable |
-|-------|-------------|---------------|-----------|
-| 0 | Brainstorming — Socratic questioning, YAGNI | — | ✅ If requirements are already clear |
-| 1 | Planning — atomic tasks, file paths, expected behavior | `planner` agent | ❌ |
-| 2 | UI/UX Design — 3 proposals, iterative refinement | `frontend-design` skill* | ✅ No UI changes |
-| 3 | Interface Design — TypeScript types, function signatures | `tdd-guide` agent | ✅ ≤ 2 files, simple logic |
-| 4 | Write Tests — TDD Red, rationalization prevention | `tdd-guide` agent | ✅ Pure UI, no business logic |
-| 5 | Implement — TDD Green, verify no regression | — | ❌ |
-| 5.5 | Refactor — improve without changing behavior | — | ✅ Nothing to refactor |
-| 6 | UIUX Review — Figma pixel diff or AI visual inspection | `visual-reviewer` / `uiux-reviewer` agent** | ✅ No UI changes |
-| 7 | Auto-improve Tests — iterate to >= 9.2 score | `auto-improve-tests` skill | ✅ Pure UI, no business logic |
-| 8 | E2E Tests — Playwright | `e2e-runner` agent | ✅ Small scope, manual verify |
-| 9 | Code Review — spec compliance, then code quality, iterative fix | `code-reviewer` agent | ❌ |
-
-*`frontend-design` is a separate plugin, not bundled with shipshape-skills.
-
-**Stage 6 supports two modes: (A) Figma pixel diff via [`figma-visual-reviewer`](../figma-visual-reviewer/) plugin when installed and Figma design is available, or (B) AI visual review via `claude-in-chrome`. Automatically selects the best available mode.
-
-Each stage pauses for user confirmation. After Stage 1, skip suggestions are provided — the user decides which stages to run.
+| Hook event | Stage | What it does |
+|------------|-------|--------------|
+| `PreToolUse` (Edit\|Write) | Before writing code | Blocks edits until `docs/cookbook/` and memory feedback have been read |
+| `Stop` | After Claude responds | Detects bug fixes and reminds to run bug-learning workflow |
+| `TaskCompleted` | After task completion | Uses AI to judge whether experience should be documented in cookbook/memory |
+| `PreToolUse` (stage-5, once) | First code edit in implementation | Agent verifies cookbook/memory were read before allowing edits |
 
 ## How to use
 
@@ -168,20 +177,6 @@ You don't need to remember command names. Just describe what you want in natural
 - **Be specific about scope** — "Add a button to the header" triggers `/feature` with skip suggestions for heavy stages.
 - **Mention testing explicitly** — "Write tests for X" triggers `/tdd` directly instead of the full `/feature` flow.
 - **You can use commands directly** — `/feature`, `/tdd`, `/plan`, `/e2e`, `/build-fix` all work as slash commands.
-
-## Hooks (automated enforcement)
-
-shipshape-skills includes auto-triggered hooks that enforce development discipline — not just suggestions, but guardrails:
-
-| Hook event | When it fires | What it does |
-|------------|--------------|--------------|
-| `PreToolUse` (Edit\|Write) | Before writing code | Blocks edits until `docs/cookbook/` and memory feedback have been read |
-| `Stop` | When Claude finishes responding | Detects bug fixes and reminds to run bug-learning workflow |
-| `TaskCompleted` | When a task is completed | Uses AI to judge whether the experience should be documented in cookbook/memory |
-
-Additionally, `stage-5-implement` has a built-in `once: true` agent hook that verifies cookbook/memory have been read before the first code edit in the implementation stage.
-
-These hooks activate automatically when the plugin is installed — no extra configuration needed.
 
 ## Key principles
 
