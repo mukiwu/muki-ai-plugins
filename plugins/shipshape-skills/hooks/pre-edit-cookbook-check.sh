@@ -53,16 +53,16 @@ if [ "$MEMORY_READ" -eq 0 ]; then
   MISSING="${MISSING}memory 中的 feedback 記錄"
 fi
 
-# 輸出提醒到 stdout（注入到 Claude 的 context）
-cat <<EOF
-⚠️ 前置知識檢查提醒：你還沒有閱讀 ${MISSING}。
+# 用 exit 2 + stderr 阻斷工具執行，強制 Claude 先讀 cookbook/memory
+cat >&2 <<EOF
+⚠️ 前置知識檢查未通過：你還沒有閱讀 ${MISSING}。
 
 根據 shipshape-skills 的開發規範（stage-5-implement.md），寫程式碼之前必須：
 1. 讀取 docs/cookbook/README.md 的快速導覽，找出相關文件
 2. 讀取 memory 中的 feedback 記錄，確認過往踩坑經驗
 3. 分析要修改的檔案既有模式
 
-請先完成前置檢查再繼續編輯。
+請先完成前置檢查再繼續編輯。此次編輯已被阻斷。
 EOF
 
-exit 0
+exit 2
