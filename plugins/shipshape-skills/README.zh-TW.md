@@ -68,6 +68,30 @@
 
 初始化完成後，執行 `/feature` 開發新功能時就會自動參考這些專案知識。
 
+## `/feature` 工作流
+
+核心的開發流程遵循紀律化的循環：
+
+| 階段 | 說明 | 觸發的 Skill / Agent | 可跳過 |
+|------|------|---------------------|--------|
+| 0 | 需求釐清 — 蘇格拉底式提問、YAGNI 原則 | — | ✅ 需求已明確 |
+| 1 | 規劃 — 原子步驟、具體到檔案路徑與預期行為 | `planner` agent | ❌ |
+| 2 | UI/UX 設計 — 產出 3 個方案，迭代修正至確認 | `frontend-design` skill* | ✅ 不涉及 UI |
+| 3 | 介面設計 — TypeScript 型別、函式簽名 | `tdd-guide` agent | ✅ ≤ 2 個檔案、邏輯明確 |
+| 4 | 寫測試 — TDD Red，含理性化預防 | `tdd-guide` agent | ✅ 純 UI、無業務邏輯 |
+| 5 | 實作 — TDD Green，驗證無 regression | — | ❌ |
+| 5.5 | 重構 — 改善結構但不改變行為 | — | ✅ 無需重構 |
+| 6 | UIUX 審查 — Figma 像素比對或 AI 視覺檢查 | `visual-reviewer` / `uiux-reviewer` agent** | ✅ 不涉及 UI |
+| 7 | 優化測試 — 迭代至 >= 9.2 分 | `auto-improve-tests` skill | ✅ 純 UI、無業務邏輯 |
+| 8 | E2E 測試 — Playwright | `e2e-runner` agent | ✅ 改動範圍小、手動可驗證 |
+| 9 | Code Review — 規格符合性 → 程式碼品質，迭代修正 | `code-reviewer` agent | ❌ |
+
+*`frontend-design` 是獨立的 plugin，不包含在 shipshape-skills 中。
+
+**階段 6 支援兩種模式：(A) 當 [`figma-visual-reviewer`](../figma-visual-reviewer/) plugin 已安裝且有 Figma 設計稿時，使用像素級比對；(B) 當 `claude-in-chrome` 可用時，使用 AI 視覺審查。自動選擇最佳可用模式。
+
+每個階段完成後暫停等待使用者確認。階段 1 完成後會列出跳過建議，由使用者決定哪些階段要執行。
+
 ## 包含什麼
 
 ### Skills
@@ -103,29 +127,14 @@
 | `build-error-resolver` | 建置與 TypeScript 型別錯誤修復 |
 | `e2e-runner` | E2E 測試產生、執行與 flaky test 管理 |
 
-## `/feature` 工作流
+### Hooks
 
-核心的開發流程遵循紀律化的循環：
-
-| 階段 | 說明 | 觸發的 Skill / Agent | 可跳過 |
-|------|------|---------------------|--------|
-| 0 | 需求釐清 — 蘇格拉底式提問、YAGNI 原則 | — | ✅ 需求已明確 |
-| 1 | 規劃 — 原子步驟、具體到檔案路徑與預期行為 | `planner` agent | ❌ |
-| 2 | UI/UX 設計 — 產出 3 個方案，迭代修正至確認 | `frontend-design` skill* | ✅ 不涉及 UI |
-| 3 | 介面設計 — TypeScript 型別、函式簽名 | `tdd-guide` agent | ✅ ≤ 2 個檔案、邏輯明確 |
-| 4 | 寫測試 — TDD Red，含理性化預防 | `tdd-guide` agent | ✅ 純 UI、無業務邏輯 |
-| 5 | 實作 — TDD Green，驗證無 regression | — | ❌ |
-| 5.5 | 重構 — 改善結構但不改變行為 | — | ✅ 無需重構 |
-| 6 | UIUX 審查 — Figma 像素比對或 AI 視覺檢查 | `visual-reviewer` / `uiux-reviewer` agent** | ✅ 不涉及 UI |
-| 7 | 優化測試 — 迭代至 >= 9.2 分 | `auto-improve-tests` skill | ✅ 純 UI、無業務邏輯 |
-| 8 | E2E 測試 — Playwright | `e2e-runner` agent | ✅ 改動範圍小、手動可驗證 |
-| 9 | Code Review — 規格符合性 → 程式碼品質，迭代修正 | `code-reviewer` agent | ❌ |
-
-*`frontend-design` 是獨立的 plugin，不包含在 shipshape-skills 中。
-
-**階段 6 支援兩種模式：(A) 當 [`figma-visual-reviewer`](../figma-visual-reviewer/) plugin 已安裝且有 Figma 設計稿時，使用像素級比對；(B) 當 `claude-in-chrome` 可用時，使用 AI 視覺審查。自動選擇最佳可用模式。
-
-每個階段完成後暫停等待使用者確認。階段 1 完成後會列出跳過建議，由使用者決定哪些階段要執行。
+| Hook 事件 | 階段 | 作用 |
+|-----------|------|------|
+| `PreToolUse` (Edit\|Write) | 寫程式碼之前 | 阻斷編輯，直到確認已閱讀 `docs/cookbook/` 和 memory feedback |
+| `Stop` | Claude 完成回覆時 | 偵測是否有修 bug，提醒執行 bug-learning 流程沉澱到 cookbook/memory |
+| `TaskCompleted` | 任務完成時 | 用 AI 判斷是否值得記錄到 cookbook 或 memory |
+| `PreToolUse` (stage-5, once) | 實作階段第一次寫 code | Agent 驗證是否已閱讀 cookbook 和 memory |
 
 ## 怎麼使用
 
@@ -166,20 +175,6 @@
 - **描述越具體越好** — 「在 header 加一個按鈕」會觸發 `/feature` 並建議跳過較重的階段。
 - **明確提到測試** — 「幫 X 寫測試」會直接觸發 `/tdd`，不走完整的 `/feature` 流程。
 - **也可以直接用指令** — `/feature`、`/tdd`、`/plan`、`/e2e`、`/build-fix` 都能作為斜線指令使用。
-
-## Hooks（自動行為強制）
-
-shipshape-skills 包含自動觸發的 hooks，確保開發規範不只是「建議」而是「強制執行」：
-
-| Hook 事件 | 觸發時機 | 作用 |
-|-----------|---------|------|
-| `PreToolUse` (Edit\|Write) | 寫程式碼之前 | 阻斷編輯，直到確認已閱讀 `docs/cookbook/` 和 memory feedback |
-| `Stop` | Claude 完成回覆時 | 偵測是否有修 bug，提醒執行 bug-learning 流程沉澱到 cookbook/memory |
-| `TaskCompleted` | 任務完成時 | 用 AI 判斷是否值得記錄到 cookbook 或 memory |
-
-此外，`stage-5-implement` skill 內建了一個 `once: true` 的 agent hook，在進入實作階段第一次寫 code 時，用 agent 驗證是否已閱讀 cookbook 和 memory。
-
-這些 hooks 安裝 plugin 後自動生效，不需要額外設定。
 
 ## 核心原則
 
