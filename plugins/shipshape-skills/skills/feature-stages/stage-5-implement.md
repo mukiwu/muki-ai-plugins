@@ -1,6 +1,14 @@
 ---
 name: feature-stage-5-implement
 description: Stage 5 of feature workflow — Implementation (TDD Green) with mandatory cookbook/memory pre-check, GREEN verification, and completion check. Includes Stage 5.5 Refactor.
+hooks:
+  PreToolUse:
+    - matcher: "Edit|Write"
+      hooks:
+        - type: agent
+          prompt: "即將進入實作階段寫程式碼。請確認本次對話中是否已經讀取了 docs/cookbook/ 相關文件和 memory 中的 feedback 記錄。用 Grep 搜尋 transcript 或直接檢查對話歷史。如果確認已讀取，允許繼續。如果沒有，拒絕並說明需要先讀取哪些文件。"
+          timeout: 15
+          once: true
 ---
 
 # 階段 5：實作功能（TDD Green）

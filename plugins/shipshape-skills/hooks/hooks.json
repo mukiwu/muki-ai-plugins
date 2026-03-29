@@ -1,4 +1,5 @@
 {
+  "description": "Disciplined development workflow hooks — cookbook pre-check, bug learning reminder, task completion review",
   "hooks": {
     "PreToolUse": [
       {
@@ -21,6 +22,17 @@
             "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/post-stop-bug-learning.sh\"",
             "timeout": 10,
             "statusMessage": "Checking if bug learning is needed..."
+          }
+        ]
+      }
+    ],
+    "TaskCompleted": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "一個開發任務剛剛完成。以下是任務內容：$ARGUMENTS\n\n請判斷：\n1. 這個任務是否涉及修復 bug 或發現新的開發模式/注意事項？\n2. 如果是，這個經驗是否值得記錄到 docs/cookbook/（專案特定模式）或 memory（跨專案回饋）？\n\n如果不需要記錄（例如純粹的功能新增、設定變更、或已有記錄），回覆 {\"ok\": true}。\n如果值得記錄，回覆 {\"ok\": false, \"reason\": \"建議記錄到 cookbook/memory：[具體建議]\"}。",
+            "timeout": 15
           }
         ]
       }
