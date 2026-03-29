@@ -46,7 +46,7 @@
 - 產出 HTML 差異報告（三欄並排比對）
 - 支援 RWD 多尺寸檢查
 
-[詳細說明 →](plugins/figma-visual-reviewer/README.md)
+[詳細說明 →](plugins/figma-visual-reviewer/README.zh-TW.md)
 
 ## 兩個 Plugin 如何搭配
 

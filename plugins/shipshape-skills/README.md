@@ -169,6 +169,20 @@ You don't need to remember command names. Just describe what you want in natural
 - **Mention testing explicitly** — "Write tests for X" triggers `/tdd` directly instead of the full `/feature` flow.
 - **You can use commands directly** — `/feature`, `/tdd`, `/plan`, `/e2e`, `/build-fix` all work as slash commands.
 
+## Hooks (automated enforcement)
+
+shipshape-skills includes auto-triggered hooks that enforce development discipline — not just suggestions, but guardrails:
+
+| Hook event | When it fires | What it does |
+|------------|--------------|--------------|
+| `PreToolUse` (Edit\|Write) | Before writing code | Blocks edits until `docs/cookbook/` and memory feedback have been read |
+| `Stop` | When Claude finishes responding | Detects bug fixes and reminds to run bug-learning workflow |
+| `TaskCompleted` | When a task is completed | Uses AI to judge whether the experience should be documented in cookbook/memory |
+
+Additionally, `stage-5-implement` has a built-in `once: true` agent hook that verifies cookbook/memory have been read before the first code edit in the implementation stage.
+
+These hooks activate automatically when the plugin is installed — no extra configuration needed.
+
 ## Key principles
 
 Borrowed from [obra/superpowers](https://github.com/obra/superpowers):
