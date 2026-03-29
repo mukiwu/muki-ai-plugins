@@ -15,9 +15,10 @@ import re
 import sys
 import urllib.request
 import urllib.error
+from typing import Optional, Tuple
 
 
-def parse_figma_url(url: str) -> tuple[str, str | None]:
+def parse_figma_url(url: str) -> Tuple[str, Optional[str]]:
     """從 Figma URL 解析 file_key 和 node_id"""
     # Match: figma.com/file/XXXXX or figma.com/design/XXXXX
     match = re.search(r'figma\.com/(?:file|design)/([a-zA-Z0-9]+)', url)

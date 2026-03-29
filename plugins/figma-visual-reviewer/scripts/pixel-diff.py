@@ -16,6 +16,12 @@ import sys
 import numpy as np
 from PIL import Image, ImageDraw
 
+try:
+    from scipy import ndimage
+    HAS_SCIPY = True
+except ImportError:
+    HAS_SCIPY = False
+
 
 def load_and_align(path_a: str, path_b: str) -> tuple:
     """載入兩張圖並對齊尺寸"""
@@ -55,7 +61,8 @@ def compute_diff(img_a: Image.Image, img_b: Image.Image, threshold: int = 10) ->
 
 def find_diff_regions(diff_mask: np.ndarray, min_region_size: int = 100) -> list:
     """找出差異區域的 bounding boxes"""
-    from scipy import ndimage
+    if not HAS_SCIPY:
+        raise ImportError("scipy is required for region detection")
 
     # Label connected components
     labeled, num_features = ndimage.label(diff_mask)
