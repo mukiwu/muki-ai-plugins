@@ -167,6 +167,20 @@
 - **明確提到測試** — 「幫 X 寫測試」會直接觸發 `/tdd`，不走完整的 `/feature` 流程。
 - **也可以直接用指令** — `/feature`、`/tdd`、`/plan`、`/e2e`、`/build-fix` 都能作為斜線指令使用。
 
+## Hooks（自動行為強制）
+
+shipshape-skills 包含自動觸發的 hooks，確保開發規範不只是「建議」而是「強制執行」：
+
+| Hook 事件 | 觸發時機 | 作用 |
+|-----------|---------|------|
+| `PreToolUse` (Edit\|Write) | 寫程式碼之前 | 阻斷編輯，直到確認已閱讀 `docs/cookbook/` 和 memory feedback |
+| `Stop` | Claude 完成回覆時 | 偵測是否有修 bug，提醒執行 bug-learning 流程沉澱到 cookbook/memory |
+| `TaskCompleted` | 任務完成時 | 用 AI 判斷是否值得記錄到 cookbook 或 memory |
+
+此外，`stage-5-implement` skill 內建了一個 `once: true` 的 agent hook，在進入實作階段第一次寫 code 時，用 agent 驗證是否已閱讀 cookbook 和 memory。
+
+這些 hooks 安裝 plugin 後自動生效，不需要額外設定。
+
 ## 核心原則
 
 借鏡 [obra/superpowers](https://github.com/obra/superpowers) 方法論：
