@@ -8,7 +8,7 @@
 
 ## Bug 修復
 
-當使用者描述程式行為與預期不符（不論用什麼措辭），修復完成後自動執行 `bug-learning` skill 的流程：分析根因、判斷是否需要沉澱到 cookbook 或 memory。
+當使用者描述程式行為與預期不符（不論用什麼措辭），修復完成後自動執行 `bug-learning` skill 的完整流程：分析根因、評估是否值得沉澱、**若判斷值得，必須實際用 Edit/Write 工具寫入 cookbook 或 memory 檔案**。「讀取 cookbook」或「承認應該寫」都不算完成——只有實際呼叫寫入工具才算。
 
 ## 框架 Patterns
 
