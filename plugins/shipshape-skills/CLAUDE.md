@@ -8,7 +8,7 @@
 
 ## Bug 修復
 
-當使用者描述程式行為與預期不符（不論用什麼措辭），修復完成後自動執行 `bug-learning` skill 的完整流程：分析根因、評估是否值得沉澱、**若判斷值得，必須實際用 Edit/Write 工具寫入 cookbook 或 memory 檔案**。「讀取 cookbook」或「承認應該寫」都不算完成——只有實際呼叫寫入工具才算。
+當使用者描述程式行為與預期不符（不論用什麼措辭），修復完成後自動執行 `bug-learning` skill 的完整流程。評估值得沉澱時，必須實際用 Edit/Write 工具寫入檔案——讀取或口頭承認都不算完成。
 
 ## 框架 Patterns
 
@@ -29,7 +29,7 @@
 
 1. 根據這次修改的檔案和函式名稱，用 Grep 搜尋 `docs/cookbook/` 中是否有提到它們
 2. 如果 cookbook 中有記錄但描述已經與程式碼不一致（例如 API 用法改了、參數變了、元件行為不同了），用 Edit 工具更新 cookbook 使其與新程式碼一致
-3. 如果 cookbook 中沒有相關記錄，根據 `bug-learning` skill 的 Step 3 評估標準判斷是否需要新增
+3. 如果 cookbook 中沒有相關記錄，且這次修改已經走過 bug-learning 並完成了 cookbook 寫入，則跳過新增評估（避免重複）。否則根據 `bug-learning` skill 的 Step 3 評估標準判斷是否需要新增
 
 ### 3. 修復因改動而壞掉的測試
 
