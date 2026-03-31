@@ -8,7 +8,7 @@
 
 ## Bug 修復
 
-當使用者描述程式行為與預期不符（不論用什麼措辭），修復完成後自動執行 `bug-learning` skill 的完整流程。評估值得沉澱時，必須實際用 Edit/Write 工具寫入檔案——讀取或口頭承認都不算完成。
+只要這次修改涉及「修正錯誤行為」，就自動執行 `bug-learning` skill 的完整流程。觸發場景包含但不限於：使用者回報 bug、review PR 後修正寫法、修復 Sentry/監控系統報的錯、發現既有邏輯有誤而修正。評估值得沉澱時，必須實際用 Edit/Write 工具寫入檔案——讀取或口頭承認都不算完成。
 
 ## 框架 Patterns
 
@@ -40,6 +40,16 @@
 3. 如果是程式碼有 bug，回去修程式碼，然後重新跑測試確認通過
 
 三件事都完成後再進入 Code Review。
+
+## Commit 前 Checklist（每次 commit 前必須檢查）
+
+不管你是走 bug 修復、功能開發、PR review、還是任何其他路徑，在 `git commit` 之前都要過一次這個 checklist：
+
+1. **測試通過？** — 跑過全量測試且全部通過
+2. **Cookbook 同步？** — Grep `docs/cookbook/` 檢查是否有提到這次修改的檔案/函式。有過時的要更新，沒有記錄但值得記的要新增
+3. **Bug learning？** — 如果這次修改涉及修復錯誤行為（不管是修自己的 bug、review 別人的 PR、還是修正 Sentry 報的錯），都要執行 bug-learning skill 的評估流程
+
+如果三項都確認過了才可以 commit。這個 checklist 的目的是確保 cookbook 寫入不會因為「主流程完成了」而被跳過。
 
 ## 測試
 
