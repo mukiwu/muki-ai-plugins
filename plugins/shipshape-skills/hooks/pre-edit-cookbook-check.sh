@@ -33,8 +33,8 @@ if [ -z "$TRANSCRIPT_PATH" ] || [ ! -f "$TRANSCRIPT_PATH" ]; then
 fi
 
 # 搜尋 transcript 中是否有讀取 cookbook 或 memory 的紀錄
-COOKBOOK_READ=$(grep -c -i "cookbook\|docs/cookbook" "$TRANSCRIPT_PATH" 2>/dev/null || echo "0")
-MEMORY_READ=$(grep -c -i "memory.*feedback\|feedback_.*\.md\|MEMORY\.md" "$TRANSCRIPT_PATH" 2>/dev/null || echo "0")
+COOKBOOK_READ=$(grep -c -iE "cookbook|docs/cookbook" "$TRANSCRIPT_PATH" 2>/dev/null || echo "0")
+MEMORY_READ=$(grep -c -iE "memory.*feedback|feedback_.*\.md|MEMORY\.md" "$TRANSCRIPT_PATH" 2>/dev/null || echo "0")
 
 if [ "$COOKBOOK_READ" -gt 0 ] && [ "$MEMORY_READ" -gt 0 ]; then
   # 已讀過 cookbook 和 memory，放行
