@@ -122,6 +122,7 @@ Each stage pauses for user confirmation. After Stage 1, skip suggestions are pro
 | `auto-improve-tests` | Iteratively review and improve unit tests until quality score >= 9.2 |
 | `bug-learning` | After fixing a bug, decide whether to document the root cause in cookbook, memory, or workflow |
 | `coding-standards` | Framework-agnostic coding standards (naming, types, error handling, API design). Routes to `react-patterns` or `vue-patterns` for framework-specific guidance |
+| `deps-check` | Before editing a shared file, list who imports it to avoid "fix A, break B" regressions. TypeScript/JavaScript only |
 | `e2e-testing` | Playwright E2E patterns — POM, flaky test handling, CI/CD, artifact management |
 | `react-patterns` | React Hooks, Custom Hooks, Zustand, performance optimization, anti-patterns |
 | `vue-patterns` | Vue 3 Composition API, Pinia, composables, performance optimization, anti-patterns |
