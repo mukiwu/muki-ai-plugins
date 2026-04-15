@@ -120,6 +120,7 @@ shipshape-skills 的流程是通用的，不綁定特定框架。你可以透過
 | `auto-improve-tests` | 迭代審查並優化單元測試，直到品質分數 >= 9.2 |
 | `bug-learning` | 修完 bug 後，自動判斷根因是否需要沉澱到 cookbook、memory 或 workflow |
 | `coding-standards` | 框架無關的程式碼標準（命名、型別、錯誤處理、API 設計）。框架相關的指引會導向 `react-patterns` 或 `vue-patterns` |
+| `deps-check` | 編輯共用檔案前列出誰 import 我，避免「改 A 壞 B」回歸。目前僅支援 TypeScript / JavaScript |
 | `e2e-testing` | Playwright E2E 測試模式 — POM、flaky test 處理、CI/CD、artifact 管理 |
 | `react-patterns` | React Hooks、Custom Hooks、Zustand、效能優化、常見反模式 |
 | `vue-patterns` | Vue 3 Composition API、Pinia、composables、效能優化、常見反模式 |
