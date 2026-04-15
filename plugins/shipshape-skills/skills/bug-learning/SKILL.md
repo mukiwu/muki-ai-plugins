@@ -1,6 +1,6 @@
 ---
 name: bug-learning
-description: 當使用者描述程式行為與預期不符時觸發 — 不論是明確說「有 bug」，還是隱含的「為什麼會這樣」「明明應該 X 卻 Y」「這裡怪怪的」。修復後判斷根因是否值得沉澱到 cookbook、memory 或 workflow，防止同類錯誤再次發生。只要使用者的描述暗示了「現狀 ≠ 預期」，就應該考慮觸發此 skill。
+description: 當使用者描述程式行為與預期不符時觸發 — 不論是明確說「有 bug」，還是隱含的「為什麼會這樣」「明明應該 X 卻 Y」「這裡怪怪的」。此 skill 強制走完五個步驟：修復 → 根因分析 → 沉澱判準 → 寫入或建議替代動作 → 輸出評估摘要。**不可在修完 bug 後直接結束回覆**，即使評估結果是「不需要寫入 cookbook」，也必須明確輸出摘要讓使用者看見此 skill 已執行。只要使用者的描述暗示「現狀 ≠ 預期」，就必須觸發此 skill。
 ---
 
 # Bug Learning — 錯誤學習與知識沉澱
@@ -54,7 +54,7 @@ Cookbook 只收「程式碼、型別、測試、import 關係**看不出來**」
 | OFFICIAL_NOTE_TYPES 要同步 UI 選單 | ✅ | 隱性資料契約 |
 | 這個 bug 改了 3 行就好 | ❌ | git log 有了 |
 
-輸出你的評估結果：
+**重要：三問判準不是「否決權」，是「路由器」**。答「是」代表這個知識該由機械工具守護，而不是放進 cookbook。Step 5 必須告訴使用者知識的去處（補型別、加 lint rule、補測試、或寫 cookbook），不是簡單說「不寫」就結束。
 
 輸出你的評估結果：
 
@@ -118,16 +118,38 @@ Cookbook 只收「程式碼、型別、測試、import 關係**看不出來**」
 1. 在對應的 command（如 `feature.md`）加入檢查項目
 2. 說明在哪個階段應該攔截此類錯誤
 
-### Step 5：回報
+### Step 5：無條件輸出評估摘要
 
-列出實際修改的檔案路徑，格式：
+**這是強制步驟，不可跳過**。不論 Step 3 決定寫或不寫，都必須輸出以下格式，讓使用者看到 skill 已經執行完整流程。靜默結束 = 使用者以為 skill 沒觸發，正是此 skill 要避免的失敗模式。
+
+**情境 A：有寫入**（列出實際修改的檔案）
 
 ```
 📝 錯誤學習已記錄：
-- Cookbook: docs/cookbook/features/home-dashboard/module-development-guide.md（新增 ErrorBoundary 注意事項）
+- Cookbook: docs/cookbook/xxx.md（新增 ErrorBoundary 注意事項）
 - Memory: 無需更新
 - Workflow: 無需更新
 ```
+
+**情境 B：不需要寫入**（說明為什麼，並建議替代動作）
+
+```
+📝 錯誤學習評估：
+- Cookbook: ❌ 不寫（原因：屬於型別契約，tsc 已能守護）
+- Memory: ❌ 不寫（原因：專案特定，不適合跨專案 feedback）
+- Workflow: ❌ 不寫
+- 建議替代動作：在 `listNotes()` 補上 return type annotation，tsc 會直接擋下呼叫端型別不匹配
+```
+
+「建議替代動作」是 Step 5 的核心——如果 cookbook 不寫，一定要告訴使用者「那該做什麼」。選項包括：
+
+- 補型別 / type guard（tsc 能抓）
+- 加 eslint rule（lint 能抓）
+- 補單元測試 / E2E 測試（測試能抓）
+- 提醒跑 deps-check 確認相依方都看過
+- 完全不需要動作（例如純 typo、一次性環境錯誤）
+
+只有當「以上皆不適用」且「下次可能再犯」時，才寫入 cookbook。
 
 ## 不沉澱的情況
 
