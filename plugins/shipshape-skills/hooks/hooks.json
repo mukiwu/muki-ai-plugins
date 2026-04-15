@@ -31,7 +31,7 @@
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "一個開發任務剛剛完成。以下是任務內容：$ARGUMENTS\n\n請判斷：這個任務是否發現了新的開發模式或注意事項，值得記錄到 docs/cookbook/（專案特定模式）或 memory（跨專案回饋）？\n\n注意：bug 修復的沉澱已由 bug-learning skill 和 Stop hook 處理，不需要在此重複判斷。\n\n如果不需要記錄，回覆 {\"ok\": true}。\n如果值得記錄，回覆 {\"ok\": false, \"reason\": \"建議記錄到 cookbook/memory：[具體建議]\"}。",
+            "prompt": "一個開發任務剛剛完成。以下是任務內容：$ARGUMENTS\n\n請判斷：這個任務是否發現了『tsc/eslint/測試/deps-check 都抓不到』的隱性知識，值得記錄到 docs/cookbook/（專案隱性耦合、外部 lib 陷阱、歷史決策）或 memory（跨專案 feedback）？\n\n判準（任一題答『是』就不記錄）：\n1. 型別或 eslint 能抓到嗎？\n2. import 關係（deps-check）看得出來嗎？\n3. 測試會失敗嗎？\n4. 只是純實作細節（改程式就好）嗎？\n\n注意：bug 修復的沉澱已由 bug-learning skill 和 Stop hook 處理，不需要在此重複判斷。預設不記錄，寧缺勿濫。\n\n如果不需要記錄，回覆 {\"ok\": true}。\n如果值得記錄，回覆 {\"ok\": false, \"reason\": \"建議記錄到 cookbook/memory：[具體建議，說明為什麼機械工具抓不到]\"}。",
             "timeout": 15
           }
         ]

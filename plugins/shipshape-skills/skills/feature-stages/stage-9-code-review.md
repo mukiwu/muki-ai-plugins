@@ -42,5 +42,6 @@ description: Stage 9 of feature workflow — Two-stage code review (spec complia
 - 確認新程式碼遵循 cookbook 記載的模式與注意事項
 - 若 cookbook 有記載「常見錯誤」或「重要注意事項」，逐條檢查是否違反
 - 若發現 cookbook 描述與實際程式碼不一致，更新 cookbook
+- **不要因為 review 完成就新增 cookbook 條目**。cookbook 只記 tsc/eslint/測試/deps-check 抓不到的隱性知識，判準見 `bug-learning` skill Step 3
 
 完成後詢問使用者是否要 commit。
