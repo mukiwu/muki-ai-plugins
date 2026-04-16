@@ -118,7 +118,7 @@ shipshape-skills 的流程是通用的，不綁定特定框架。你可以透過
 | Skill | 說明 |
 |-------|------|
 | `auto-improve-tests` | 迭代審查並優化單元測試，直到品質分數 >= 9.2 |
-| `bug-learning` | 修完 bug 後，自動判斷根因是否需要沉澱到 cookbook、memory 或 workflow |
+| `bug-fix-learning` | 修完 bug 後，自動判斷根因是否需要沉澱到 cookbook、memory 或 workflow |
 | `coding-standards` | 框架無關的程式碼標準（命名、型別、錯誤處理、API 設計）。框架相關的指引會導向 `react-patterns` 或 `vue-patterns` |
 | `deps-check` | 編輯共用檔案前列出誰 import 我，避免「改 A 壞 B」回歸。目前僅支援 TypeScript / JavaScript |
 | `e2e-testing` | Playwright E2E 測試模式 — POM、flaky test 處理、CI/CD、artifact 管理 |
@@ -152,7 +152,7 @@ shipshape-skills 的流程是通用的，不綁定特定框架。你可以透過
 | Hook 事件 | 階段 | 作用 |
 |-----------|------|------|
 | `PreToolUse` (Edit\|Write) | 寫程式碼之前 | 阻斷編輯，直到確認已閱讀 `docs/cookbook/` 和 memory feedback |
-| `Stop` | Claude 完成回覆時 | 偵測是否有修 bug，提醒執行 bug-learning 流程沉澱到 cookbook/memory |
+| `Stop` | Claude 完成回覆時 | 偵測是否有修 bug，提醒執行 bug-fix-learning 流程沉澱到 cookbook/memory |
 | `TaskCompleted` | 任務完成時 | 用 AI 判斷是否值得記錄到 cookbook 或 memory |
 | `PreToolUse` (stage-5, once) | 實作階段第一次寫 code | Agent 驗證是否已閱讀 cookbook 和 memory |
 
@@ -188,7 +188,7 @@ shipshape-skills 的流程是通用的，不綁定特定框架。你可以透過
 
 | 你說的話 | 觸發什麼 |
 |---------|---------|
-| 「這裡壞了」「發現 bug」「這個不對」 | `bug-learning` — 修復後自動判斷根因要沉澱到哪裡 |
+| 「這裡壞了」「發現 bug」「這個不對」 | `bug-fix-learning` — 修復後自動判斷根因要沉澱到哪裡 |
 
 ### 小提示
 
