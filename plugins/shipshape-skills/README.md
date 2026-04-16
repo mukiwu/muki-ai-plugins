@@ -120,7 +120,7 @@ Each stage pauses for user confirmation. After Stage 1, skip suggestions are pro
 | Skill | Description |
 |-------|-------------|
 | `auto-improve-tests` | Iteratively review and improve unit tests until quality score >= 9.2 |
-| `bug-learning` | After fixing a bug, decide whether to document the root cause in cookbook, memory, or workflow |
+| `bug-fix-learning` | After fixing a bug, decide whether to document the root cause in cookbook, memory, or workflow |
 | `coding-standards` | Framework-agnostic coding standards (naming, types, error handling, API design). Routes to `react-patterns` or `vue-patterns` for framework-specific guidance |
 | `deps-check` | Before editing a shared file, list who imports it to avoid "fix A, break B" regressions. TypeScript/JavaScript only |
 | `e2e-testing` | Playwright E2E patterns — POM, flaky test handling, CI/CD, artifact management |
@@ -154,7 +154,7 @@ Each stage pauses for user confirmation. After Stage 1, skip suggestions are pro
 | Hook event | Stage | What it does |
 |------------|-------|--------------|
 | `PreToolUse` (Edit\|Write) | Before writing code | Blocks edits until `docs/cookbook/` and memory feedback have been read |
-| `Stop` | After Claude responds | Detects bug fixes and reminds to run bug-learning workflow |
+| `Stop` | After Claude responds | Detects bug fixes and reminds to run bug-fix-learning workflow |
 | `TaskCompleted` | After task completion | Uses AI to judge whether experience should be documented in cookbook/memory |
 | `PreToolUse` (stage-5, once) | First code edit in implementation | Agent verifies cookbook/memory were read before allowing edits |
 
@@ -190,7 +190,7 @@ You don't need to remember command names. Just describe what you want in natural
 
 | You say | What happens |
 |---------|-------------|
-| "This is broken", "Found a bug", "This isn't working" | `bug-learning` — after fixing, decides where to document the root cause |
+| "This is broken", "Found a bug", "This isn't working" | `bug-fix-learning` — after fixing, decides where to document the root cause |
 
 ### Tips
 

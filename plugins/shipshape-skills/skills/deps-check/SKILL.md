@@ -82,7 +82,7 @@ npx tsc --noEmit --incremental
 ## 和其他機制的關係
 
 - **型別檢查（tsc）**：改完跑 `tsc --noEmit` 驗證。deps-check 是**事前**告訴你要看哪些檔案，tsc 是**事後**驗證你有沒有改對。兩者互補。
-- **bug-learning**：如果 deps-check 沒抓到某個隱性耦合（例如透過事件、全域狀態），事後觸發 bug-learning 時應該把這個隱性耦合寫進 memory 或 cookbook，下次就能提前提醒。
+- **bug-fix-learning**：如果 deps-check 沒抓到某個隱性耦合（例如透過事件、全域狀態），事後觸發 bug-fix-learning 時應該把這個隱性耦合寫進 memory 或 cookbook，下次就能提前提醒。
 - **code-reviewer**：review 階段會再次檢查跨檔案影響，但此時改動已經做完，deps-check 是為了讓 review 能聚焦在品質而非回歸。
 
 ## Hook 模式（可選）
