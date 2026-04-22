@@ -118,7 +118,7 @@ shipshape-skills 的流程是通用的，不綁定特定框架。你可以透過
 | Skill | 說明 |
 |-------|------|
 | `auto-improve-tests` | 迭代審查並優化單元測試，直到品質分數 >= 9.2 |
-| `bug-fix-learning` | 修完 bug 後，自動判斷根因是否需要沉澱到 cookbook、memory 或 workflow |
+| `bug-fix-learning` | 紀律化修復（根因優先 Iron Law、3 次失敗質疑架構）+ 知識沉澱到 cookbook/memory/workflow。Bug、測試失敗、build error 都會觸發，不限於使用者主動回報 |
 | `coding-standards` | 框架無關的程式碼標準（命名、型別、錯誤處理、API 設計）。框架相關的指引會導向 `react-patterns` 或 `vue-patterns` |
 | `deps-check` | 編輯共用檔案前列出誰 import 我，避免「改 A 壞 B」回歸。目前僅支援 TypeScript / JavaScript |
 | `e2e-testing` | Playwright E2E 測試模式 — POM、flaky test 處理、CI/CD、artifact 管理 |
@@ -129,7 +129,7 @@ shipshape-skills 的流程是通用的，不綁定特定框架。你可以透過
 
 | 指令 | 說明 |
 |------|------|
-| `/init` | 互動式專案設定 — 產生 `CLAUDE.md` 並建議專案專屬 skills |
+| `/init` | 互動式專案設定 — 產生 `CLAUDE.md`、建立 `docs/cookbook/` 目錄結構（含 MOC 漸進式披露）、建議專案專屬 skills |
 | `/feature` | 完整開發流程：需求釐清 → 規劃 → TDD → 實作 → Code Review |
 | `/tdd` | 測試驅動開發：先定義介面、先寫測試、再實作 |
 | `/plan` | 產出實作計畫，含風險評估與步驟拆解 |
@@ -138,14 +138,14 @@ shipshape-skills 的流程是通用的，不綁定特定框架。你可以透過
 
 ### Agents
 
-| Agent | 說明 |
-|-------|------|
-| `code-reviewer` | 兩階段審查：先確認規格符合性，再看程式碼品質 |
-| `uiux-reviewer` | 透過 claude-in-chrome 以真實使用者視角審查 Web 介面 — 評估版面配置、文字可讀性、視覺層級與規格符合度 |
-| `tdd-guide` | TDD 教練，含理性化預防（反駁跳過測試的藉口） |
-| `planner` | 功能規劃，將任務拆解為可獨立執行的原子步驟 |
-| `build-error-resolver` | 建置與 TypeScript 型別錯誤修復 |
-| `e2e-runner` | E2E 測試產生、執行與 flaky test 管理 |
+| Agent | 說明 | Model |
+|-------|------|-------|
+| `code-reviewer` | 兩階段審查：先確認規格符合性，再看程式碼品質 | `sonnet` |
+| `uiux-reviewer` | 透過 claude-in-chrome 以真實使用者視角審查 Web 介面 — 評估版面配置、文字可讀性、視覺層級與規格符合度 | `sonnet` |
+| `tdd-guide` | TDD 教練，含理性化預防（反駁跳過測試的藉口） | `sonnet` |
+| `planner` | 功能規劃，將任務拆解為可獨立執行的原子步驟 | `opus` |
+| `build-error-resolver` | 建置與 TypeScript 型別錯誤修復 | `haiku` |
+| `e2e-runner` | E2E 測試產生、執行與 flaky test 管理 | `haiku` |
 
 ### Hooks
 
@@ -188,7 +188,8 @@ shipshape-skills 的流程是通用的，不綁定特定框架。你可以透過
 
 | 你說的話 | 觸發什麼 |
 |---------|---------|
-| 「這裡壞了」「發現 bug」「這個不對」 | `bug-fix-learning` — 修復後自動判斷根因要沉澱到哪裡 |
+| 「這裡壞了」「發現 bug」「這個不對」 | `bug-fix-learning` — 紀律化根因調查 + 知識沉澱 |
+| 測試失敗、build error、非預期行為 | `bug-fix-learning` — 不需要使用者明說，自動觸發 |
 
 ### 小提示
 
@@ -201,9 +202,12 @@ shipshape-skills 的流程是通用的，不綁定特定框架。你可以透過
 借鏡 [obra/superpowers](https://github.com/obra/superpowers) 方法論：
 
 - **沒有失敗的測試就不能寫 production code** — 先寫了 code 再補測試？刪掉重來。
-- **完成前必須驗證** — 「應該可以」不是驗證。執行指令、讀完輸出、確認結果。
+- **完成驗證（Iron Law）** — 「應該可以」不是驗證。執行指令、讀完輸出、帶證據回報（「42/42 pass」而非「測試通過了」）。
+- **沒有根因就不能動手改** — 不能用猜的。讀錯誤訊息、穩定重現、追蹤資料流，然後才修。3 次修復失敗 → 質疑架構。
 - **理性化預防** — TDD 階段列出常見的跳過測試藉口，並逐一反駁。
 - **兩階段 Code Review** — 先確認方向對（規格符合性），再談品質。不要花時間打磨不該存在的 code。
+- **依賴影響面檢查** — 編輯共用檔案前，先跑 `deps-check` 列出所有依賴方。防止「改 A 壞 B」。
+- **計畫不能有 placeholder** — 「TBD」「加入適當的錯誤處理」「視情況而定」都是禁語。每個步驟都要有具體的檔案路徑和函式名稱。
 - **Mock 三鐵律** — 不測 mock 行為、不在 production code 加 test-only method、mock 前先理解依賴。
 
 ## 授權
