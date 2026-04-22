@@ -5,7 +5,18 @@ description: Stage 1 of feature workflow — Planning with planner agent. Produc
 
 # 階段 1：規劃
 
-使用 Agent tool 派遣 **planner** subagent（`subagent_type: "shipshape-skills:planner"`）進行功能規劃。在 prompt 中傳入：使用者的需求描述、相關檔案路徑、專案技術棧。
+## 前置知識檢查（強制）
+
+探索程式碼之前，**必須**先查閱既有知識，避免重複踩坑或違反既有架構：
+
+1. **Cookbook 對照（漸進式披露）**：讀 `docs/cookbook/README.md` → 找到相關模組資料夾 → 讀 `MOC.md` → 讀相關的 `business-rules.md`（業務邏輯）和 `pitfalls.md`（踩坑紀錄）。也檢查 `architecture/MOC.md` 是否有相關的架構決策。
+2. **Memory 回饋**：讀取 memory 中的 feedback 記錄，確認是否有與本次開發相關的過往經驗。
+
+將讀到的知識一併傳給 planner subagent，這樣規劃時就能考慮已知的業務規則、陷阱和架構約束。
+
+## 執行規劃
+
+使用 Agent tool 派遣 **planner** subagent（`subagent_type: "shipshape-skills:planner"`）進行功能規劃。在 prompt 中傳入：使用者的需求描述、相關檔案路徑、專案技術棧、**以及前置知識檢查讀到的 cookbook 和 memory 內容**。
 
 planner subagent 負責：
 - 釐清需求與邊界條件
