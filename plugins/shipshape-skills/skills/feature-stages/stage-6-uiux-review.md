@@ -23,7 +23,7 @@ description: Stage 6 of feature workflow — UIUX review with two modes. Mode A 
 
 當 `figma-visual-reviewer` plugin 已安裝，且對話 context 中有 Figma URL 或使用者提供設計稿截圖時：
 
-1. 使用 Agent tool 派遣 `visual-reviewer` subagent，傳入 Figma URL 和目標網頁 URL
+1. 使用 Agent tool 派遣 `visual-reviewer` subagent（`subagent_type: "figma-visual-reviewer:visual-reviewer"`），傳入 Figma URL 和目標網頁 URL
 2. subagent 會自動：導出 Figma 設計稿 → Playwright 截網頁 → 像素 diff → AI 判斷差異類型
 3. 產出差異報告（含 diff 視覺化圖 + HTML 報告）
 
