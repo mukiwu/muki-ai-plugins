@@ -120,7 +120,7 @@ Each stage pauses for user confirmation. After Stage 1, skip suggestions are pro
 | Skill | Description |
 |-------|-------------|
 | `auto-improve-tests` | Iteratively review and improve unit tests until quality score >= 9.2 |
-| `bug-fix-learning` | After fixing a bug, decide whether to document the root cause in cookbook, memory, or workflow |
+| `bug-fix-learning` | Disciplined debugging (root-cause-first Iron Law, 3-strike architecture questioning) + knowledge retention to cookbook/memory/workflow. Triggers on bugs, test failures, build errors — not just user reports |
 | `coding-standards` | Framework-agnostic coding standards (naming, types, error handling, API design). Routes to `react-patterns` or `vue-patterns` for framework-specific guidance |
 | `deps-check` | Before editing a shared file, list who imports it to avoid "fix A, break B" regressions. TypeScript/JavaScript only |
 | `e2e-testing` | Playwright E2E patterns — POM, flaky test handling, CI/CD, artifact management |
@@ -131,7 +131,7 @@ Each stage pauses for user confirmation. After Stage 1, skip suggestions are pro
 
 | Command | Description |
 |---------|-------------|
-| `/init` | Interactive project setup — generates `CLAUDE.md` and suggests project-specific skills |
+| `/init` | Interactive project setup — generates `CLAUDE.md`, builds `docs/cookbook/` directory with MOC-based progressive disclosure, and suggests project-specific skills |
 | `/feature` | Full development workflow: brainstorming, planning, TDD, implementation, code review |
 | `/tdd` | Test-Driven Development: scaffold interfaces, write tests first, then implement |
 | `/plan` | Create step-by-step implementation plan with risk assessment |
@@ -140,14 +140,14 @@ Each stage pauses for user confirmation. After Stage 1, skip suggestions are pro
 
 ### Agents
 
-| Agent | Description |
-|-------|-------------|
-| `code-reviewer` | Two-stage review: spec compliance first, then code quality |
-| `uiux-reviewer` | Visual UI/UX review via claude-in-chrome — evaluates layout, typography, readability, visual hierarchy, and spec compliance from a real user's perspective |
-| `tdd-guide` | TDD coaching with rationalization prevention |
-| `planner` | Feature planning with atomic task breakdown |
-| `build-error-resolver` | Build and TypeScript error resolution |
-| `e2e-runner` | E2E test generation, execution, and flaky test management |
+| Agent | Description | Model |
+|-------|-------------|-------|
+| `code-reviewer` | Two-stage review: spec compliance first, then code quality | `sonnet` |
+| `uiux-reviewer` | Visual UI/UX review via claude-in-chrome — evaluates layout, typography, readability, visual hierarchy, and spec compliance from a real user's perspective | `sonnet` |
+| `tdd-guide` | TDD coaching with rationalization prevention | `sonnet` |
+| `planner` | Feature planning with atomic task breakdown | `opus` |
+| `build-error-resolver` | Build and TypeScript error resolution | `haiku` |
+| `e2e-runner` | E2E test generation, execution, and flaky test management | `haiku` |
 
 ### Hooks
 
@@ -190,7 +190,8 @@ You don't need to remember command names. Just describe what you want in natural
 
 | You say | What happens |
 |---------|-------------|
-| "This is broken", "Found a bug", "This isn't working" | `bug-fix-learning` — after fixing, decides where to document the root cause |
+| "This is broken", "Found a bug", "This isn't working" | `bug-fix-learning` — disciplined root-cause-first debugging + knowledge retention |
+| Test failures, build errors, unexpected behavior | `bug-fix-learning` — auto-triggers without explicit user report |
 
 ### Tips
 
@@ -203,9 +204,12 @@ You don't need to remember command names. Just describe what you want in natural
 Borrowed from [obra/superpowers](https://github.com/obra/superpowers):
 
 - **No production code without a failing test first** — wrote code before the test? Delete it.
-- **Verification before completion** — "should work" is not verification. Run the command, read the output, confirm the result.
+- **Verification before completion (Iron Law)** — "should work" is not verification. Run the command, read the output, report with evidence ("42/42 pass", not "tests pass").
+- **No fix without root cause** — no guessing. Read the error, reproduce, trace data flow, then fix. 3 failed attempts → question the architecture.
 - **Rationalization prevention** — common excuses for skipping tests are listed and rebutted in the TDD stage.
 - **Two-stage code review** — check spec compliance before code quality. Don't polish code that shouldn't exist.
+- **Dependency impact check** — before editing shared files, run `deps-check` to list all dependents. Prevents "fix A, break B".
+- **No placeholders in plans** — "TBD", "add appropriate error handling", "adjust as needed" are banned. Every step needs concrete file paths and function names.
 - **Mock three laws** — never test mock behavior, never add test-only methods to production code, never mock without understanding dependencies.
 
 ## License
