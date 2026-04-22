@@ -5,7 +5,9 @@ description: Stage 9 of feature workflow — Two-stage code review (spec complia
 
 # 階段 9：Code Review（兩階段審查）
 
-使用 **code-reviewer** agent 進行**兩階段**審查：
+使用 Agent tool 派遣 **code-reviewer** subagent（`subagent_type: "shipshape-skills:code-reviewer"`）。在 prompt 中傳入：階段 1 的實作計畫、本次修改的 git diff、相關的 cookbook 內容。
+
+code-reviewer subagent 進行**兩階段**審查：
 
 ## 第一階段：規格符合性
 

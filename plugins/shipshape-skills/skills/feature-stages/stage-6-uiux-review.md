@@ -23,8 +23,8 @@ description: Stage 6 of feature workflow — UIUX review with two modes. Mode A 
 
 當 `figma-visual-reviewer` plugin 已安裝，且對話 context 中有 Figma URL 或使用者提供設計稿截圖時：
 
-1. 使用 `visual-reviewer` agent 執行完整比對流程
-2. Agent 會自動：導出 Figma 設計稿 → Playwright 截網頁 → 像素 diff → AI 判斷差異類型
+1. 使用 Agent tool 派遣 `visual-reviewer` subagent，傳入 Figma URL 和目標網頁 URL
+2. subagent 會自動：導出 Figma 設計稿 → Playwright 截網頁 → 像素 diff → AI 判斷差異類型
 3. 產出差異報告（含 diff 視覺化圖 + HTML 報告）
 
 判定標準：
@@ -36,8 +36,8 @@ description: Stage 6 of feature workflow — UIUX review with two modes. Mode A 
 
 當沒有 Figma 設計稿，但 `claude-in-chrome` 可用時：
 
-1. 提供目標 URL 給 **uiux-reviewer** agent
-2. Agent 從前面階段的對話 context 取得功能規格
+1. 使用 Agent tool 派遣 **uiux-reviewer** subagent（`subagent_type: "shipshape-skills:uiux-reviewer"`），傳入目標 URL 和功能規格
+2. subagent 用 claude-in-chrome 實際開瀏覽器查看頁面
 3. 進行五維度審查（視覺層級、文字與可讀性、版面配置、操作直覺、規格符合度）
 
 ## 迭代修正循環（兩種模式共用）

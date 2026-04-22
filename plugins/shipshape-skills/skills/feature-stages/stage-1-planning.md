@@ -5,7 +5,9 @@ description: Stage 1 of feature workflow — Planning with planner agent. Produc
 
 # 階段 1：規劃
 
-使用 **planner** agent 進行功能規劃：
+使用 Agent tool 派遣 **planner** subagent（`subagent_type: "shipshape-skills:planner"`）進行功能規劃。在 prompt 中傳入：使用者的需求描述、相關檔案路徑、專案技術棧。
+
+planner subagent 負責：
 - 釐清需求與邊界條件
 - 識別需要修改/新增的檔案
 - 評估風險與依賴
