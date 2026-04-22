@@ -167,9 +167,9 @@ Cookbook 只收「程式碼、型別、測試、import 關係**看不出來**」
 
 #### 3a. 寫入 Cookbook
 
-1. 用 Glob 搜尋 `docs/cookbook/**/*.md`，找到最相關的 cookbook 文件
-2. 用 Read 讀取該文件，找到「常見問題」或「注意事項」區塊
-3. 用 Edit 在該區塊新增一條記錄。如果沒有相關文件，用 Write 建立新檔案
+1. 用 Glob 搜尋 `docs/cookbook/**/*.md`，根據修改的模組找到對應的資料夾和檔案
+2. 業務邏輯寫入 `docs/cookbook/<module>/business-rules.md`，踩坑紀錄寫入 `docs/cookbook/<module>/pitfalls.md`，架構決策寫入 `docs/cookbook/architecture/`
+3. 用 Read 讀取該文件，用 Edit 追加記錄。如果對應的資料夾或檔案不存在，用 Bash + Write 建立
 
 **寫入內容的格式範例：**
 

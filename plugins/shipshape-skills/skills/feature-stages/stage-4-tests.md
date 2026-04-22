@@ -7,7 +7,9 @@ description: Stage 4 of feature workflow — Write unit tests first (TDD Red). I
 
 **鐵律：NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST。** 先寫了 code 再補測試？刪掉重來。
 
-根據介面設計撰寫 Vitest 單元測試：
+使用 Agent tool 派遣 **tdd-guide** subagent（`subagent_type: "shipshape-skills:tdd-guide"`）。在 prompt 中傳入：階段 1 的實作計畫、階段 3 的介面設計、專案的測試規範。
+
+tdd-guide subagent 根據介面設計撰寫 Vitest 單元測試：
 - 測試位置：`src/tests/unit/`，鏡像 `src/` 結構
 - 遵循專案測試規範
 - 涵蓋正常路徑、邊界條件、錯誤處理
