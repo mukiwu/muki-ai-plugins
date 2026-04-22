@@ -36,7 +36,16 @@ description: Full development workflow for new features — 10 stages from brain
 
 1. **判斷是否可泛化**：這個回饋只適用於當前情境，還是未來也會遇到？
 2. **若可泛化**：立即寫入 memory（feedback 類型），包含規則、原因（Why）、適用時機（How to apply）
-3. **若涉及架構模式**：考慮是否需要更新 `docs/cookbook/` 對應文件。但**不要為了記錄而記錄**——只有通過 `bug-fix-learning` skill Step 2 的三問判準（tsc/eslint/測試/deps-check 抓不到的隱性知識）才寫
+3. **若涉及業務邏輯或架構決策**：考慮是否需要更新 `docs/cookbook/`。判準見 CLAUDE.md「品質關卡 → Cookbook 同步」的三問規則
 4. **回報使用者**：簡要說明已記錄的內容
 
 > 不要等到流程結束才收斂。使用者提出回饋的當下就是最佳記錄時機。
+
+## Cookbook 寫入時機（貫穿全流程）
+
+開發新功能時，以下時機評估是否需要寫入 cookbook（判準見 CLAUDE.md「品質關卡 → Cookbook 同步」）：
+
+- **使用者提供規格書時**：使用者上傳文件（PDF、圖片）或貼連結要求閱讀規格書時，除了分析規格內容，主動判斷哪些業務邏輯、計算規則、流程約束是程式碼看不出 why 的，摘錄到 cookbook
+- **階段 0-1**：使用者口頭說明業務邏輯或規格時，如果這些規則**程式碼看不出 why**，記錄到 cookbook
+- **階段 5**：實作過程中發現外部 library 的坑、隱性耦合、或非直覺的行為，記錄到 cookbook
+- **階段 9**：Code review 發現架構決策需要留下 why，記錄到 cookbook

@@ -25,6 +25,20 @@
 
 只要這次修改涉及「修正錯誤行為」，就自動執行 `bug-fix-learning` skill 的完整流程。觸發場景包含但不限於：使用者回報 bug、review PR 後修正寫法、修復 Sentry/監控系統報的錯、發現既有邏輯有誤而修正。評估值得沉澱時，必須實際用 Edit/Write 工具寫入檔案——讀取或口頭承認都不算完成。
 
+## 依賴影響面檢查
+
+修改**被多處引用的檔案**（`src/lib/`、`src/services/`、`src/utils/`、`src/hooks/`、共用元件）之前，自動執行 `deps-check` skill 列出所有依賴方。以下情境必須觸發：
+
+- 修改 exported function 的 signature 或 return type
+- 改名、刪除、搬移檔案或 exported symbol
+- 使用者說「重構」「refactor」「改 API」「把這個抽出去」
+
+不需要觸發：純新增檔案、只改 private/local symbol、樣式文案調整、測試檔案。
+
+## 元件重用
+
+實作新的 UI 元件前，先用 Grep 搜尋專案中是否已有類似功能的元件。避免重複造輪子。如果找到可重用的元件，優先基於現有元件擴展，而非從頭寫一個新的。
+
 ## 框架 Patterns
 
 修改 React 相關檔案（`.jsx`、`.tsx`）時，自動參考 `react-patterns` skill 的最佳實踐。
@@ -45,11 +59,21 @@
 
 ### 2. Cookbook 同步
 
-檢查這次修改是否影響了 `docs/cookbook/` 中記錄的內容：
+Cookbook（`docs/cookbook/`）記錄**程式碼、型別、測試、import 關係看不出來的隱性知識**。包含三類內容：
 
-1. 根據這次修改的檔案和函式名稱，用 Grep 搜尋 `docs/cookbook/` 中是否有提到它們
-2. 如果 cookbook 中有記錄但描述已經與程式碼不一致（例如 API 用法改了、參數變了、元件行為不同了），用 Edit 工具更新 cookbook 使其與新程式碼一致
-3. 如果 cookbook 中沒有相關記錄，**預設不新增**。只有通過 `bug-fix-learning` skill Step 2 的三問判準（tsc/eslint/測試/deps-check 都抓不到的隱性知識）才寫入。純實作細節、型別可推導的契約、import 關係都不寫。
+- **Bug 與技術陷阱**：外部 library 的坑、跨時序耦合、隱性資料契約
+- **業務邏輯**：程式碼看不出 why 的商業規則、領域特有的計算邏輯、流程約束
+- **架構決策**：歷史決策的 why、技術選型理由
+
+**更新既有內容**：用 Grep 搜尋 `docs/cookbook/` 中是否有提到這次修改的檔案/函式。有過時的記錄就更新，使其與新程式碼一致。
+
+**新增內容的判準**：預設不新增。寫入前過三問（任何一題答「是」就不寫）：
+
+1. **tsc / eslint 會抓到嗎？** — 會抓 → 不寫
+2. **grep import 或 deps-check 看得出關係嗎？** — 看得出 → 不寫
+3. **測試會失敗嗎？** — 會失敗 → 不寫
+
+三問都答「否」，且屬於上述三類之一，才寫入 cookbook。這個判準適用於所有流程（bug 修復、feature 開發、code review）。
 
 ### 3. Bug fix learning
 
