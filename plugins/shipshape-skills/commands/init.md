@@ -155,19 +155,33 @@ docs/cookbook/
 
 ### Step 5：建議 skills 目錄
 
-根據技術棧，建議使用者可以建立的專案 skills：
+**先判斷 cookbook 還是 skill**：大部分專案知識應該放 cookbook，不是 skill。分界線：
+
+| 放 Cookbook | 放 Skill |
+|------------|----------|
+| 「這東西怎麼運作、為什麼這樣做、有什麼坑」 | 「AI 遇到某種任務時要怎麼執行」 |
+| 知識、規則、陷阱、慣例 | 操作流程、步驟指引 |
+| 例：WebSocket 重連策略、ECharts 封裝慣例、認證流程、API 設計慣例 | 例：Element Plus 元件寫法指引（因為每次寫元件都要遵循的操作流程） |
+
+**判斷原則**：如果這份內容是「讀一次就知道了，之後靠記憶」→ cookbook。如果是「每次執行某類任務都要按步驟走」→ skill。模糊時優先放 cookbook，因為 cookbook 已經有自動讀取機制（stage-5 前置檢查會讀）。
+
+根據技術棧，建議使用者可以建立的專案 skills（**只建議真正需要操作流程的**）：
 
 ```
 .claude/skills/
 ├── element-plus/
-│   └── SKILL.md       ← 元件用法、表單模式、主題客製
-├── project-api/
-│   └── SKILL.md       ← API 設計慣例、錯誤處理模式
+│   └── SKILL.md       ← 元件用法、表單模式、主題客製（每次寫元件都要遵循）
 ```
 
 **不要自動建立 skill 檔案**，只列出建議清單並解釋每個 skill 的用途。讓使用者決定要建哪些。
 
 如果使用者同意，再幫忙建立 skill 檔案骨架（只放標題和基本結構，內容由使用者後續填寫或由 AI 在開發過程中逐步補充）。
+
+**常見誤判**：以下這些通常應該放 cookbook 而非 skill：
+- 第三方 library 的封裝慣例（ECharts、Univer.js 等）→ `docs/cookbook/<module>/` 或 `docs/cookbook/architecture/`
+- API 設計慣例、Axios 攔截器模式 → `docs/cookbook/architecture/api-patterns.md`
+- 認證流程、token 管理 → `docs/cookbook/architecture/auth.md`
+- WebSocket 連線管理 → `docs/cookbook/architecture/websocket.md`
 
 ### Step 6：總結
 
