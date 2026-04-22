@@ -29,7 +29,7 @@
 
 1. 根據這次修改的檔案和函式名稱，用 Grep 搜尋 `docs/cookbook/` 中是否有提到它們
 2. 如果 cookbook 中有記錄但描述已經與程式碼不一致（例如 API 用法改了、參數變了、元件行為不同了），用 Edit 工具更新 cookbook 使其與新程式碼一致
-3. 如果 cookbook 中沒有相關記錄，**預設不新增**。只有通過 `bug-fix-learning` skill Step 3 的三問判準（tsc/eslint/測試/deps-check 都抓不到的隱性知識）才寫入。純實作細節、型別可推導的契約、import 關係都不寫。
+3. 如果 cookbook 中沒有相關記錄，**預設不新增**。只有通過 `bug-fix-learning` skill Step 2 的三問判準（tsc/eslint/測試/deps-check 都抓不到的隱性知識）才寫入。純實作細節、型別可推導的契約、import 關係都不寫。
 
 ### 3. 修復因改動而壞掉的測試
 
@@ -46,7 +46,7 @@
 不管你是走 bug 修復、功能開發、PR review、還是任何其他路徑，在 `git commit` 之前都要過一次這個 checklist：
 
 1. **測試通過？** — 跑過全量測試且全部通過
-2. **Cookbook 同步？** — Grep `docs/cookbook/` 檢查是否有提到這次修改的檔案/函式。有過時的要更新；沒記錄時預設不寫，除非通過 bug-fix-learning Step 3 三問判準
+2. **Cookbook 同步？** — Grep `docs/cookbook/` 檢查是否有提到這次修改的檔案/函式。有過時的要更新；沒記錄時預設不寫，除非通過 bug-fix-learning Step 2 三問判準
 3. **Bug fix learning？** — 如果這次修改涉及修復錯誤行為（不管是修自己的 bug、review 別人的 PR、還是修正 Sentry 報的錯），都要執行 bug-fix-learning skill 的評估流程
 
 如果三項都確認過了才可以 commit。這個 checklist 的目的是確保 cookbook 寫入不會因為「主流程完成了」而被跳過。

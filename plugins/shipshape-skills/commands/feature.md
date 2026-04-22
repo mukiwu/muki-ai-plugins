@@ -36,7 +36,7 @@ description: Full development workflow for new features — 10 stages from brain
 
 1. **判斷是否可泛化**：這個回饋只適用於當前情境，還是未來也會遇到？
 2. **若可泛化**：立即寫入 memory（feedback 類型），包含規則、原因（Why）、適用時機（How to apply）
-3. **若涉及架構模式**：考慮是否需要更新 `docs/cookbook/` 對應文件。但**不要為了記錄而記錄**——只有通過 `bug-fix-learning` skill Step 3 的三問判準（tsc/eslint/測試/deps-check 抓不到的隱性知識）才寫
+3. **若涉及架構模式**：考慮是否需要更新 `docs/cookbook/` 對應文件。但**不要為了記錄而記錄**——只有通過 `bug-fix-learning` skill Step 2 的三問判準（tsc/eslint/測試/deps-check 抓不到的隱性知識）才寫
 4. **回報使用者**：簡要說明已記錄的內容
 
 > 不要等到流程結束才收斂。使用者提出回饋的當下就是最佳記錄時機。
