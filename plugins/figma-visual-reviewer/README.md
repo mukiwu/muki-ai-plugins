@@ -99,10 +99,6 @@ python scripts/generate-report.py \
 
 Generates a standalone HTML report with embedded images.
 
-## Integration with shipshape-skills
-
-When both plugins are installed, shipshape's `/feature` workflow (Stage 6: UIUX Review) automatically uses figma-visual-reviewer when a Figma design is available. No configuration needed.
-
 ## Requirements
 
 - Python 3.10+

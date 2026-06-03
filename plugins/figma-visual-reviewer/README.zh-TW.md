@@ -97,10 +97,6 @@ python scripts/generate-report.py \
 
 產出獨立的 HTML 報告，圖片直接嵌入（不需要外部檔案）。
 
-## 與 shipshape-skills 的整合
-
-兩個 plugin 都安裝時，shipshape 的 `/feature` 工作流（階段 6：UIUX 審查）會在有 Figma 設計稿的情況下自動使用 figma-visual-reviewer。不需要額外設定。
-
 ## 系統需求
 
 - Python 3.10+
