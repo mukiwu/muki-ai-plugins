@@ -7,12 +7,6 @@
   },
   "plugins": [
     {
-      "name": "shipshape-skills",
-      "description": "Disciplined development workflow — TDD, code review, planning, E2E testing, and bug learning skills.",
-      "source": "./plugins/shipshape-skills",
-      "category": "development"
-    },
-    {
       "name": "figma-visual-reviewer",
       "description": "Visual regression testing — compare Figma designs against live web pages with pixel-level diff and AI vision.",
       "source": "./plugins/figma-visual-reviewer",
