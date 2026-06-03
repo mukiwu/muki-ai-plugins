@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "muki-ai-plugins",
-  "description": "Muki's Claude Code plugins — disciplined development workflows, visual regression testing, and code quality tools.",
+  "description": "Muki's Claude Code plugins — visual regression testing and test quality review.",
   "owner": {
     "name": "Muki Wu"
   },
@@ -11,6 +11,12 @@
       "description": "Visual regression testing — compare Figma designs against live web pages with pixel-level diff and AI vision.",
       "source": "./plugins/figma-visual-reviewer",
       "category": "design"
+    },
+    {
+      "name": "review-tests",
+      "description": "Test review doctor — diagnose an existing test file for blind spots and output a self-contained HTML report. Read-only; never modifies code.",
+      "source": "./plugins/review-tests",
+      "category": "testing"
     }
   ]
 }
