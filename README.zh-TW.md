@@ -1,6 +1,6 @@
 # muki-ai-plugins
 
-給 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的 plugin marketplace，專注於品質保證 — 視覺回歸測試與測試體檢。
+給 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的 plugin marketplace — 視覺回歸測試、測試體檢，與專案知識記錄。
 
 ## Plugins
 
@@ -8,6 +8,7 @@
 |--------|------|
 | [figma-visual-reviewer](plugins/figma-visual-reviewer/) | 視覺回歸測試 — 比對 Figma 設計稿與實際網頁 |
 | [review-tests](plugins/review-tests/) | 測試體檢 — 找出測試盲點，產出 self-contained 的 HTML 報告 |
+| [lore](plugins/lore/) | 專案 lore — 建立、查閱、記錄、維護程式碼講不出來的隱性知識 |
 
 ## 安裝
 
@@ -18,6 +19,7 @@
 # 安裝個別 plugin
 /plugin install figma-visual-reviewer
 /plugin install review-tests
+/plugin install lore
 ```
 
 ## Plugin 總覽
@@ -43,6 +45,17 @@
 - 只診斷，補測試交給 TDD
 
 [詳細說明 →](plugins/review-tests/README.zh-TW.md)
+
+### lore
+
+建立、查閱、記錄、維護專案的 lore——那些程式碼自己藏著、卻講不出來的隱性知識。
+
+- `lore-init`／`lore-consult`／`lore-capture`／`lore-maintain` — 四個 skill 涵蓋完整生命週期
+- 把業務規則、踩坑、API map，以及決定背後的「為什麼」記在 `docs/lore/`
+- 規劃或修 bug 前先查，動手過程中學到什麼就記下來
+- 標記優先於刪除——以前對、現在過期的知識，那個教訓還留著
+
+[詳細說明 →](plugins/lore/README.zh-TW.md)
 
 ## 授權
 

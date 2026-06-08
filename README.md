@@ -2,7 +2,7 @@
 
 [繁體中文版](README.zh-TW.md)
 
-A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin marketplace for quality assurance — visual regression testing and test review.
+A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin marketplace — visual regression testing, test review, and project knowledge capture.
 
 ## Plugins
 
@@ -10,6 +10,7 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin marketpla
 |--------|-------------|
 | [figma-visual-reviewer](plugins/figma-visual-reviewer/) | Visual regression testing — compare Figma designs against live web pages |
 | [review-tests](plugins/review-tests/) | Test review doctor — diagnose a test file for blind spots, output a self-contained HTML report |
+| [lore](plugins/lore/) | Project lore — scaffold, consult, capture, and maintain the implicit knowledge your codebase can't show |
 
 ## Install
 
@@ -20,6 +21,7 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin marketpla
 # Install individual plugins
 /plugin install figma-visual-reviewer
 /plugin install review-tests
+/plugin install lore
 ```
 
 ## Plugin Overview
@@ -45,6 +47,17 @@ Reads an existing test file, finds blind spots, and produces a self-contained HT
 - Diagnose only — fixes are left to TDD
 
 [Read more →](plugins/review-tests/README.md)
+
+### lore
+
+Scaffold, consult, capture, and maintain project lore — the implicit knowledge your codebase carries but can't show on its own.
+
+- `lore-init` / `lore-consult` / `lore-capture` / `lore-maintain` — four skills covering the full lifecycle
+- Stores business rules, pitfalls, API maps, and the *why* behind decisions under `docs/lore/`
+- Consult before planning or bug-fixing; capture what you learn as you go
+- Mark over delete — outdated-but-once-true knowledge keeps its lesson
+
+[Read more →](plugins/lore/README.md)
 
 ## License
 
