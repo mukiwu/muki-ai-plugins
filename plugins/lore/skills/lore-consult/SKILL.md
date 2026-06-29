@@ -9,13 +9,13 @@ Read `${CLAUDE_PLUGIN_ROOT}/reference/lore-spec.md` first for the structure and 
 
 ## When to use
 
-Before planning a feature or starting a bug fix — but only when the repo actually has a `docs/lore/` folder. If there is no lore, there is nothing to consult.
+Before planning a feature or starting a bug fix — but only when the repo actually has a `docs/lore/` folder. If there is no `docs/lore/`, there is nothing to consult: tell the user briefly and suggest running `lore-init` to scaffold one, rather than going quiet.
 
 ## Procedure
 
 1. **Find the area.** Read `docs/lore/README.md` and map the current task to one (or more) area. A task can touch several areas; pick all that apply.
 2. **Read the core files.** For each matched area, read its `pitfalls.md` and `business-rules.md`. If you are planning a new feature, also read `api-map.md` when it is present.
-3. **Brief, don't dump.** Produce a SHORT brief covering only the rules and pitfalls that bear on this task, together with their `code:` links. Do not paste the whole area. Skip `status: obsolete` entries unless one is directly relevant to what you are doing.
+3. **Brief, don't dump.** Produce a SHORT brief covering only the rules and pitfalls that bear on this task, together with their `code:` links — aim for at most ~5 bullets or ~300 words unless the user explicitly asks for more. Do not paste the whole area. Skip `status: obsolete` entries unless one is directly relevant to what you are doing.
 4. **Check the links.** For each entry you surfaced, verify its `code:` path still exists. If a path is missing or has moved, flag that entry as possibly stale.
 
 ## Just-in-time cleanup
