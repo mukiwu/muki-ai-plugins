@@ -69,6 +69,8 @@ What breaks, why, and what to do instead.
 - `updated:` — the ISO date (`YYYY-MM-DD`) the entry was last verified.
 - `status:` — one of `active` (still true), `resolved` (the problem was fixed but the history is worth keeping), or `obsolete` (no longer applies).
 
+**Date rule (applies to every write).** Any `updated:` value must come from a real, known current date — the system clock or a date the user gives you. Never fabricate or backdate it. When you don't know today's date, ask rather than guess. Every skill that writes or refreshes an entry follows this rule.
+
 The format is deliberately both human-readable AND greppable: tools grep `` `code:` `` to check that the linked paths still exist, and `status:` lets stale entries be marked rather than silently deleted.
 
 ## Maintenance & deletion policy

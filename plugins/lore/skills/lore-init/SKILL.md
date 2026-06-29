@@ -17,8 +17,8 @@ If `docs/lore/` already exists, do NOT overwrite it. Switch to augment-mode: add
 ## Procedure
 
 1. **Detect existing lore.** Check whether `docs/lore/` already exists. If it does, switch to augment-mode — add only missing core files (`README.md`, an area's `pitfalls.md` / `business-rules.md`) and never clobber anything that is already there.
-2. **Infer the project type.** Decide whether this is a frontend app, a backend service, a library, or a CLI. Use that to judge whether `api-map.md` is worth seeding (it pays off for API-heavy projects). When you are unsure, ask the user instead of guessing.
-3. **Infer the initial areas.** Look at the codebase's top-level domains or subsystems and propose one or two starter areas (for example `payments/`, `auth/`). Confirm the list with the user before creating anything.
+2. **Infer the project type.** Decide whether this is a frontend app, a backend service, a library, or a CLI. Use that to judge whether `api-map.md` is worth seeding (it pays off for API-heavy projects). When you are unsure, ask the user instead of guessing. If you still can't tell and the user doesn't answer, fall back to the safe minimum: scaffold only the core files and skip `api-map.md` and `architecture/`.
+3. **Infer the initial areas.** Look at the codebase's top-level domains or subsystems and propose one or two starter areas (for example `payments/`, `auth/`). Confirm the list with the user before creating anything. Never create areas without explicit confirmation — if the user doesn't respond, propose them and stop there, don't create them.
 4. **Create from the templates** in `${CLAUDE_PLUGIN_ROOT}/reference/templates/`:
    - `docs/lore/README.md` from `README.md.tmpl` — fill the Areas table with the areas you chose.
    - For each starter area, `docs/lore/<area>/pitfalls.md` and `docs/lore/<area>/business-rules.md` from `pitfalls.md.tmpl` and `business-rules.md.tmpl`, replacing the `<AREA>` placeholder with the real area name.

@@ -1,10 +1,18 @@
 {
   "name": "lore",
   "description": "Capture, consult, scaffold, and maintain project lore — the implicit knowledge (business rules, API maps, pitfalls, decision rationale) that code, types, and git history can't reveal.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": {
     "name": "Muki Wu"
   },
+  "homepage": "https://github.com/mukiwu/muki-ai-plugins/tree/master/plugins/lore",
   "repository": "https://github.com/mukiwu/muki-ai-plugins",
-  "license": "MIT"
+  "license": "MIT",
+  "keywords": [
+    "knowledge-base",
+    "documentation",
+    "lore",
+    "project-notes",
+    "business-rules"
+  ]
 }
