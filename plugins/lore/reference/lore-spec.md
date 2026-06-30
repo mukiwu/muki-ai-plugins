@@ -84,6 +84,33 @@ The format is deliberately both human-readable AND greppable: tools grep `` `cod
 - **Two cleanup paths, complementary:** just-in-time cleanup woven into `lore-consult` / `lore-capture` (cheap, because you're already in context), plus a periodic sweep via `lore-maintain` (catches the long tail no one is reading).
 - **Destructive actions (delete / archive / merge) always require human confirmation.** The default action is "mark", never an automatic delete.
 
+## Health check & adoption feedback
+
+`lore-check` is a **read-only** audit. It scores a lore base on six dimensions — entry quality (the boundary test above), coverage, link health, freshness, retrievability, and adoption — then hands fixes off to `lore-maintain` (cleanup) and `lore-capture` (gaps). It never mutates anything itself.
+
+**Adoption feedback log.** To measure whether surfaced lore actually gets used, the skills append events to `docs/lore/.lore-feedback.jsonl` — one JSON object per line, created on first use. It lives in the user's project and is **gitignored by default** (keeping it is the user's call; a skill that writes it may add `.lore-feedback.jsonl` to `docs/lore/.gitignore` if not already ignored).
+
+Event shape:
+
+```json
+{"ts": "2026-06-30", "skill": "lore-consult", "entry": "payments/pitfalls.md#contractCalc rounding", "task": "add annual billing", "outcome": "surfaced"}
+```
+
+`outcome` is one of:
+
+- `surfaced` — `lore-consult` put this entry in a brief.
+- `heeded` — the work followed it. Helpful.
+- `redundant` — it only confirmed what the user already planned. Neutral, NOT a strike.
+- `ignored` — skipped, or it turned out wrong. Unhelpful; a review candidate.
+- `accepted` / `declined` — a `lore-maintain` action the user confirmed or refused.
+
+Notes:
+
+- The three-way `heeded` / `redundant` / `ignored` split is deliberate. A plain helpful/unhelpful binary would punish good lore that merely confirmed a sound plan.
+- `lore-consult` records `surfaced` when it surfaces an entry, then reconciles each to a final outcome at task end. This reconciliation is **best-effort** — a dropped session simply leaves the entry as `surfaced`.
+- `lore-maintain` records `accepted` / `declined` per confirmed action.
+- Writing to the log must NEVER block or fail the main task. If it can't be written, skip it silently.
+
 ## Plays well with others
 
 If a project also keeps a domain glossary (the *what* — vocabulary and concepts) or a code-structure index (the *where* — files, imports, layers), lore is the third leg: the *why* and the gotchas. The three are complementary but distinct. Lore stands on its own and does not require either of them to be present.

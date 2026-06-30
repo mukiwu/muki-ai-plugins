@@ -22,6 +22,12 @@ Before planning a feature or starting a bug fix — but only when the repo actua
 
 When step 4 turns up a stale entry — or one that plainly contradicts the current code — offer to fix it on the spot: refresh its `updated:` date, rewrite it, or mark it `obsolete`. You are already in context, so this is cheap. Keep it a side-offer the user can decline; never force it, and never let it block the main task.
 
+## Adoption feedback (best-effort)
+
+Following lore-spec's feedback log: when your brief surfaces an entry, append a `surfaced` event for it to `docs/lore/.lore-feedback.jsonl`. At the end of the task, reconcile each surfaced entry to its real outcome — `heeded` (the work followed it), `redundant` (it only confirmed what was already planned), or `ignored` (skipped, or it turned out wrong). This signal is what `lore-check` aggregates into its adoption report.
+
+This is strictly best-effort and must never block or delay the task. If the log can't be written, skip it. A session that ends before reconciliation simply leaves the entry as `surfaced`. If `docs/lore/.gitignore` doesn't already ignore `.lore-feedback.jsonl`, add it.
+
 ## Guardrail
 
-Relevance over completeness — a tight brief beats a full dump. Maintenance is an offer here, not an interruption.
+Relevance over completeness — a tight brief beats a full dump. Maintenance is an offer here, not an interruption. Feedback logging is best-effort and never blocks the task.
