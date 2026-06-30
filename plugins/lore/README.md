@@ -2,7 +2,7 @@
 
 [繁體中文版](README.zh-TW.md)
 
-A plugin for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) to scaffold, consult, capture, and maintain project **lore** — the implicit knowledge your codebase carries but can't show on its own.
+A plugin for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) to scaffold, consult, capture, maintain, and health-check project **lore** — the implicit knowledge your codebase carries but can't show on its own.
 
 ## What Is Lore
 
@@ -32,7 +32,7 @@ Each entry carries a one-line, greppable meta directly under its heading:
 - `updated:` — ISO date the entry was last verified.
 - `status:` — `active` | `resolved` | `obsolete`.
 
-## The Four Skills
+## The Five Skills
 
 | Skill | When it triggers |
 |-------|------------------|
@@ -40,6 +40,7 @@ Each entry carries a one-line, greppable meta directly under its heading:
 | **lore-consult** | Read lore before acting — before planning a feature or fixing a bug, it surfaces the relevant rules, pitfalls, and API map, and flags entries that look stale. |
 | **lore-capture** | Record implicit knowledge — when you learn something the code can't reveal (a pitfall, an intentional behavior, an API quirk, a decision's *why*). |
 | **lore-maintain** | Clean up as lore grows — find stale, duplicate, or wrong entries, check that code links and the index still hold, and prune obsolete content. |
+| **lore-check** | Audit whether the lore is actually helping — a read-only health report across coverage, link health, freshness, entry quality, and adoption, then hands the fixes to lore-maintain / lore-capture. |
 
 ## Quick Start
 
@@ -60,6 +61,12 @@ From then on, `lore-consult` reads before you act and `lore-capture` records wha
 ## Maintenance Philosophy
 
 **Mark over delete.** Hard-won knowledge keeps its lesson even after it stops being current, so outdated-but-once-true entries get marked `obsolete` rather than removed. Every destructive action (delete / archive / merge) requires your confirmation — the default is always "mark".
+
+## Health Check
+
+`lore-check` answers a question the other skills don't: *is this lore actually helping?* It runs a read-only audit and reports per dimension — entry quality (does each still pass the boundary test?), coverage gaps, broken links, staleness, retrievability, and **adoption**. It never edits anything; it hands fixes to `lore-maintain` and `lore-capture`.
+
+Adoption is the real-use signal. When `lore-consult` surfaces an entry and when `lore-maintain` proposes an action, the outcome is logged (best-effort) to `docs/lore/.lore-feedback.jsonl` — `heeded`, `redundant`, or `ignored`. Entries that get surfaced again and again but never heeded bubble up as review candidates. The log lives in your project and is gitignored by default.
 
 ## License
 

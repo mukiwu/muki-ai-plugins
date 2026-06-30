@@ -1,6 +1,6 @@
 # lore
 
-給 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的 plugin，幫你建立、查閱、記錄、維護專案的 **lore**——那些程式碼自己藏著、卻講不出來的隱性知識。
+給 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的 plugin，幫你建立、查閱、記錄、維護、體檢專案的 **lore**——那些程式碼自己藏著、卻講不出來的隱性知識。
 
 ## 什麼是 lore
 
@@ -30,7 +30,7 @@ docs/lore/
 - `updated:`——最後一次確認這條還成立的日期（ISO 格式）。
 - `status:`——`active`｜`resolved`｜`obsolete`。
 
-## 四個 skill
+## 五個 skill
 
 | Skill | 什麼時候會觸發 |
 |-------|----------------|
@@ -38,6 +38,7 @@ docs/lore/
 | **lore-consult** | 動手前先讀 lore——規劃功能或修 bug 之前，把相關的規則、坑、API map 撈出來，順便標出看起來過期的 entry。 |
 | **lore-capture** | 記錄隱性知識——當你學到程式碼看不出來的東西（踩到的坑、確認是刻意的行為、API 怪癖、某個決定的「為什麼」）。 |
 | **lore-maintain** | 隨 lore 長大做整理——找出過期、重複、錯誤的 entry，檢查 `code:` 連結與索引還對不對，清掉沒用的內容。 |
+| **lore-check** | 檢查 lore 到底有沒有在幫你——唯讀體檢，逐面向看覆蓋率、連結健康、新鮮度、entry 品質、採納率，再把要修的交給 lore-maintain／lore-capture。 |
 
 ## 快速開始
 
@@ -58,6 +59,12 @@ docs/lore/
 ## 維護哲學
 
 **標記優先於刪除。** 得來不易的知識，就算不再是現況，那個教訓還是有價值，所以「以前對、現在過期」的 entry 是標成 `obsolete`，而不是直接刪掉。任何破壞性動作（刪除／封存／合併）都要經你確認——預設動作永遠是「標記」。
+
+## 健康檢查
+
+`lore-check` 回答其他 skill 不回答的問題：*這包 lore 到底有沒有在幫你？* 它跑一次唯讀體檢，逐面向報告——entry 品質（每條還過不過 boundary test？）、覆蓋缺口、死連結、過期、撈不撈得出來，還有**採納率**。它不改任何東西，要修的交給 `lore-maintain` 跟 `lore-capture`。
+
+採納率是真實使用的訊號。當 `lore-consult` 撈出一條 entry、或 `lore-maintain` 提一個動作，結果會（best-effort）記進 `docs/lore/.lore-feedback.jsonl`——`heeded`、`redundant` 或 `ignored`。一直被撈出來、卻從沒被採用的 entry 會浮上來變成複查候選。這個 log 放在你的專案裡，預設 gitignore。
 
 ## 授權
 

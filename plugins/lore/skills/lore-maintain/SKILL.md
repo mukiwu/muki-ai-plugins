@@ -9,7 +9,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/reference/lore-spec.md` first — follow its Mainten
 
 ## When to use
 
-On an explicit request ("tidy up lore", "clean out stale entries") or as a scheduled sweep that catches the long tail nobody is reading.
+On an explicit request ("tidy up lore", "clean out stale entries") or as a scheduled sweep that catches the long tail nobody is reading. Also the natural follow-up to a `lore-check` report: its flagged broken links, stale entries, suspected noise, and low-adoption entries (surfaced repeatedly but never heeded) are your work list.
 
 ## Procedure
 
@@ -18,7 +18,7 @@ On an explicit request ("tidy up lore", "clean out stale entries") or as a sched
 3. **Find duplicates.** Within each area, look for entries that overlap or say the same thing — these are merge candidates.
 4. **Check the index for drift.** Compare the Areas table in `docs/lore/README.md` against the folders actually on disk, and note anything that no longer lines up.
 5. **Produce a report.** For each entry, recommend an action: keep, refresh `updated:`, mark `resolved`, mark `obsolete`, merge, or flag as a delete-candidate.
-6. **Apply per the deletion policy.** Follow lore-spec: **mark over delete**. Every destructive action — delete, archive, or merge — is confirmed with the user. Don't batch-confirm with a single blanket "yes": confirm each entry, or a small group you have explicitly listed out (per lore-spec, batch-archiving an obsolete pile is fine when the items are listed and the user approves them). The default action is always "mark", never an automatic delete.
+6. **Apply per the deletion policy.** Follow lore-spec: **mark over delete**. Every destructive action — delete, archive, or merge — is confirmed with the user. Don't batch-confirm with a single blanket "yes": confirm each entry, or a small group you have explicitly listed out (per lore-spec, batch-archiving an obsolete pile is fine when the items are listed and the user approves them). The default action is always "mark", never an automatic delete. As you apply each confirmed action, append an `accepted` (the user approved it) or `declined` (the user refused it) event to lore-spec's feedback log — best-effort, never blocking.
 
 ## Report format (suggested)
 
