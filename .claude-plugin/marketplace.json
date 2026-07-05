@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "muki-ai-plugins",
-  "description": "Muki's Claude Code plugins — visual regression testing and test quality review.",
+  "description": "Muki's Claude Code plugins — project lore knowledge base, test quality review, and visual regression testing.",
   "owner": {
     "name": "Muki Wu"
   },
@@ -20,7 +20,7 @@
     },
     {
       "name": "lore",
-      "description": "Capture, consult, scaffold, maintain, and health-check project lore — the implicit knowledge (business rules, API maps, pitfalls, decision rationale) that code, types, and git history can't reveal.",
+      "description": "Capture, consult, guard, scaffold, maintain, and health-check project lore — the implicit knowledge (business rules, API maps, pitfalls, decision rationale) that code, types, and git history can't reveal.",
       "source": "./plugins/lore",
       "category": "documentation"
     }

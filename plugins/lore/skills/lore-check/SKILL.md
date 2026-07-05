@@ -33,6 +33,8 @@ Produce one report. Give each dimension its own line with the raw numbers and a 
 
 Yellow/green thresholds are heuristic: flag yellow when there is any broken link, the boundary-test pass rate is low, there are uncovered domains, or an entry is surfaced repeatedly with zero `heeded`. Don't chase precise numbers — the point is to steer the next action, not to grade.
 
+After delivering the report, refresh the heartbeat stamp: write today's date to `docs/lore/.lore-last-check` (one line, `YYYY-MM-DD`), and make sure `docs/lore/.gitignore` ignores it. The SessionStart hook reads this stamp to suggest a re-check after ~30 days — it is how the health loop keeps running without anyone remembering to.
+
 ## Guardrail
 
-Read-only, always. `lore-check` reports and recommends; it never edits, marks, deletes, or refreshes anything itself. Every fix is a handoff to `lore-maintain` or `lore-capture`, which carry their own confirmation steps.
+Read-only toward the lore itself, always. `lore-check` never edits, marks, deletes, or refreshes any lore content — every fix is a handoff to `lore-maintain` or `lore-capture`, which carry their own confirmation steps. The one exemption is bookkeeping: the gitignored `.lore-last-check` stamp (and, per lore-spec, the feedback log) are metadata about the check, not lore.

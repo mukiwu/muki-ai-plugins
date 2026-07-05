@@ -86,28 +86,33 @@ The format is deliberately both human-readable AND greppable: tools grep `` `cod
 
 ## Health check & adoption feedback
 
-`lore-check` is a **read-only** audit. It scores a lore base on six dimensions — entry quality (the boundary test above), coverage, link health, freshness, retrievability, and adoption — then hands fixes off to `lore-maintain` (cleanup) and `lore-capture` (gaps). It never mutates anything itself.
+`lore-check` is a **read-only** audit. It scores a lore base on six dimensions — entry quality (the boundary test above), coverage, link health, freshness, retrievability, and adoption — then hands fixes off to `lore-maintain` (cleanup) and `lore-capture` (gaps). It never mutates lore content itself; its one bookkeeping write is the heartbeat stamp below.
+
+**Heartbeat stamp.** After each run, `lore-check` writes today's date to `docs/lore/.lore-last-check` (one line, `YYYY-MM-DD`, gitignored like the feedback log). The SessionStart hook reads the stamp's age and suggests a re-check after ~30 days. The stamp is metadata about the check, not lore — writing it does not break lore-check's read-only contract.
 
 **Adoption feedback log.** To measure whether surfaced lore actually gets used, the skills append events to `docs/lore/.lore-feedback.jsonl` — one JSON object per line, created on first use. It lives in the user's project and is **gitignored by default** (keeping it is the user's call; a skill that writes it may add `.lore-feedback.jsonl` to `docs/lore/.gitignore` if not already ignored).
 
 Event shape:
 
 ```json
-{"ts": "2026-06-30", "skill": "lore-consult", "entry": "payments/pitfalls.md#contractCalc rounding", "task": "add annual billing", "outcome": "surfaced"}
+{"ts": "2026-06-30", "skill": "lore-consult", "entry": "payments/pitfalls.md#contractCalc rounding", "task": "add annual billing", "outcome": "surfaced", "note": ""}
 ```
+
+`note` is optional — a short free-text reason, most valuable on `ignored` / `declined` (was the entry wrong, irrelevant, or badly written?). It gives `lore-maintain` something concrete to act on when a low-adoption entry comes up for review.
 
 `outcome` is one of:
 
-- `surfaced` — `lore-consult` put this entry in a brief.
-- `heeded` — the work followed it. Helpful.
-- `redundant` — it only confirmed what the user already planned. Neutral, NOT a strike.
-- `ignored` — skipped, or it turned out wrong. Unhelpful; a review candidate.
+- `surfaced` — `lore-consult` put this entry in a brief, or `lore-guard` matched it against a diff.
+- `heeded` — the work followed it, or a `lore-guard` flag led to a fix. Helpful.
+- `redundant` — it only confirmed what the user already planned, or the diff already respected it. Neutral, NOT a strike.
+- `ignored` — skipped, dismissed, or it turned out wrong. Unhelpful; a review candidate.
 - `accepted` / `declined` — a `lore-maintain` action the user confirmed or refused.
 
 Notes:
 
 - The three-way `heeded` / `redundant` / `ignored` split is deliberate. A plain helpful/unhelpful binary would punish good lore that merely confirmed a sound plan.
 - `lore-consult` records `surfaced` when it surfaces an entry, then reconciles each to a final outcome at task end. This reconciliation is **best-effort** — a dropped session simply leaves the entry as `surfaced`.
+- `lore-guard` records the same three-way outcome per entry it judged against a diff.
 - `lore-maintain` records `accepted` / `declined` per confirmed action.
 - Writing to the log must NEVER block or fail the main task. If it can't be written, skip it silently.
 

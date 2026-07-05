@@ -14,13 +14,14 @@ Before planning a feature or starting a bug fix — but only when the repo actua
 ## Procedure
 
 1. **Find the area.** Read `docs/lore/README.md` and map the current task to one (or more) area. A task can touch several areas; pick all that apply.
-2. **Read the core files.** For each matched area, read its `pitfalls.md` and `business-rules.md`. If you are planning a new feature, also read `api-map.md` when it is present.
-3. **Brief, don't dump.** Produce a SHORT brief covering only the rules and pitfalls that bear on this task, together with their `code:` links — aim for at most ~5 bullets or ~300 words unless the user explicitly asks for more. Do not paste the whole area. Skip `status: obsolete` entries unless one is directly relevant to what you are doing.
-4. **Check the links.** For each entry you surfaced, verify its `code:` path still exists. If a path is missing or has moved, flag that entry as possibly stale.
+2. **Reverse-lookup by file.** When you already know which files the task will touch, also grep `docs/lore/` for `` `code:` `` references matching those paths (prefix matches count — an entry pointing at `src/payments/` covers files under it). This catches entries filed under an area you didn't map in step 1; the `code:` meta exists precisely to make this lookup cheap.
+3. **Read the core files.** For each matched area, read its `pitfalls.md` and `business-rules.md`. If you are planning a new feature, also read `api-map.md` when it is present. When a file has grown long, don't read it wall-to-wall: grep its `## ` headings and meta lines first, then read only the entries that look relevant.
+4. **Brief, don't dump.** Produce a SHORT brief covering only the rules and pitfalls that bear on this task, together with their `code:` links — aim for at most ~5 bullets or ~300 words unless the user explicitly asks for more. Do not paste the whole area. Skip non-`active` entries (`resolved`, `obsolete`) unless one is directly relevant to what you are doing.
+5. **Check the links.** For each entry you surfaced, verify its `code:` path still exists. If a path is missing or has moved, flag that entry as possibly stale.
 
 ## Just-in-time cleanup
 
-When step 4 turns up a stale entry — or one that plainly contradicts the current code — offer to fix it on the spot: refresh its `updated:` date, rewrite it, or mark it `obsolete`. You are already in context, so this is cheap. Keep it a side-offer the user can decline; never force it, and never let it block the main task.
+When step 5 turns up a stale entry — or one that plainly contradicts the current code — offer to fix it on the spot: refresh its `updated:` date, rewrite it, or mark it `obsolete`. You are already in context, so this is cheap. Keep it a side-offer the user can decline; never force it, and never let it block the main task.
 
 ## Adoption feedback (best-effort)
 

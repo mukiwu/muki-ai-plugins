@@ -23,7 +23,7 @@ If `docs/lore/` already exists, do NOT overwrite it. Switch to augment-mode: add
    - `docs/lore/README.md` from `README.md.tmpl` — fill the Areas table with the areas you chose.
    - For each starter area, `docs/lore/<area>/pitfalls.md` and `docs/lore/<area>/business-rules.md` from `pitfalls.md.tmpl` and `business-rules.md.tmpl`, replacing the `<AREA>` placeholder with the real area name.
    - Optionally `docs/lore/api-map.md` from `api-map.md.tmpl` and/or `docs/lore/architecture/index.md` from `architecture-index.md.tmpl`, only when the project type warrants them.
-5. **Wire up the trigger.** Tell the user to add a one-line lore pointer to their `CLAUDE.md` (or `AGENTS.md`) so `lore-consult` and `lore-capture` fire naturally — for example: "Project lore lives in `docs/lore/` — consult it before planning or bug-fixing, and capture implicit knowledge into it."
+5. **Wire up the trigger.** Offer to add a one-line lore pointer to the project's `CLAUDE.md` (or `AGENTS.md`) yourself — for example: "Project lore lives in `docs/lore/` — consult it before planning or bug-fixing, guard diffs against it before committing, and capture implicit knowledge into it." Add it on the user's confirmation; if they decline, just show them the line to paste. The plugin's SessionStart hook already nudges toward the lore skills in repos that have `docs/lore/`, but the pointer makes triggering robust for teammates and agents running without the plugin installed.
 
 ## Guardrail
 

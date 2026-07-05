@@ -1,27 +1,56 @@
 #!/usr/bin/env bash
 # SessionStart hook for the lore plugin.
 #
-# Nudges the agent to PROACTIVELY capture product business logic / domain
-# 眉角 (tacit gotchas) into docs/lore/ when the user shares it in
-# conversation — but only in projects that already have a docs/lore/ base,
-# so projects without lore stay quiet.
+# In projects that already have a docs/lore/ base, injects a standing
+# instruction covering the three moments the agent should reach for lore:
+#   1. before work  -> lore-consult (read the relevant rules/pitfalls)
+#   2. during work  -> lore-capture (record business logic / 眉角 the user
+#      shares, or non-obvious root causes confirmed while debugging)
+#   3. before commit/PR -> lore-guard (check the diff against recorded lore)
+# It also carries a lightweight heartbeat: when the lore base has content
+# but lore-check hasn't run in >30 days (tracked via the gitignored
+# docs/lore/.lore-last-check stamp), it suggests a health check.
+#
+# Projects without docs/lore/ stay completely quiet.
 
 set -euo pipefail
 
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$PWD}"
 
 # Only inject when this project actually has a lore base.
-if [ ! -d "${PROJECT_DIR}/docs/lore" ] && [ ! -d "docs/lore" ]; then
+if [ -d "${PROJECT_DIR}/docs/lore" ]; then
+  LORE_DIR="${PROJECT_DIR}/docs/lore"
+elif [ -d "docs/lore" ]; then
+  LORE_DIR="docs/lore"
+else
   exit 0
 fi
 
 # The standing instruction. Keep it product-focused: business logic + 眉角,
 # never code structure (that fails lore's "could you recover it from code?" test).
-message='<lore-capture>
-這個專案有 docs/lore/ 知識庫，記錄程式碼看不出來的隱性知識：產品商業規則、領域眉角（踩過才知道的脾氣）、API 契約／陷阱、決策的 why。
+message='<lore>
+這個專案有 docs/lore/ 知識庫，記錄程式碼看不出來的隱性知識：產品商業規則、領域眉角（踩過才知道的脾氣）、API 契約／陷阱、決策的 why。三個時機主動用它：
 
-當使用者在對話中講出這類知識——解釋產品怎麼運作、一個規格、一個眉角、為什麼某件事要這樣設計——主動考慮呼叫 `lore:lore-capture`：判斷值不值得記，值得就先問使用者要不要記再寫。判準：「這件事讀現行 code 能不能推回來？能就不是 lore，跳過」。不要記程式結構、function 做什麼、或任何讀 code 就有的東西——重點是產品商業邏輯與眉角。
-</lore-capture>'
+1. 動手前——規劃功能或修 bug 前，先跑 `lore:lore-consult` 撈這個任務相關的 rules 與 pitfalls；已知會動哪些檔案時，順手用 `code:` 反查。
+2. 進行中——使用者講出這類知識（解釋產品怎麼運作、一個規格、一個眉角、為什麼要這樣設計），或你在除錯中挖到非顯而易見的根因、確認某個怪行為是刻意的，主動考慮 `lore:lore-capture`：判斷值不值得記，值得就先問使用者要不要記再寫。判準：「這件事讀現行 code 能不能推回來？能就不是 lore，跳過」。不要記程式結構、function 做什麼、或任何讀 code 就有的東西。
+3. commit / PR 前——跑 `lore:lore-guard`，用 diff 對照 lore 的 `code:` 連結，確認沒踩到已記錄的商業規則或 pitfall。
+</lore>'
+
+# Heartbeat: only when the base actually has area content (at least one file
+# below an area folder), so a freshly scaffolded empty base stays quiet.
+stamp="${LORE_DIR}/.lore-last-check"
+has_area_content=$(find "$LORE_DIR" -mindepth 2 -name '*.md' -print 2>/dev/null | head -n 1)
+if [ -n "$has_area_content" ]; then
+  if [ ! -f "$stamp" ]; then
+    message="${message}
+
+（這包 lore 尚未跑過健康檢查——找個空檔建議使用者跑一次 \`lore:lore-check\`，看它有沒有真的在幫忙。）"
+  elif [ -n "$(find "$stamp" -mtime +30 -print 2>/dev/null)" ]; then
+    message="${message}
+
+（距離上次 \`lore:lore-check\` 已超過 30 天——找個空檔建議使用者再體檢一次。）"
+  fi
+fi
 
 # JSON-escape (single C-level pass per substitution; avoids a char loop).
 escape_for_json() {
