@@ -14,9 +14,11 @@
  *   "health":     { "level": "良好|及格|待補強", "summary": "一句話總評" },
  *   "sections":   [ { "title": "斷言有效性",
  *                     "findings": [ { "desc": "通順中文，保留專有名詞", "loc": "spec 行 …",
- *                                     "src": { "fn": "fnName", "file": "(選填，預設 sourceFile)", "from": 297, "to": 300 } } ] },
+ *                                     "level": "high|med|low",              // 選填，預設 med
+ *                                     "src": { "fn": "fnName", "file": "(選填，預設 sourceFile)",
+ *                                              "from": 297, "to": 300, "lang": "(選填，預設依副檔名)" } } ] },
  *                   { "title": "Mock 健康度", "clean": "無問題……" } ],   // clean 與 findings 二選一
- *   "suggestions": [ "應該驗證 …" ]
+ *   "suggestions": [ "應該驗證 …" ]                                       // 空陣列時整張建議卡略過
  * }
  *
  * src.from–src.to 只放與該 finding 相關的關鍵幾行，不要整個 function。
@@ -47,33 +49,57 @@ function readFileLines(rel) {
   return fileCache[rel]
 }
 
-// 每條 finding 自帶關鍵片段定位 src: { fn, file?, from, to }
+// 高亮只認 TS 家族；其他語言（py、go…）純 escape 等寬顯示，不套錯的關鍵字色。
+const TS_LIKE = new Set(['ts', 'tsx', 'js', 'jsx', 'mjs', 'cjs', 'vue'])
+function langClass(src, file) {
+  const lang = src.lang || path.extname(file || '').slice(1).toLowerCase()
+  return TS_LIKE.has(lang) ? 'lang-ts' : 'lang-plain'
+}
+
+// 每條 finding 自帶關鍵片段定位 src: { fn, file?, from, to, lang? }
 // 只擷取與該 finding 相關的關鍵幾行，不展整個 function——重點才不會被淹沒、好找。
+// 單條片段讀不到（路徑 typo、行號超界）只降級成一行提示，絕不掀掉整份報告——
+// 一個 typo 不該讓其他九條正確的分析陪葬。
 function detailsBlock(src) {
   if (!src) return ''
   const file = src.file || data.sourceFile
-  const code = readFileLines(file).slice(src.from - 1, src.to).join('\n')
+  let code
+  try {
+    if (!file || !src.from || !src.to) throw new Error('src 缺 file/from/to')
+    code = readFileLines(file).slice(src.from - 1, src.to).join('\n')
+  } catch (e) {
+    return `<div class="src-missing">source 片段無法載入：${esc(file || '(未指定)')}:${esc(src.from ?? '?')}–${esc(src.to ?? '?')}</div>`
+  }
   const loc = `${path.basename(file)}:${src.from}–${src.to}`
   return `<details class="src-toggle">
   <summary>查看 source：<span class="fn">${esc(src.fn)}()</span> <span class="loc">${esc(loc)}</span></summary>
-  <pre><code class="lang-ts">${esc(code)}</code></pre>
+  <pre><code class="${langClass(src, file)}">${esc(code)}</code></pre>
 </details>`
 }
 
+const SEV = {
+  high: { cls: 'sev-high', label: '高' },
+  med:  { cls: 'sev-med',  label: '中' },
+  low:  { cls: 'sev-low',  label: '低' },
+}
+const sevOrder = f => ({ high: 0, med: 1, low: 2 }[f.level] ?? 1)
+
 function findingHtml(f) {
-  return `<div class="finding">
-    <div class="finding-body">${md(f.desc)}</div>
+  const sev = SEV[f.level] || SEV.med
+  return `<div class="finding ${sev.cls}">
+    <div class="finding-body"><span class="sev ${sev.cls}">${sev.label}</span>${md(f.desc)}</div>
     ${f.loc ? `<div class="finding-loc">${esc(f.loc)}</div>` : ''}
     ${f.src ? detailsBlock(f.src) : ''}
   </div>`
 }
 
 function sectionHtml(sec) {
-  const findings = sec.findings || []
+  const findings = (sec.findings || []).slice().sort((a, b) => sevOrder(a) - sevOrder(b))
   const body = findings.length
     ? findings.map(findingHtml).join('\n')
     : `<div class="clean">${md(sec.clean || '無問題')}</div>`
-  const count = findings.length ? `${findings.length} 項` : '✓'
+  const highCount = findings.filter(f => f.level === 'high').length
+  const count = findings.length ? `${findings.length} 項${highCount ? `（高 ${highCount}）` : ''}` : '✓'
   return `<section class="card">
     <h2>${esc(sec.title)} <span class="count">${count}</span></h2>
     ${body}
@@ -116,6 +142,13 @@ const html = `<!doctype html>
   h2 { font-size:15px; margin:0 0 14px; display:flex; align-items:center; gap:10px; }
   .count { font-size:12px; font-weight:500; color:var(--muted); background:var(--soft); padding:2px 9px; border-radius:999px; }
   .finding { border-left:3px solid var(--bar); padding:2px 0 2px 14px; margin:14px 0; }
+  .finding.sev-high { border-left-color:var(--weak); }
+  .finding.sev-low { border-left-color:var(--line); }
+  .sev { font-size:11px; font-weight:600; padding:1px 8px; border-radius:999px; margin-right:8px; vertical-align:1px; }
+  .sev.sev-high { background:var(--weak-bg); color:var(--weak); }
+  .sev.sev-med { background:var(--pass-bg); color:var(--pass); }
+  .sev.sev-low { background:var(--soft); color:var(--muted); }
+  .src-missing { font-size:12px; color:var(--muted); margin-top:6px; font-style:italic; }
   .finding-body { font-size:14.5px; }
   .finding-body code,.clean code { background:var(--soft); padding:1px 5px; border-radius:4px; font-size:12.5px; }
   .finding-loc { font-size:12px; color:var(--muted); margin:4px 0 8px; font-variant-numeric:tabular-nums; }
@@ -130,7 +163,7 @@ const html = `<!doctype html>
   summary .loc { color:var(--muted); font-size:11.5px; font-variant-numeric:tabular-nums; }
   pre { background:var(--soft); border:1px solid var(--line); border-radius:8px; padding:14px 16px;
     overflow-x:auto; margin:8px 0 4px; font-size:12.5px; line-height:1.55; }
-  code.lang-ts { font-family:ui-monospace,SFMono-Regular,Menlo,"Cascadia Code",monospace; }
+  code.lang-ts, code.lang-plain { font-family:ui-monospace,SFMono-Regular,Menlo,"Cascadia Code",monospace; }
   .kw{color:var(--kw);} .str{color:var(--str);} .cmt{color:var(--cmt);font-style:italic;} .num{color:var(--num);}
   .sugg { counter-reset:s; list-style:none; padding:0; margin:0; }
   .sugg li { counter-increment:s; padding:8px 0 8px 34px; position:relative; font-size:14px; border-bottom:1px dashed var(--line); }
@@ -157,12 +190,12 @@ const html = `<!doctype html>
 
   ${(data.sections || []).map(sectionHtml).join('\n')}
 
-  <section class="card">
+  ${(data.suggestions || []).length ? `<section class="card">
     <h2>建議補的行為 <span class="count">走 tdd 一次一個</span></h2>
     <ol class="sugg">
-      ${(data.suggestions || []).map(s => `<li>${md(s)}</li>`).join('\n      ')}
+      ${data.suggestions.map(s => `<li>${md(s)}</li>`).join('\n      ')}
     </ol>
-  </section>
+  </section>` : ''}
 
   <footer>
     由 <code>review-tests</code> skill 產生 · 純診斷，未修改任何 source／測試／設定 · 補測試請走 <code>tdd</code>
@@ -208,6 +241,9 @@ function stampFile() {
 
 const outDir = path.join(ROOT, '.review-tests')
 fs.mkdirSync(outDir, { recursive: true })
+// 輸出目錄自帶 .gitignore（內容 *），報告永遠不會被 commit，也免得每次口頭提醒。
+const gitignorePath = path.join(outDir, '.gitignore')
+if (!fs.existsSync(gitignorePath)) fs.writeFileSync(gitignorePath, '*\n')
 const base = path.basename(data.testFile || 'report').replace(/\.[^.]+$/, '')
 const outFile = path.join(outDir, `${base}-${stampFile()}.html`)
 fs.writeFileSync(outFile, html)

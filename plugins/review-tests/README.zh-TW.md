@@ -25,20 +25,21 @@ review-tests src/utils/foo.spec.ts
 
 | 維度 | 看的東西 |
 |------|---------|
-| **斷言有效性** | 無意義斷言、只為覆蓋率而存在的測試、只用 `toBeDefined()` 帶過、註解算出了精確值卻只斷言 `> 0` |
+| **斷言有效性** | 無意義斷言、只為覆蓋率而存在的測試、只用 `toBeDefined()` 帶過、註解算出了精確值卻只斷言 `> 0`、`toThrow()` 沒驗型別或訊息、大到沒人看的 snapshot |
 | **行為盲點** | 缺少 happy path／edge case／error handling／null 處理、沒測到的分支、覆蓋不全的參數組合 |
-| **Mock 健康度** | 過度 mock 把真實路徑都遮掉、mock 資料不符 TypeScript interface |
-| **測試結構** | AAA（Arrange-Act-Assert）、測試描述是否清楚、副作用是否清理 |
+| **Mock 健康度** | 過度 mock 把真實路徑都遮掉、mock 資料不符 TypeScript interface、驗 spy 呼叫次數這種貼實作的斷言 |
+| **測試結構** | AAA（Arrange-Act-Assert）、測試描述是否清楚、副作用是否清理、測試間隔離（共用狀態有沒有重設） |
+| **非決定性與 async** | 假綠燈殺手：漏 `await` 的斷言（永遠 pass）、沒 return 的 promise、fake timers 沒還原、依賴 `Date.now()`／亂數／時區、真的打網路 |
 
 ## 報告長怎樣
 
 一份單檔、self-contained 的 HTML（CSS／JS 全 inline、零外部依賴），寫到 `.review-tests/` 並自動打開：
 
 - 一個健康度 badge（良好／及格／待補強）加一句總評。
-- findings 依四個維度分組，每條都標到測試的行號。
-- **Backlink** — 每條 finding 都有一個 toggle，展開後是被測 source function 的**關鍵幾行**（不是整個 function），含語法高亮與 source 路徑、行號範圍。
+- findings 依五個維度分組，每條標到測試行號、帶嚴重度標籤（高／中／低），嚴重的排前面。
+- **Backlink** — 每條 finding 都有一個 toggle，展開後是被測 source function 的**關鍵幾行**（不是整個 function）；TS 家族檔案套語法高亮，其他語言純文字等寬顯示，附 source 路徑、行號範圍。
 
-記得把 `.review-tests/` 加進 `.gitignore`，報告才不會被 commit 進專案。
+報告資料夾會自帶 `.gitignore`，報告永遠不會被 commit，不用你記得。
 
 ## 它遵守的三條規則
 

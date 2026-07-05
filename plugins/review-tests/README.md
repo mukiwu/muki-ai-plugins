@@ -27,20 +27,21 @@ You can also just ask in natural language: *"review the tests for foo"*. It anal
 
 | Dimension | What it looks for |
 |-----------|-------------------|
-| **Assertion validity** | Meaningless assertions, coverage-only tests, weak `toBeDefined()` checks, comments that compute an exact value but only assert `> 0` |
+| **Assertion validity** | Meaningless assertions, coverage-only tests, weak `toBeDefined()` checks, comments that compute an exact value but only assert `> 0`, `toThrow()` without type/message, giant snapshots nobody reviews |
 | **Behavior gaps** | Missing happy path / edge cases / error handling / null handling, untested branches, uncovered parameter combinations |
-| **Mock health** | Over-mocking that hides the real code path, mock data that doesn't match the TypeScript interface |
-| **Structure** | AAA (Arrange-Act-Assert), clear test descriptions, side-effect cleanup |
+| **Mock health** | Over-mocking that hides the real code path, mock data that doesn't match the TypeScript interface, spy-call-count assertions coupled to implementation |
+| **Structure** | AAA (Arrange-Act-Assert), clear test descriptions, side-effect cleanup, test isolation (shared mutable state reset between tests) |
+| **Determinism & async** | The false-green killers: assertions missing `await` (they always pass), unreturned promises, unrestored fake timers, `Date.now()` / randomness / timezone dependence, tests hitting real networks |
 
 ## The Report
 
 A single self-contained HTML file (inline CSS/JS, zero external dependencies) written to `.review-tests/` and opened automatically:
 
 - A health badge (good / pass / needs-work) with a one-line verdict.
-- Findings grouped by the four dimensions, each pinned to a test line.
-- **Backlinks** — every finding has a toggle that expands the *key lines* of the source function under test (not the whole function), with syntax highlighting and the source path + line range.
+- Findings grouped by the five dimensions, each pinned to a test line and tagged with a severity (high / med / low) — sorted so the worst comes first.
+- **Backlinks** — every finding has a toggle that expands the *key lines* of the source function under test (not the whole function), with syntax highlighting for TS-family files (plain monospace for other languages) and the source path + line range.
 
-Add `.review-tests/` to your `.gitignore` so reports don't get committed.
+The report folder writes its own `.gitignore`, so reports never get committed — nothing for you to remember.
 
 ## Three Rules It Follows
 

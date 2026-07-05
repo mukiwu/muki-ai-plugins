@@ -1,7 +1,7 @@
 {
   "name": "review-tests",
   "description": "Test review doctor — diagnose an existing test file for blind spots and output a self-contained HTML report with backlinks to the source under test. Read-only; never modifies code.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": {
     "name": "Muki Wu"
   },
