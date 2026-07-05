@@ -68,47 +68,55 @@ Figma 設計稿 ──→ 導出 PNG（透過 Figma API）
 | `pixel-diff.py` | 像素級圖片比對，含區域偵測 |
 | `generate-report.py` | 產出 HTML 報告（三欄並排比對） |
 
+腳本裝在 plugin 目錄裡，不在你的專案裡——呼叫時一定要走 `${CLAUDE_PLUGIN_ROOT}`，直接寫 `scripts/...` 會找不到檔案。
+
 ### figma-export.py
 
 ```bash
-python scripts/figma-export.py "<figma_url>" --output design.png --scale 2
+python "${CLAUDE_PLUGIN_ROOT}/scripts/figma-export.py" "<figma_url>" --output design.png --scale 1
 ```
 
-需要設定 `FIGMA_ACCESS_TOKEN` 環境變數。
+需要 `FIGMA_ACCESS_TOKEN`（環境變數，或放專案根的 `.env`，腳本兩邊都會讀）。`--scale` 要跟網頁截圖的 device pixel ratio 一致，不然比對會滿版假差異。
 
 ### pixel-diff.py
 
 ```bash
-python scripts/pixel-diff.py design.png screenshot.png --output diff.png --threshold 10
+python "${CLAUDE_PLUGIN_ROOT}/scripts/pixel-diff.py" design.png screenshot.png --output diff.png --threshold 10
 ```
 
-輸出 JSON 差異統計數據和視覺化差異圖。
+輸出 JSON 差異統計數據和視覺化差異圖。verdict 門檻用 `--pass-below`／`--block-above` 調；動態內容（時鐘、輪播）用 `--ignore-region x,y,w,h` 遮掉。
 
 ### generate-report.py
 
 ```bash
-python scripts/generate-report.py \
+python "${CLAUDE_PLUGIN_ROOT}/scripts/generate-report.py" \
   --design design.png \
   --screenshot screenshot.png \
   --diff diff.png \
   --stats stats.json \
+  --findings findings.json \
   --output report.html
 ```
 
-產出獨立的 HTML 報告，圖片直接嵌入（不需要外部檔案）。
+產出獨立的 HTML 報告，圖片直接嵌入（不需要外部檔案）；有給 `--findings` 時會包含 AI 的 Bug／Drift／Acceptable 分類表。
 
 ## 系統需求
 
 - Python 3.10+
 - `Pillow`、`numpy`（必要）
 - `scipy`（選用，用於區域偵測）
-- `requests`（用於 Figma API）
-- Playwright MCP（用於網頁截圖）
+- Playwright MCP（用於網頁截圖），安裝方式：
+
+  ```bash
+  claude mcp add playwright -- npx @playwright/mcp@latest
+  ```
+
+  沒裝也能用：審查會退回手動模式，由你自己提供網頁截圖。
 
 ## 設定
 
 ```bash
-pip install Pillow numpy scipy requests
+pip install Pillow numpy scipy
 ```
 
 取得 Figma API 權限：
@@ -121,6 +129,7 @@ pip install Pillow numpy scipy requests
 # 加到專案的 .env 檔
 FIGMA_ACCESS_TOKEN=figd_你的token
 ```
+記得把 `.env` 加進 `.gitignore`——這個 token 有你 Figma 檔案的讀取權限。
 
 **方式 B — Claude Code 設定：**
 ```bash

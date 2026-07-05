@@ -70,47 +70,55 @@ Not all pixel differences are bugs. The AI categorizes each difference:
 | `pixel-diff.py` | Pixel-level image comparison with region detection |
 | `generate-report.py` | Generate HTML report with side-by-side comparison |
 
+The scripts live inside the plugin directory, not your project — always call them through `${CLAUDE_PLUGIN_ROOT}` (a bare `scripts/...` path won't exist in your cwd).
+
 ### figma-export.py
 
 ```bash
-python scripts/figma-export.py "<figma_url>" --output design.png --scale 2
+python "${CLAUDE_PLUGIN_ROOT}/scripts/figma-export.py" "<figma_url>" --output design.png --scale 1
 ```
 
-Requires `FIGMA_ACCESS_TOKEN` environment variable.
+Requires `FIGMA_ACCESS_TOKEN` (environment variable, or a `.env` in your project root — the script reads both). Keep `--scale` equal to the screenshot's device pixel ratio, or the diff will drown in false positives.
 
 ### pixel-diff.py
 
 ```bash
-python scripts/pixel-diff.py design.png screenshot.png --output diff.png --threshold 10
+python "${CLAUDE_PLUGIN_ROOT}/scripts/pixel-diff.py" design.png screenshot.png --output diff.png --threshold 10
 ```
 
-Outputs JSON with diff statistics and a visual diff image.
+Outputs JSON with diff statistics and a visual diff image. `--pass-below` / `--block-above` tune the verdict thresholds; `--ignore-region x,y,w,h` masks dynamic content (clocks, carousels).
 
 ### generate-report.py
 
 ```bash
-python scripts/generate-report.py \
+python "${CLAUDE_PLUGIN_ROOT}/scripts/generate-report.py" \
   --design design.png \
   --screenshot screenshot.png \
   --diff diff.png \
   --stats stats.json \
+  --findings findings.json \
   --output report.html
 ```
 
-Generates a standalone HTML report with embedded images.
+Generates a standalone HTML report with embedded images, including the AI Bug/Drift/Acceptable classification table when `--findings` is provided.
 
 ## Requirements
 
 - Python 3.10+
 - `Pillow`, `numpy` (required)
 - `scipy` (optional, for region detection)
-- `requests` (for Figma API)
-- Playwright MCP (for web page screenshots)
+- Playwright MCP (for web page screenshots) — install with:
+
+  ```bash
+  claude mcp add playwright -- npx @playwright/mcp@latest
+  ```
+
+  Without it, the reviewer falls back to manual mode: you provide the web screenshot yourself.
 
 ## Setup
 
 ```bash
-pip install Pillow numpy scipy requests
+pip install Pillow numpy scipy
 ```
 
 For Figma API access:
@@ -123,6 +131,7 @@ For Figma API access:
 # Add to your project's .env file
 FIGMA_ACCESS_TOKEN=figd_your_token_here
 ```
+Make sure `.env` is in your `.gitignore` — this token grants read access to your Figma files.
 
 **Option B — Claude Code settings:**
 ```bash

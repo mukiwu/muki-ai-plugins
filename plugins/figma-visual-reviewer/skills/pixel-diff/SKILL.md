@@ -20,8 +20,11 @@ description: Pixel-level image comparison between two screenshots. Generates a v
 ## 使用方式
 
 ```bash
-python scripts/pixel-diff.py <image_a> <image_b> --output diff.png [--threshold 5] [--highlight-color red]
+python "${CLAUDE_PLUGIN_ROOT}/scripts/pixel-diff.py" <image_a> <image_b> --output diff.png \
+  [--threshold 10] [--pass-below 5] [--block-above 15] [--ignore-region x,y,w,h]
 ```
+
+腳本在 plugin 目錄裡，不在使用者專案裡——路徑一定要用 `${CLAUDE_PLUGIN_ROOT}`，寫相對路徑會找不到檔案。
 
 ## 參數
 
@@ -30,7 +33,11 @@ python scripts/pixel-diff.py <image_a> <image_b> --output diff.png [--threshold 
 | `image_a` | 是 | 參考圖（設計稿） |
 | `image_b` | 是 | 比對圖（網頁截圖） |
 | `--output` | 否 | 差異圖輸出路徑（預設 `diff.png`） |
-| `--threshold` | 否 | 像素差異容許值 0-100（預設 10，值越低越嚴格） |
+| `--threshold` | 否 | 每像素色差敏感度 0-100（預設 10，值越低越嚴格）。這是「色差多大才算不同」，不是整體容許比例 |
+| `--pass-below` | 否 | 整體差異低於此百分比判 PASS（預設 5） |
+| `--block-above` | 否 | 整體差異高於此百分比判 BLOCK（預設 15），之間為 WARNING |
+| `--ignore-region` | 否 | 忽略區域 `x,y,w,h`，可重複——遮掉時鐘、輪播等動態內容 |
+| `--background` | 否 | 透明圖層合成的背景色（預設 `white`） |
 | `--highlight-color` | 否 | 差異標記顏色（預設 `red`） |
 
 ## 輸出
@@ -50,6 +57,7 @@ python scripts/pixel-diff.py <image_a> <image_b> --output diff.png [--threshold 
 
 ## 注意事項
 
-- 兩張圖必須是相同解析度，如果不同會自動 resize 較大的那張
-- threshold 10 適合一般比對，設為 5 可以抓更細微的差異
-- 字型反鋸齒差異通常在 threshold 10 以下會被過濾
+- 尺寸不同時會**等比例**縮到共同寬度再 crop 高度（不會各軸獨立拉伸）；長寬比差太多會警告——那通常代表兩張圖根本不是同一個畫面範圍
+- 最好從源頭對齊尺寸：Figma 導出的 `--scale` 跟網頁截圖的 device pixel ratio 要一致
+- `--threshold` 是每像素色差的敏感度：預設 10 會濾掉字型反鋸齒、瀏覽器渲染那類細微色差；降到 5 會抓得更細，但假差異也會變多
+- 透明背景的 Figma 導出會自動合成白底再比對（可用 `--background` 改）

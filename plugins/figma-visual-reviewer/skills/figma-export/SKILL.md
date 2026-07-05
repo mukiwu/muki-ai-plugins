@@ -14,14 +14,16 @@ description: Export Figma frames as PNG images via Figma REST API. Use when you 
 
 ## 前置條件
 
-- 環境變數 `FIGMA_ACCESS_TOKEN` 必須設定
-- 安裝 `requests`：`pip install requests`
+- `FIGMA_ACCESS_TOKEN`：環境變數，或放在專案根的 `.env`（腳本會自己讀）
+- 不需額外套件——腳本只用 Python 內建的 urllib
 
 ## 使用方式
 
 ```bash
-python scripts/figma-export.py "<figma_url>" --output design.png [--scale 2] [--node-id <id>]
+python "${CLAUDE_PLUGIN_ROOT}/scripts/figma-export.py" "<figma_url>" --output design.png [--scale 1] [--node-id <id>]
 ```
+
+腳本在 plugin 目錄裡，不在使用者專案裡——路徑一定要用 `${CLAUDE_PLUGIN_ROOT}`，寫相對路徑會找不到檔案。
 
 ## 參數
 
@@ -29,7 +31,7 @@ python scripts/figma-export.py "<figma_url>" --output design.png [--scale 2] [--
 |------|------|------|
 | `figma_url` | 是 | Figma 檔案或 frame 的 URL |
 | `--output` | 否 | 輸出檔名（預設 `figma-export.png`） |
-| `--scale` | 否 | 縮放倍數（預設 2，即 2x 解析度） |
+| `--scale` | 否 | 縮放倍數（預設 1）。要跟網頁截圖的 device pixel ratio 一致，不然像素比對會滿版假差異 |
 | `--node-id` | 否 | 指定 node ID（從 URL 的 `node-id=` 參數取得） |
 
 ## Figma URL 格式

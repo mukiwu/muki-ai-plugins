@@ -1,7 +1,7 @@
 {
   "name": "figma-visual-reviewer",
   "description": "Visual regression testing — compare Figma designs against live web pages with pixel-level diff and AI vision.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": {
     "name": "Muki Wu"
   },
