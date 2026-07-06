@@ -2,11 +2,12 @@
 # SessionStart hook for the lore plugin.
 #
 # In projects that already have a docs/lore/ base, injects a standing
-# instruction covering the three moments the agent should reach for lore:
+# instruction covering the four moments the agent should reach for lore:
 #   1. before work  -> lore-consult (read the relevant rules/pitfalls)
 #   2. during work  -> lore-capture (record business logic / 眉角 the user
 #      shares, or non-obvious root causes confirmed while debugging)
 #   3. before commit/PR -> lore-guard (check the diff against recorded lore)
+#   4. when words wobble -> lore-ul (align vague/colliding terms into the glossary)
 # It also carries a lightweight heartbeat: when the lore base has content
 # but lore-check hasn't run in >30 days (tracked via the gitignored
 # docs/lore/.lore-last-check stamp), it suggests a health check.
@@ -34,6 +35,7 @@ message='<lore>
 1. 動手前——規劃功能或修 bug 前，先跑 `lore:lore-consult` 撈這個任務相關的 rules 與 pitfalls；已知會動哪些檔案時，順手用 `code:` 反查。
 2. 進行中——使用者講出這類知識（解釋產品怎麼運作、一個規格、一個眉角、為什麼要這樣設計），或你在除錯中挖到非顯而易見的根因、確認某個怪行為是刻意的，主動考慮 `lore:lore-capture`：判斷值不值得記，值得就先問使用者要不要記再寫。判準：「這件事讀現行 code 能不能推回來？能就不是 lore，跳過」。不要記程式結構、function 做什麼、或任何讀 code 就有的東西。
 3. commit / PR 前——跑 `lore:lore-guard`，用 diff 對照 lore 的 `code:` 連結，確認沒踩到已記錄的商業規則或 pitfall。
+4. 詞彙對齊——對話出現模糊詞、同詞異義、或 code 命名跟使用者用詞對不上時，考慮 `lore:lore-ul` 把詞對齊進 `docs/lore/glossary.md`；專案已有 glossary 時，對話與新程式碼的命名跟著它的用詞走（`not:` 列的是禁用詞）。
 </lore>'
 
 # Heartbeat: only when the base actually has area content (at least one file
