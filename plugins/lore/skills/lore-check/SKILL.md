@@ -1,6 +1,6 @@
 ---
 name: lore-check
-description: Audit a project's docs/lore/ and report whether it is actually helping — coverage, link health, freshness, entry quality (does each pass the "could you recover it from code?" test), and adoption (were surfaced entries acted on). Read-only: it diagnoses, then hands fixes off to lore-maintain and lore-capture.
+description: Audit a project's docs/lore/ and report whether it is actually helping — coverage, link health, freshness, entry quality (does each pass the "could you recover it from code?" test), adoption (were surfaced entries acted on), and language health (glossary completeness and banned-name drift). Read-only: it diagnoses, then hands fixes off to lore-maintain and lore-capture.
 ---
 
 # Lore Check
@@ -15,7 +15,7 @@ This skill is **read-only**. It never edits, marks, or deletes anything — it p
 
 ## Procedure
 
-Run all six checks, then produce one report. Use your file tools directly (Read, Grep, checking that paths exist) — there is no script to run.
+Run all seven checks, then produce one report. Use your file tools directly (Read, Grep, checking that paths exist) — there is no script to run.
 
 1. **① Quality — the headline.** For each entry, apply lore-spec's boundary test against the current code: "Could a competent engineer reading the code recover this on their own?" If yes, the entry is noise, not lore. Report the pass rate (for example 10/12). This leads because noise drowns out real lore — a base full of code-derivable entries is actively worse than a small clean one.
 2. **② Coverage.** Identify the codebase's top-level domains or subsystems, then compare against the existing areas. Report domains that have no lore at all — these are the gaps worth filling.
@@ -23,13 +23,15 @@ Run all six checks, then produce one report. Use your file tools directly (Read,
 4. **④ Freshness.** Read each entry's `updated:` and `status:`. Report the age distribution, how many are older than ~180 days, and the `active` / `resolved` / `obsolete` breakdown.
 5. **⑤ Retrievability.** Check that every entry has complete, greppable meta (`code:`, `updated:`, `status:`), and that the README Areas table matches the folders actually on disk. If `lore-consult` can't find or link an entry, it can't surface it.
 6. **⑥ Adoption.** Read `docs/lore/.lore-feedback.jsonl` if it exists and aggregate per entry: how often each was surfaced, and the `heeded` / `redundant` / `ignored` split. Flag entries surfaced repeatedly but never heeded as review candidates. If the log is absent or empty, report "no data yet" — that is normal for a fresh base, not an error.
+7. **⑦ Language.** If `docs/lore/glossary.md` (or any `<area>/terms.md`) exists: check every term's meta is complete (`code:`, `updated:`, `status:`), and spot-check the codebase for `not:` names still used in domain positions — a heuristic sample judged in context, not an exhaustive lint. Fold in each term's adoption from the feedback log (keys `glossary.md#<Term>`). If there is no glossary, report "no glossary yet — `lore-ul` can bootstrap one"; that is a note, not a failure.
 
 ## Report
 
-Produce one report. Give each dimension its own line with the raw numbers and a green / yellow status. Do NOT roll the six into a single score — that hides what to fix. End with concrete next steps that point at the right skill:
+Produce one report. Give each dimension its own line with the raw numbers and a green / yellow status. Do NOT roll the seven into a single score — that hides what to fix. End with concrete next steps that point at the right skill:
 
 - broken links, stale entries, suspected noise, low-adoption entries → `lore-maintain`
 - coverage gaps → `lore-capture`
+- incomplete term meta, banned-name drift, missing glossary → `lore-ul`
 
 Yellow/green thresholds are heuristic: flag yellow when there is any broken link, the boundary-test pass rate is low, there are uncovered domains, or an entry is surfaced repeatedly with zero `heeded`. Don't chase precise numbers — the point is to steer the next action, not to grade.
 
