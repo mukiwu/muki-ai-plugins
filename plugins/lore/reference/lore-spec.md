@@ -32,6 +32,7 @@ docs/lore/
     index.md           # optional: only when an area has many files (~5+)
   architecture/        # optional area: cross-cutting tech-choice "why"
   api-map.md           # optional: feature <-> API <-> entry points (API-heavy projects)
+  glossary.md          # optional: shared vocabulary (ubiquitous language), one entry per term
 ```
 
 Rules:
@@ -68,10 +69,48 @@ What breaks, why, and what to do instead.
 - `code:` — the file path this entry points at, with an optional `→ symbol`. Multiple `code:` references are allowed. Use `—` when the entry isn't tied to any specific code.
 - `updated:` — the ISO date (`YYYY-MM-DD`) the entry was last verified.
 - `status:` — one of `active` (still true), `resolved` (the problem was fixed but the history is worth keeping), or `obsolete` (no longer applies).
+- `term:` — optional: the glossary term this entry hangs off, written exactly as the term's heading (including an area qualifier when the term is collision-split, e.g. `Customer (billing)`).
 
 **Date rule (applies to every write).** Any `updated:` value must come from a real, known current date — the system clock or a date the user gives you. Never fabricate or backdate it. When you don't know today's date, ask rather than guess. Every skill that writes or refreshes an entry follows this rule.
 
 The format is deliberately both human-readable AND greppable: tools grep `` `code:` `` to check that the linked paths still exist, and `status:` lets stale entries be marked rather than silently deleted.
+
+## Glossary (ubiquitous language)
+
+`docs/lore/glossary.md` holds the project's shared vocabulary — the terms the team, the code, and the agent agree to use, one `## Term` entry per concept. It is optional like `api-map.md`, and it is created lazily: the file appears when the first term is agreed (via `lore-ul`), never at scaffold time. Terms are aligned with the user, never auto-generated.
+
+The global file spans areas, so its frontmatter carries only `kind`:
+
+```yaml
+---
+kind: glossary
+---
+```
+
+Each term entry follows the same one-line-meta shape as every other entry:
+
+```markdown
+## Customer
+
+`code:` `src/models/customer.ts` → `Customer` · `area:` `billing` · `aka:` `buyer` · `not:` `client, account` · `updated:` `2026-07-06` · `status:` `active`
+
+The paying party. Distinct from User (someone who can log in): one Customer can have many Users.
+Example: on a company subscription, the company is the Customer; employee accounts are Users.
+```
+
+- `code:` — the type/class/module that implements the concept; use `—` when it has no implementation yet.
+- `area:` — the area the definition belongs to; omit when the term means the same thing project-wide.
+- `aka:` — accepted synonyms.
+- `not:` — rejected names for this concept, comma-separated. This is the hook `lore-guard`'s naming check greps.
+- Body: at least a one-line definition, plus a concrete example whenever possible — examples are what pin a concept's boundary.
+
+**Term collisions.** When two areas use the same word for different things, keep both entries in the global file and qualify the headings with the area in parentheses — `## Customer (billing)` and `## Customer (support)` — with `area:` mandatory on both. The same word meaning two things *inside one* area is not allowed: split the concept into two differently-named terms instead.
+
+**Splitting into per-area files.** When a single area accumulates roughly 10+ terms, propose moving them into `<area>/terms.md` (frontmatter: `area:` + `kind: glossary`). Same spirit as the lazy `index.md` rule — split when size demands it, with the user's confirmation, never preemptively.
+
+**Terms evolve under the same mark-over-delete policy.** When a concept is renamed, mark the old term `status: obsolete` and point its body at the new term — the language's history is part of the lore. A term that was never true is misinformation: delete it, with confirmation.
+
+**Feedback events for terms** use the entry key `glossary.md#<Term>` (or `<area>/terms.md#<Term>` after a split) and the same outcome vocabulary as every other entry.
 
 ## Maintenance & deletion policy
 
@@ -86,7 +125,7 @@ The format is deliberately both human-readable AND greppable: tools grep `` `cod
 
 ## Health check & adoption feedback
 
-`lore-check` is a **read-only** audit. It scores a lore base on six dimensions — entry quality (the boundary test above), coverage, link health, freshness, retrievability, and adoption — then hands fixes off to `lore-maintain` (cleanup) and `lore-capture` (gaps). It never mutates lore content itself; its one bookkeeping write is the heartbeat stamp below.
+`lore-check` is a **read-only** audit. It scores a lore base on seven dimensions — entry quality (the boundary test above), coverage, link health, freshness, retrievability, adoption, and language health — then hands fixes off to `lore-maintain` (cleanup), `lore-capture` (gaps), and `lore-ul` (vocabulary). It never mutates lore content itself; its one bookkeeping write is the heartbeat stamp below.
 
 **Heartbeat stamp.** After each run, `lore-check` writes today's date to `docs/lore/.lore-last-check` (one line, `YYYY-MM-DD`, gitignored like the feedback log). The SessionStart hook reads the stamp's age and suggests a re-check after ~30 days. The stamp is metadata about the check, not lore — writing it does not break lore-check's read-only contract.
 
@@ -118,4 +157,4 @@ Notes:
 
 ## Plays well with others
 
-If a project also keeps a domain glossary (the *what* — vocabulary and concepts) or a code-structure index (the *where* — files, imports, layers), lore is the third leg: the *why* and the gotchas. The three are complementary but distinct. Lore stands on its own and does not require either of them to be present.
+If a project also keeps a code-structure index (the *where* — files, imports, layers), lore covers the rest: the *what* (the glossary's shared vocabulary), the *why*, and the gotchas. Lore stands on its own and does not require any other documentation system to be present.
