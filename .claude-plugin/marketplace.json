@@ -20,7 +20,7 @@
     },
     {
       "name": "lore",
-      "description": "Capture, consult, guard, scaffold, maintain, and health-check project lore — the implicit knowledge (business rules, API maps, pitfalls, decision rationale) that code, types, and git history can't reveal.",
+      "description": "Capture, consult, guard, scaffold, maintain, health-check, and language-align project lore — the implicit knowledge (business rules, API maps, pitfalls, decision rationale) that code, types, and git history can't reveal.",
       "source": "./plugins/lore",
       "category": "documentation"
     }
