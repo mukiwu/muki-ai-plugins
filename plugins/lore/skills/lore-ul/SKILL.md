@@ -42,7 +42,7 @@ Follow the spec: a cross-area collision stays in the global file with area-quali
 
 ## Adoption feedback (best-effort)
 
-Per lore-spec's feedback log: when you challenge usage with an existing entry, append a `surfaced` event keyed `glossary.md#<Term>`, then reconcile it — `heeded` (the wording changed to follow it, or the entry was sharpened), `redundant` (usage already matched), or `ignored` (the user overrode it). Never let logging block or delay the session.
+Per lore-spec's feedback log: when you challenge usage with an existing entry, append a `surfaced` event keyed `glossary.md#<Term>` (or `<area>/terms.md#<Term>` after a split), then reconcile it — `heeded` (the wording changed to follow it, or the entry was sharpened), `redundant` (usage already matched), or `ignored` (the user overrode it). Never let logging block or delay the session.
 
 ## Guardrail
 
