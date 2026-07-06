@@ -1,6 +1,6 @@
 # lore
 
-給 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的 plugin，幫你建立、查閱、記錄、守門、維護、體檢專案的 **lore**——那些程式碼自己藏著、卻講不出來的隱性知識。
+給 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的 plugin，幫你建立、查閱、記錄、守門、維護、體檢專案的 **lore**，並對齊團隊的通用語言——那些程式碼自己藏著、卻講不出來的隱性知識。
 
 ## 什麼是 lore
 
@@ -15,6 +15,7 @@ docs/lore/
     pitfalls.md        # 核心：踩坑（什麼會壞、不要做 X）
     business-rules.md  # 核心：規則，以及程式碼講不出來的「為什麼」
   api-map.md           # 選用：功能 <-> API <-> 進入點
+  glossary.md          # 選用：通用語言詞彙表（一個詞一條）
   architecture/        # 選用：跨模組的技術選型理由
 ```
 
@@ -30,7 +31,7 @@ docs/lore/
 - `updated:`——最後一次確認這條還成立的日期（ISO 格式）。
 - `status:`——`active`｜`resolved`｜`obsolete`。
 
-## 六個 skill
+## 七個 skill
 
 | Skill | 什麼時候會觸發 |
 |-------|----------------|
@@ -40,16 +41,18 @@ docs/lore/
 | **lore-guard** | commit／PR 前用 diff 對照 lore——把改到的檔案透過 `code:` 連結反查對應 entry，回報這次改動有沒有踩到已記錄的商業規則或坑。 |
 | **lore-maintain** | 隨 lore 長大做整理——找出過期、重複、錯誤的 entry，檢查 `code:` 連結與索引還對不對，清掉沒用的內容。 |
 | **lore-check** | 檢查 lore 到底有沒有在幫你——唯讀體檢，逐面向看覆蓋率、連結健康、新鮮度、entry 品質、採納率，再把要修的交給 lore-maintain／lore-capture。 |
+| **lore-ul** | 建立與對齊 `docs/lore/glossary.md` 的通用語言——對話出現模糊詞、同詞異義、code 命名跟你的用詞對不上時把詞煉成詞條；也能替還沒有詞彙表的專案從零 bootstrap 一份。 |
 
 ## 閉環
 
-六個 skill 串成一個迴圈，讓 lore 活著，而不是像多數文件一樣慢慢爛掉：
+七個 skill 串成一個迴圈，讓 lore 活著，而不是像多數文件一樣慢慢爛掉：
 
 1. **capture** 在你學到的當下把知識寫下來（SessionStart hook 會在對的時機提醒）。
 2. **consult** 在下一次做功能、修 bug 前把它讀回來——知識真的影響工作，而不是躺在那裡。
 3. **guard** 在 commit 前拿完成的 diff 回頭對照——已記錄的規則不會被悄悄打破。
 4. 兩者都會記錄每條被撈出的 entry 最後是**被採納、只是確認、還是被忽略**。
 5. **check** 把這些訊號彙整成健康報告（心跳提醒約每 30 天建議跑一次），**maintain** 據此動手——更新、重寫、或讓 entry 退役。
+6. **ul** 讓語言本身也在迴圈裡：consult 把詞條讀進 brief、guard 用 `not:` 禁用詞把關命名、check 體檢詞彙健康——連用詞都會自我修正。
 
 一直在幫忙的知識留下，不再幫忙的知識被點名、被修正。這就是它能自我修正的原因。
 
