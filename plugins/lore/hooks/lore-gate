@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+# PreToolUse / PostToolUse gate for the lore plugin.
+#
+# The SessionStart hook (lore-session-start) only nudges once, at session
+# boot, and only if the model reads it. This gate enforces the two riskiest
+# moments per-action, independent of any CLAUDE.md pointer:
+#   pre-edit   -> first Edit/Write/MultiEdit this session -> nudge lore-consult
+#   pre-bash   -> `git commit` / `gh pr create`           -> nudge lore-guard
+#   post-skill -> lore:lore-consult ran                   -> mark consulted, stop nudging
+#
+# Same soft-nudge shape as the estimate-gate/tdd-gate scripts this user already
+# runs globally (additionalContext + systemMessage, never a deny) — appropriate
+# here too, since "is this worth recording/guarding" stays the model's call.
+#
+# Quiet whenever the project has no docs/lore/ at all.
+
+set -euo pipefail
+
+MODE="${1:-}"
+PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$PWD}"
+
+if [ -d "${PROJECT_DIR}/docs/lore" ]; then
+  LORE_DIR="${PROJECT_DIR}/docs/lore"
+elif [ -d "docs/lore" ]; then
+  LORE_DIR="docs/lore"
+else
+  exit 0
+fi
+
+input="$(cat)"
+# Flatten to one line so field-extraction regexes don't have to cross newlines
+# (BSD sed/grep on macOS don't handle multiline patterns the way GNU does).
+flat="$(printf '%s' "$input" | tr '\n' ' ')"
+
+session_id=$(printf '%s' "$flat" | sed -n 's/.*"session_id"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p')
+session_id="${session_id:-no-session}"
+
+flag_dir="${TMPDIR:-/tmp}/claude-lore-gate"
+mkdir -p "$flag_dir" 2>/dev/null || true
+
+escape_for_json() {
+  local s="$1"
+  s="${s//\\/\\\\}"
+  s="${s//\"/\\\"}"
+  s="${s//$'\n'/\\n}"
+  s="${s//$'\r'/\\r}"
+  s="${s//$'\t'/\\t}"
+  printf '%s' "$s"
+}
+
+emit() {
+  local msg="$1" event="$2" escaped
+  escaped=$(escape_for_json "$msg")
+  printf '{\n  "hookSpecificOutput": {\n    "hookEventName": "%s",\n    "additionalContext": "%s"\n  },\n  "systemMessage": "%s"\n}\n' \
+    "$event" "$escaped" "$escaped"
+}
+
+case "$MODE" in
+  post-skill)
+    skill=$(printf '%s' "$flat" | sed -n 's/.*"skill"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p')
+    if [ "$skill" = "lore:lore-consult" ]; then
+      : > "${flag_dir}/${session_id}.consulted"
+    fi
+    exit 0
+    ;;
+
+  pre-edit)
+    [ -f "${flag_dir}/${session_id}.reminded-consult" ] && exit 0
+    [ -f "${flag_dir}/${session_id}.consulted" ] && exit 0
+
+    file_path=$(printf '%s' "$flat" | sed -n 's/.*"file_path"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p')
+    case "$file_path" in
+      */docs/lore/*|docs/lore/*) exit 0 ;;  # editing lore itself isn't "touching code"
+    esac
+
+    : > "${flag_dir}/${session_id}.reminded-consult"
+    emit '[Lore Gate] 準備動這個 session 第一次 Edit/Write/MultiEdit，專案有 docs/lore/。動手前先呼叫 lore:lore-consult，撈這塊相關的 business rules / pitfalls，避免撞已知的坑。（此提醒每個 session 只跳一次，不擋動作。）' \
+      "PreToolUse"
+    exit 0
+    ;;
+
+  pre-bash)
+    is_commit=0
+    printf '%s' "$flat" | grep -qF 'git commit' && is_commit=1
+    printf '%s' "$flat" | grep -qF 'gh pr create' && is_commit=1
+    if [ "$is_commit" = "1" ]; then
+      emit '[Lore Gate] 準備 commit / 發 PR。先呼叫 lore:lore-guard，拿這次 diff 對照 docs/lore 已記錄的 business rules 跟 pitfalls，確認沒踩到已知的雷。（每次 commit/PR 都提醒，因為每次的 diff 不同，不設一次性旗標。）' \
+        "PreToolUse"
+    fi
+    exit 0
+    ;;
+
+  *)
+    exit 0
+    ;;
+esac

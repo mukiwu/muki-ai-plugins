@@ -54,6 +54,20 @@ if [ -n "$has_area_content" ]; then
   fi
 fi
 
+# Glossary gap: glossary.md is created lazily by design (lore-ul, term by
+# term, never templated) — but "lazy to create" must not mean "lazy to
+# remind". Nudge every session while the gap exists; it self-resolves the
+# moment glossary.md (or a post-split <area>/terms.md) shows up on disk.
+has_glossary=$(find "$LORE_DIR" -maxdepth 1 -name 'glossary.md' -print 2>/dev/null)
+if [ -z "$has_glossary" ]; then
+  has_glossary=$(find "$LORE_DIR" -mindepth 2 -name 'terms.md' -print 2>/dev/null | head -n 1)
+fi
+if [ -n "$has_area_content" ] && [ -z "$has_glossary" ]; then
+  message="${message}
+
+（這包 lore 還沒有 glossary——詞彙沒對齊，之後 lore-guard 也沒東西可以核對用字。找個空檔用 \`lore:lore-ul\` 開始跟使用者對幾個關鍵詞。）"
+fi
+
 # JSON-escape (single C-level pass per substitution; avoids a char loop).
 escape_for_json() {
     local s="$1"
