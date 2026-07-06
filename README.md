@@ -10,7 +10,7 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin marketpla
 |--------|-------------|
 | [figma-visual-reviewer](plugins/figma-visual-reviewer/) | Visual regression testing — compare Figma designs against live web pages |
 | [review-tests](plugins/review-tests/) | Test review doctor — diagnose a test file for blind spots, output a self-contained HTML report |
-| [lore](plugins/lore/) | Project lore — scaffold, consult, capture, and maintain the implicit knowledge your codebase can't show |
+| [lore](plugins/lore/) | Project lore — scaffold, consult, capture, guard, maintain, health-check, and language-align the implicit knowledge your codebase can't show |
 
 ## Install
 
@@ -50,11 +50,11 @@ Reads an existing test file, finds blind spots, and produces a self-contained HT
 
 ### lore
 
-Scaffold, consult, capture, and maintain project lore — the implicit knowledge your codebase carries but can't show on its own.
+Scaffold, consult, capture, guard, maintain, health-check, and language-align project lore — the implicit knowledge your codebase carries but can't show on its own.
 
-- `lore-init` / `lore-consult` / `lore-capture` / `lore-maintain` — four skills covering the full lifecycle
-- Stores business rules, pitfalls, API maps, and the *why* behind decisions under `docs/lore/`
-- Consult before planning or bug-fixing; capture what you learn as you go
+- `lore-init` / `lore-consult` / `lore-capture` / `lore-guard` / `lore-check` / `lore-maintain` / `lore-ul` — seven skills covering the full lifecycle
+- Stores business rules, pitfalls, API maps, a shared glossary, and the *why* behind decisions under `docs/lore/`
+- Consult before planning or bug-fixing; capture what you learn as you go; guard your diff against recorded lore before commit
 - Mark over delete — outdated-but-once-true knowledge keeps its lesson
 
 [Read more →](plugins/lore/README.md)
