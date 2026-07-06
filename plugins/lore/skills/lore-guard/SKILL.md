@@ -1,6 +1,6 @@
 ---
 name: lore-guard
-description: Check pending code changes against recorded lore before committing. Use after implementing a change (and before commit / PR) in a repo that has docs/lore/ — it maps the changed files to lore entries through their code: links and reports any business rule or pitfall the change violates. Read-only for both code and lore.
+description: Check pending code changes against recorded lore before committing. Use after implementing a change (and before commit / PR) in a repo that has docs/lore/ — it maps the changed files to lore entries through their code: links and reports any business rule, pitfall, or glossary naming rule the change violates. Read-only for both code and lore.
 ---
 
 # Lore Guard

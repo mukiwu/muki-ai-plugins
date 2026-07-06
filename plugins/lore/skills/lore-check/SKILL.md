@@ -1,6 +1,6 @@
 ---
 name: lore-check
-description: Audit a project's docs/lore/ and report whether it is actually helping — coverage, link health, freshness, entry quality (does each pass the "could you recover it from code?" test), adoption (were surfaced entries acted on), and language health (glossary completeness and banned-name drift). Read-only: it diagnoses, then hands fixes off to lore-maintain and lore-capture.
+description: Audit a project's docs/lore/ and report whether it is actually helping — coverage, link health, freshness, entry quality (does each pass the "could you recover it from code?" test), adoption (were surfaced entries acted on), and language health (glossary completeness and banned-name drift). Read-only: it diagnoses, then hands fixes off to lore-maintain, lore-capture, and lore-ul.
 ---
 
 # Lore Check
@@ -39,4 +39,4 @@ After delivering the report, refresh the heartbeat stamp: write today's date to 
 
 ## Guardrail
 
-Read-only toward the lore itself, always. `lore-check` never edits, marks, deletes, or refreshes any lore content — every fix is a handoff to `lore-maintain` or `lore-capture`, which carry their own confirmation steps. The one exemption is bookkeeping: the gitignored `.lore-last-check` stamp (and, per lore-spec, the feedback log) are metadata about the check, not lore.
+Read-only toward the lore itself, always. `lore-check` never edits, marks, deletes, or refreshes any lore content — every fix is a handoff to `lore-maintain`, `lore-capture`, or `lore-ul`, which carry their own confirmation steps. The one exemption is bookkeeping: the gitignored `.lore-last-check` stamp (and, per lore-spec, the feedback log) are metadata about the check, not lore.
