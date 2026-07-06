@@ -2,7 +2,7 @@
 
 [繁體中文版](README.zh-TW.md)
 
-A plugin for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) to scaffold, consult, capture, guard, maintain, and health-check project **lore** — the implicit knowledge your codebase carries but can't show on its own.
+A plugin for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) to scaffold, consult, capture, guard, maintain, health-check, and language-align project **lore** — the implicit knowledge your codebase carries but can't show on its own.
 
 ## What Is Lore
 
@@ -17,6 +17,7 @@ docs/lore/
     pitfalls.md        # core: gotchas (what breaks, don't-do-X)
     business-rules.md  # core: rules & the "why" code can't show
   api-map.md           # optional: feature <-> API <-> entry points
+  glossary.md          # optional: shared vocabulary (ubiquitous language)
   architecture/        # optional: cross-cutting tech-choice rationale
 ```
 
@@ -32,7 +33,7 @@ Each entry carries a one-line, greppable meta directly under its heading:
 - `updated:` — ISO date the entry was last verified.
 - `status:` — `active` | `resolved` | `obsolete`.
 
-## The Six Skills
+## The Seven Skills
 
 | Skill | When it triggers |
 |-------|------------------|
@@ -42,16 +43,18 @@ Each entry carries a one-line, greppable meta directly under its heading:
 | **lore-guard** | Check a diff against recorded lore before commit / PR — maps changed files to entries via their `code:` links and reports any business rule or pitfall the change violates. |
 | **lore-maintain** | Clean up as lore grows — find stale, duplicate, or wrong entries, check that code links and the index still hold, and prune obsolete content. |
 | **lore-check** | Audit whether the lore is actually helping — a read-only health report across coverage, link health, freshness, entry quality, and adoption, then hands the fixes to lore-maintain / lore-capture. |
+| **lore-ul** | Build and align the shared vocabulary in `docs/lore/glossary.md` — when a conversation hits a vague or overloaded term, when code names disagree with how you talk, or to bootstrap a glossary from scratch. |
 
 ## The Loop
 
-The six skills close a loop that keeps the lore alive instead of rotting like most docs:
+The seven skills close a loop that keeps the lore alive instead of rotting like most docs:
 
 1. **capture** writes knowledge down as you learn it (the SessionStart hook nudges at the right moments).
 2. **consult** reads it back before the next feature or bug fix — so it actually shapes the work.
 3. **guard** re-checks the finished diff against it before commit — so recorded rules can't be silently broken.
 4. Both log whether each surfaced entry was **heeded, redundant, or ignored**.
 5. **check** aggregates that signal into a health report (a heartbeat nudge suggests one every ~30 days), and **maintain** acts on it — refreshing, rewriting, or retiring entries.
+6. **ul** keeps the language itself in the loop: consult reads its terms into briefs, guard flags banned names from its `not:` lists, and check audits the glossary's health — so even the words stay self-correcting.
 
 Knowledge that keeps helping stays; knowledge that stops helping gets flagged and fixed. That is the self-correcting part.
 
