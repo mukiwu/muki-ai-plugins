@@ -1,6 +1,6 @@
 # Lore Spec
 
-Lore is the implicit knowledge a project carries that its code, types, tests, and git history can't reveal on their own — the business rules, the rationale behind decisions, the API maps, and the pitfalls you only learn by getting burned. It is standalone: it does not depend on any other documentation system, glossary, or index to be useful. Every `lore` skill reads this spec first so that the structure, frontmatter, and entry meta they produce stay consistent.
+Lore is the implicit knowledge a project carries that its code, types, tests, and git history can't reveal on their own — the business rules, the rationale behind decisions, the API maps, and the pitfalls you only learn by getting burned. It is standalone: it does not depend on any other documentation system or index to be useful. Every `lore` skill reads this spec first so that the structure, frontmatter, and entry meta they produce stay consistent.
 
 ## What lore is / isn't
 
@@ -48,7 +48,7 @@ Every `pitfalls.md` / `business-rules.md` / topic file starts with a light front
 ```yaml
 ---
 area: payments
-kind: pitfalls   # pitfalls | business-rules | topic | architecture | api-map
+kind: pitfalls   # pitfalls | business-rules | topic | architecture | api-map | glossary
 ---
 ```
 
