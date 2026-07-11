@@ -16,6 +16,12 @@ The other lore skills key knowledge by code location; this one keys it by concep
 - The project has no glossary yet and wants one (bootstrap).
 - The user explicitly asks to define, align, or clean up terminology.
 
+Softer, earlier signals count too — by the time a term is visibly overloaded, the language has already drifted. Any of these is reason enough to start aligning:
+
+- The user keeps using a word the glossary doesn't have.
+- The user quietly rewords something you said — a gentle correction is a concept surfacing.
+- The same constraint keeps coming up in conversation but lives in code only as scattered `if` checks — a rule without a name.
+
 ## Two modes
 
 Look at `docs/lore/glossary.md`: missing or empty → bootstrap mode; otherwise → alignment mode.
@@ -28,7 +34,8 @@ Work the ambiguity one question at a time, and attach your recommended answer to
 2. **Challenge against the glossary.** When the user's usage conflicts with an existing entry, call it out immediately: "The glossary defines cancellation as voiding the whole order, but you seem to mean partial — which is it?"
 3. **Probe boundaries with concrete scenarios.** Invent edge cases that force precision: "A company subscribes and an employee logs in — who is the Customer in that sentence?"
 4. **Cross-check the code.** When the user states what a term means, check whether the code agrees, and surface contradictions. If a question can be answered by reading the codebase, read the codebase instead of spending a question on it.
-5. **Write the term the moment it settles.** Update `glossary.md` inline, entry by entry — never batch. Rejected candidates go into the winning term's `not:` list so `lore-guard` can enforce the choice later.
+5. **Mine awkwardness and contradiction.** When an implementation keeps coming out clumsy, or a discussion keeps circling the same spot, ask whether an unnamed concept is missing — clumsy code is often a concept the model lacks. When two statements about a term contradict, don't pick a side: ask in which situation each holds; the answer usually splits the concept in two.
+6. **Write the term the moment it settles.** Update `glossary.md` inline, entry by entry — never batch. Rejected candidates go into the winning term's `not:` list so `lore-guard` can enforce the choice later.
 
 ### Bootstrap mode (cold start)
 
@@ -47,3 +54,5 @@ Per lore-spec's feedback log: when you challenge usage with an existing entry, a
 ## Guardrail
 
 Terms are aligned, never generated — every entry is confirmed by the user before it is written. The glossary holds language only: definitions, boundaries, examples. No implementation details, no specs, no plans. `updated:` dates follow lore-spec's date rule.
+
+Two gates, not one. The boundary test decides whether knowledge is worth recording at all; a second test decides whether a word belongs in the glossary: is it something the user (or the domain) would actually say out loud, or only a name for a technical mechanism? A cache policy, a retry loop, a worker pool — however important — are not glossary terms. Only domain language goes in.

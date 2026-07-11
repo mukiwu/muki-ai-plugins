@@ -36,10 +36,20 @@ docs/lore/
 ```
 
 Rules:
-- **Core** = `README.md` + each area's `pitfalls.md` and `business-rules.md`. Everything else is optional.
+- **Core files** = `README.md` + each area's `pitfalls.md` and `business-rules.md`. Everything else is optional. (Distinct from the *core area* mark below — that one is about which area matters most, not which files are mandatory.)
 - **No mandatory MOC.** The index lives in `README.md`; an area only grows its own `index.md` once it has many files (~5+).
 - **One axis.** Everything is an `<area>/` keyed by domain/subsystem — no mixing of a `features/` wrapper layer, top-level areas, and loose files.
 - **Vocabulary:** always call it "lore". Don't relabel it "cookbook", "wiki", or anything else.
+
+## Core areas
+
+Not every area matters equally. The area(s) holding the project's competitive heart — the logic you would keep secret, the part that makes the product worth building — can carry a **core** mark in the README Areas table (a `★` in a Core column). Like glossary terms, core status is aligned, never inferred: the mark is set only on the user's explicit confirmation, and most projects have one core area, rarely two.
+
+The skills weight their work by it:
+
+- `lore-consult` expands core-marked areas first when several match a task.
+- `lore-check` treats an uncovered core area as a red flag; an uncovered peripheral area is merely a note.
+- `lore-capture` leans toward recording when the knowledge touches a core area — core knowledge pays the highest interest.
 
 ## File frontmatter
 
@@ -72,6 +82,8 @@ What breaks, why, and what to do instead.
 - `term:` — optional: the glossary term this entry hangs off, written exactly as the term's heading (including an area qualifier when the term is collision-split, e.g. `Customer (billing)`).
 
 **Date rule (applies to every write).** Any `updated:` value must come from a real, known current date — the system clock or a date the user gives you. Never fabricate or backdate it. When you don't know today's date, ask rather than guess. Every skill that writes or refreshes an entry follows this rule.
+
+A strong body answers three things: what it is, why, and what to do. When the rule has an observable "done right" state, add a fourth — what behavior you'd see when it is respected. An entry that states its success criterion is checkable (by `lore-guard`, by a reviewer) instead of merely readable. Optional, never forced — some lore has no observable state.
 
 The format is deliberately both human-readable AND greppable: tools grep `` `code:` `` to check that the linked paths still exist, and `status:` lets stale entries be marked rather than silently deleted.
 
