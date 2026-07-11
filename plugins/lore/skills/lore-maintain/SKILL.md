@@ -1,6 +1,6 @@
 ---
 name: lore-maintain
-description: Audit and clean up docs/lore/ as it grows. Use to find stale, duplicate, or wrong entries, check that code links and the README index still hold, and prune obsolete content — marking over deleting, with confirmation for destructive actions.
+description: Use when lore looks stale or noisy, when a lore-check report flags problems, or on a periodic sweep — finds stale, duplicate, or wrong entries, checks that code links and the README index still hold, and prunes obsolete content; marking over deleting, with confirmation for destructive actions.
 ---
 
 # Lore Maintain

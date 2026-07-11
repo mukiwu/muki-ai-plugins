@@ -1,6 +1,6 @@
 ---
 name: lore-check
-description: Audit a project's docs/lore/ and report whether it is actually helping — coverage, link health, freshness, entry quality (does each pass the "could you recover it from code?" test), adoption (were surfaced entries acted on), and language health (glossary completeness and banned-name drift). Read-only: it diagnoses, then hands fixes off to lore-maintain, lore-capture, and lore-ul.
+description: Use when asked whether the project's lore is healthy or still helping, or when the 30-day heartbeat suggests a re-check — audits coverage, link health, freshness, entry quality, adoption, and language health, read-only, then hands fixes off to lore-maintain, lore-capture, and lore-ul.
 ---
 
 # Lore Check

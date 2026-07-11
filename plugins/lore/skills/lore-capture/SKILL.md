@@ -1,6 +1,6 @@
 ---
 name: lore-capture
-description: Record implicit project knowledge into docs/lore/. Use when you learn something code, types, tests, or git history can't reveal — a pitfall you hit, a behavior confirmed intentional, an API quirk, or the why behind a decision.
+description: Use when the conversation surfaces knowledge that code, types, tests, or git history can't reveal — the user explains a business rule or a spec, shares a gotcha, gives the why behind a decision, says "that's intentional, not a bug", or you hit a pitfall or dig up a non-obvious root cause while debugging. Record it into docs/lore/ before the session ends and it evaporates.
 ---
 
 # Lore Capture

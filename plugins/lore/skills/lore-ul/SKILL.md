@@ -1,6 +1,6 @@
 ---
 name: lore-ul
-description: Build and align the project's ubiquitous language in docs/lore/glossary.md. Use when a conversation hits a vague or overloaded term, when the same word means different things in different places, when code names disagree with how the user talks — or to bootstrap a glossary for a project that has none.
+description: Use when a conversation hits a vague or overloaded term, the same word means different things in different places, the user quietly rewords something you said, the user keeps using a word the glossary doesn't have, or code names disagree with how the user talks — align the term into docs/lore/glossary.md. Also bootstraps a glossary for a project that has none.
 ---
 
 # Lore UL (Ubiquitous Language)

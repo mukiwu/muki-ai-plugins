@@ -1,6 +1,6 @@
 ---
 name: lore-consult
-description: Read existing project lore before acting. Use before planning a feature or fixing a bug in a repo that has a docs/lore/ folder — it surfaces the relevant business rules, pitfalls, and API map, and flags entries that look stale.
+description: Use when about to plan a feature, fix a bug, or touch unfamiliar code in a repo that has a docs/lore/ folder, before writing any implementation — surfaces the business rules, pitfalls, glossary terms, and API map relevant to the task, and flags entries that look stale.
 ---
 
 # Lore Consult

@@ -1,6 +1,6 @@
 ---
 name: lore-init
-description: Scaffold a docs/lore/ knowledge base in a project. Use when setting up lore for the first time, when a project has no docs/lore/ yet, or when the user asks to initialize, bootstrap, or set up project lore.
+description: Use when a project has no docs/lore/ yet and implicit knowledge starts coming up in conversation, or when the user asks to initialize, bootstrap, or set up project lore — scaffolds the docs/lore/ knowledge base.
 ---
 
 # Lore Init

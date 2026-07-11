@@ -29,14 +29,35 @@ fi
 
 # The standing instruction. Keep it product-focused: business logic + 眉角,
 # never code structure (that fails lore's "could you recover it from code?" test).
-message='<lore>
-這個專案有 docs/lore/ 知識庫，記錄程式碼看不出來的隱性知識：產品商業規則、領域眉角（踩過才知道的脾氣）、API 契約／陷阱、決策的 why。四個時機主動用它：
+#
+# Written superpowers-style on purpose: a strong discrete directive (the 1%
+# rule) plus a rationalization (red-flag) table beats a polite suggestion.
+# This injection fires once per session (startup/clear/compact) and has to
+# carry the whole conversation, so the wording is a hammer, not a hint.
+message='<EXTREMELY_IMPORTANT>
+這個專案有 docs/lore/ 知識庫，記錄程式碼看不出來的隱性知識：商業規則、領域眉角、API 契約／陷阱、決策的 why。
 
-1. 動手前——規劃功能或修 bug 前，先跑 `lore:lore-consult` 撈這個任務相關的 rules 與 pitfalls；已知會動哪些檔案時，順手用 `code:` 反查。
-2. 進行中——使用者講出這類知識（解釋產品怎麼運作、一個規格、一個眉角、為什麼要這樣設計），或你在除錯中挖到非顯而易見的根因、確認某個怪行為是刻意的，主動考慮 `lore:lore-capture`：判斷值不值得記，值得就先問使用者要不要記再寫。判準：「這件事讀現行 code 能不能推回來？能就不是 lore，跳過」。不要記程式結構、function 做什麼、或任何讀 code 就有的東西。
-3. commit / PR 前——跑 `lore:lore-guard`，用 diff 對照 lore 的 `code:` 連結，確認沒踩到已記錄的商業規則或 pitfall。
-4. 詞彙對齊——對話出現模糊詞、同詞異義、或 code 命名跟使用者用詞對不上時，考慮 `lore:lore-ul` 把詞對齊進 `docs/lore/glossary.md`；專案已有 glossary 時，對話與新程式碼的命名跟著它的用詞走（`not:` 列的是禁用詞）。
-</lore>'
+規則（不可協商）：對話中只要有 1% 的可能剛剛出現了「讀現行 code 推不回來的知識」，你就必須停下來評估對應的 lore skill，不等使用者開口。使用者不會叫你記，知識說出口的當下就是唯一的記錄時機。
+
+四個時機與觸發訊號：
+
+1. 動手前 → `lore:lore-consult`。規劃功能、修 bug、要動不熟的程式碼之前先跑，撈相關 rules 與 pitfalls；已知會動哪些檔案時，順手用 `code:` 反查。
+2. 對話中（最常漏的一個）→ `lore:lore-capture`。使用者說出這類句子就是訊號：「其實我們的規則是⋯」「這邊要小心⋯」「當初這樣做是因為⋯」「這不是 bug，是故意的」；或你在除錯中確認了非顯而易見的根因。判準：「讀現行 code 推得回來的就不是 lore」。
+3. commit / PR 前 → `lore:lore-guard`。用 diff 對照 lore 的 `code:` 連結，確認沒踩到已記錄的規則或 pitfall。
+4. 詞彙不對齊 → `lore:lore-ul`。訊號：同詞異義、使用者悄悄改掉你回覆裡的用詞、使用者反覆用 glossary 沒有的詞、code 命名跟使用者講法對不上。已有 glossary 時，對話與新程式碼的命名跟著它走（`not:` 列的是禁用詞）。
+
+紅旗表——出現這些念頭代表你正在合理化，停：
+
+| 念頭 | 真相 |
+|------|------|
+| 這只是閒聊 | 閒聊裡的業務規則最容易流失，先評估 |
+| 等做完再記 | 做完就忘了，說出口的當下記錄成本最低 |
+| 這太小不值得記 | 判準是 code 推不推得回來，不是大小 |
+| 使用者沒叫我記 | 主動提案就是這套系統的設計，問一句要不要記 |
+| 我知道他在說什麼 | 懂意思不等於詞彙已對齊，glossary 要白紙黑字 |
+
+不要記的東西不變：程式結構、function 做什麼、任何讀 code 就有的內容。寫入永遠先問過使用者（aligned, never generated）。
+</EXTREMELY_IMPORTANT>'
 
 # Heartbeat: only when the base actually has area content (at least one file
 # below an area folder), so a freshly scaffolded empty base stays quiet.
