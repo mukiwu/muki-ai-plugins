@@ -43,7 +43,7 @@ Each entry carries a one-line, greppable meta directly under its heading:
 | **lore-guard** | Check a diff against recorded lore before commit / PR — maps changed files to entries via their `code:` links and reports any business rule or pitfall the change violates. |
 | **lore-maintain** | Clean up as lore grows — find stale, duplicate, or wrong entries, check that code links and the index still hold, and prune obsolete content. |
 | **lore-check** | Audit whether the lore is actually helping — a read-only health report across coverage, link health, freshness, entry quality, and adoption, then hands the fixes to lore-maintain / lore-capture. |
-| **lore-ul** | Build and align the shared vocabulary in `docs/lore/glossary.md` — when a conversation hits a vague or overloaded term, when code names disagree with how you talk, or to bootstrap a glossary from scratch. |
+| **lore-ul** | Build and align the shared vocabulary — when a conversation hits a vague or overloaded term, when code names disagree with how you talk, or to bootstrap a glossary from scratch. Writes `docs/lore/glossary.md`, or defers to a root `CONTEXT.md` when the project already keeps its vocabulary there. |
 
 ## The Loop
 
@@ -57,6 +57,10 @@ The seven skills close a loop that keeps the lore alive instead of rotting like 
 6. **ul** keeps the language itself in the loop: consult reads its terms into briefs, guard flags banned names from its `not:` lists, and check audits the glossary's health — so even the words stay self-correcting.
 
 Knowledge that keeps helping stays; knowledge that stops helping gets flagged and fixed. That is the self-correcting part.
+
+## Plays Well With CONTEXT.md
+
+If your project already keeps its vocabulary in a root `CONTEXT.md` / `CONTEXT-MAP.md` (the format used by domain-modeling / grilling skills), lore treats that file as the canonical glossary instead of building a parallel one: `lore-consult` reads terms from it, `lore-guard` enforces its `_Avoid_` lists at commit time (the enforcement piece that format doesn't ship with), and `lore-ul` steps aside — `docs/lore/glossary.md` is only used when no `CONTEXT.md` exists.
 
 ## Quick Start
 

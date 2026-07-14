@@ -91,6 +91,20 @@ The format is deliberately both human-readable AND greppable: tools grep `` `cod
 
 `docs/lore/glossary.md` holds the project's shared vocabulary — the terms the team, the code, and the agent agree to use, one `## Term` entry per concept. It is optional like `api-map.md`, and it is created lazily: the file appears when the first term is agreed (via `lore-ul`), never at scaffold time. Terms are aligned with the user, never auto-generated.
 
+**Glossary resolution (run this before any glossary read or write).** Some projects already keep their vocabulary outside lore — most commonly a root `CONTEXT.md` (single context) or a root `CONTEXT-MAP.md` pointing at per-context `CONTEXT.md` files, the format used by domain-modeling / grilling skills. That file is the same artifact as lore's glossary: an opinionated term list whose `_Avoid_:` line plays the role of `not:`. Every skill that touches vocabulary resolves the glossary source in this order:
+
+1. **External glossary** — a root `CONTEXT.md`, or a root `CONTEXT-MAP.md` and the per-context files it lists. When present it is canonical: read terms from it, treat `_Avoid_:` names as banned, and never create `docs/lore/glossary.md` next to it.
+2. **Lore glossary** — `docs/lore/glossary.md` (plus any post-split `<area>/terms.md`), the format the rest of this section defines.
+3. **None** — no glossary yet; `lore-ul` can bootstrap one, honoring this same order when choosing where to write.
+
+Rules for the external case:
+
+- **Consume, don't restructure.** The file belongs to whatever tool maintains it (often a domain-modeling skill). When a lore skill writes a term there, it uses the file's native format — a `**Term**:` definition plus an `_Avoid_:` list — and never injects lore's `code:` / `updated:` / `status:` meta into it.
+- **Feedback events** for external terms are keyed `CONTEXT.md#<Term>` (or `<path>/CONTEXT.md#<Term>` in a multi-context repo).
+- **Never maintain both.** If a legacy `docs/lore/glossary.md` coexists with a root `CONTEXT.md`, the external file wins: `lore-check` flags the duplication, and `lore-maintain` offers a user-confirmed merge of the remaining lore terms into `CONTEXT.md` before retiring `glossary.md`.
+
+The rest of this section describes lore's own glossary format — it applies when no external glossary exists.
+
 The global file spans areas, so its frontmatter carries only `kind`:
 
 ```yaml

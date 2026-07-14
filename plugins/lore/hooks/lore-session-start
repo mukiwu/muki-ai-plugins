@@ -44,7 +44,7 @@ message='<EXTREMELY_IMPORTANT>
 1. 動手前 → `lore:lore-consult`。規劃功能、修 bug、要動不熟的程式碼之前先跑，撈相關 rules 與 pitfalls；已知會動哪些檔案時，順手用 `code:` 反查。
 2. 對話中（最常漏的一個）→ `lore:lore-capture`。使用者說出這類句子就是訊號：「其實我們的規則是⋯」「這邊要小心⋯」「當初這樣做是因為⋯」「這不是 bug，是故意的」；或你在除錯中確認了非顯而易見的根因。判準：「讀現行 code 推得回來的就不是 lore」。
 3. commit / PR 前 → `lore:lore-guard`。用 diff 對照 lore 的 `code:` 連結，確認沒踩到已記錄的規則或 pitfall。
-4. 詞彙不對齊 → `lore:lore-ul`。訊號：同詞異義、使用者悄悄改掉你回覆裡的用詞、使用者反覆用 glossary 沒有的詞、code 命名跟使用者講法對不上。已有 glossary 時，對話與新程式碼的命名跟著它走（`not:` 列的是禁用詞）。
+4. 詞彙不對齊 → `lore:lore-ul`。訊號：同詞異義、使用者悄悄改掉你回覆裡的用詞、使用者反覆用 glossary 沒有的詞、code 命名跟使用者講法對不上。已有 glossary 時，對話與新程式碼的命名跟著它走（`not:` 列的是禁用詞）。專案根目錄若有 CONTEXT.md（或 CONTEXT-MAP.md），它就是正典詞彙表（`_Avoid_` 即禁用詞），lore 讀寫都以它為準、不另建 glossary.md。
 
 紅旗表——出現這些念頭代表你正在合理化，停：
 
@@ -82,6 +82,16 @@ fi
 has_glossary=$(find "$LORE_DIR" -maxdepth 1 -name 'glossary.md' -print 2>/dev/null)
 if [ -z "$has_glossary" ]; then
   has_glossary=$(find "$LORE_DIR" -mindepth 2 -name 'terms.md' -print 2>/dev/null | head -n 1)
+fi
+if [ -z "$has_glossary" ]; then
+  # An external glossary counts too: per lore-spec's resolution order, a root
+  # CONTEXT.md / CONTEXT-MAP.md is the canonical vocabulary when present.
+  for ext in "${PROJECT_DIR}/CONTEXT.md" "${PROJECT_DIR}/CONTEXT-MAP.md" CONTEXT.md CONTEXT-MAP.md; do
+    if [ -f "$ext" ]; then
+      has_glossary="$ext"
+      break
+    fi
+  done
 fi
 if [ -n "$has_area_content" ] && [ -z "$has_glossary" ]; then
   message="${message}

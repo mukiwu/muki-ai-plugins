@@ -41,7 +41,7 @@ docs/lore/
 | **lore-guard** | commit／PR 前用 diff 對照 lore——把改到的檔案透過 `code:` 連結反查對應 entry，回報這次改動有沒有踩到已記錄的商業規則或坑。 |
 | **lore-maintain** | 隨 lore 長大做整理——找出過期、重複、錯誤的 entry，檢查 `code:` 連結與索引還對不對，清掉沒用的內容。 |
 | **lore-check** | 檢查 lore 到底有沒有在幫你——唯讀體檢，逐面向看覆蓋率、連結健康、新鮮度、entry 品質、採納率，再把要修的交給 lore-maintain／lore-capture。 |
-| **lore-ul** | 建立與對齊 `docs/lore/glossary.md` 的通用語言——對話出現模糊詞、同詞異義、code 命名跟你的用詞對不上時把詞煉成詞條；也能替還沒有詞彙表的專案從零 bootstrap 一份。 |
+| **lore-ul** | 建立與對齊通用語言——對話出現模糊詞、同詞異義、code 命名跟你的用詞對不上時把詞煉成詞條；也能替還沒有詞彙表的專案從零 bootstrap 一份。寫進 `docs/lore/glossary.md`；專案根目錄已有 `CONTEXT.md` 時則以它為準、不另建一份。 |
 
 ## 閉環
 
@@ -55,6 +55,10 @@ docs/lore/
 6. **ul** 讓語言本身也在迴圈裡：consult 把詞條讀進 brief、guard 用 `not:` 禁用詞把關命名、check 體檢詞彙健康——連用詞都會自我修正。
 
 一直在幫忙的知識留下，不再幫忙的知識被點名、被修正。這就是它能自我修正的原因。
+
+## 跟 CONTEXT.md 共存
+
+如果專案已經把詞彙放在根目錄的 `CONTEXT.md`／`CONTEXT-MAP.md`（domain-modeling／grilling 這類 skill 用的格式），lore 會直接把那個檔案當成正典詞彙表，不會再建一份平行的：`lore-consult` 從它讀詞條、`lore-guard` 在 commit 前用它的 `_Avoid_` 清單把關命名（那套格式本身沒有的執法環節）、`lore-ul` 則讓路——只有在沒有 `CONTEXT.md` 的專案才會用 `docs/lore/glossary.md`。
 
 ## 快速開始
 

@@ -1,6 +1,6 @@
 ---
 name: lore-ul
-description: Use when a conversation hits a vague or overloaded term, the same word means different things in different places, the user quietly rewords something you said, the user keeps using a word the glossary doesn't have, or code names disagree with how the user talks — align the term into docs/lore/glossary.md. Also bootstraps a glossary for a project that has none.
+description: Use when a conversation hits a vague or overloaded term, the same word means different things in different places, the user quietly rewords something you said, the user keeps using a word the glossary doesn't have, or code names disagree with how the user talks — align the term into the project's glossary (a root CONTEXT.md when present, docs/lore/glossary.md otherwise). Also bootstraps a glossary for a project that has none.
 ---
 
 # Lore UL (Ubiquitous Language)
@@ -8,6 +8,10 @@ description: Use when a conversation hits a vague or overloaded term, the same w
 Read `${CLAUDE_PLUGIN_ROOT}/reference/lore-spec.md` first — its Glossary section defines the file location, the term-entry meta, collision handling, and the split rule.
 
 The other lore skills key knowledge by code location; this one keys it by concept. A shared vocabulary is what lets rules hang off concepts instead of file paths, lets the user and the agent challenge each other's wording, and gives `lore-guard` something to check names against.
+
+## Which file, and whose flow
+
+Resolve the glossary source per lore-spec before reading or writing anything. When a root `CONTEXT.md` / `CONTEXT-MAP.md` exists — or a dedicated domain-modeling / grilling skill is available in this session — let that system lead: a relentless-interview flow extracts terms better than reactive alignment, so this skill's job shrinks to spotting the drift signals below and kicking that flow off. When a term settles mid-conversation without a full interview, apply the alignment moves yourself but write into `CONTEXT.md` in its native format (`**Term**:` + `_Avoid_:` — rejected candidates go to `_Avoid_:` instead of `not:`, and no lore meta is injected). Never create `docs/lore/glossary.md` alongside an external glossary. Everything below assumes the fallback case: no external glossary and no such skill, so lore's own format applies.
 
 ## When to use
 
@@ -24,7 +28,7 @@ Softer, earlier signals count too — by the time a term is visibly overloaded, 
 
 ## Two modes
 
-Look at `docs/lore/glossary.md`: missing or empty → bootstrap mode; otherwise → alignment mode.
+Look at the resolved glossary source: missing or empty → bootstrap mode; otherwise → alignment mode. Bootstrap only ever creates `docs/lore/glossary.md` — an external `CONTEXT.md` is grown in place by its own flow, never bootstrapped around.
 
 ### Alignment mode (the everyday one)
 
@@ -49,7 +53,7 @@ Follow the spec: a cross-area collision stays in the global file with area-quali
 
 ## Adoption feedback (best-effort)
 
-Per lore-spec's feedback log: when you challenge usage with an existing entry, append a `surfaced` event keyed `glossary.md#<Term>` (or `<area>/terms.md#<Term>` after a split), then reconcile it — `heeded` (the wording changed to follow it, or the entry was sharpened), `redundant` (usage already matched), or `ignored` (the user overrode it). Never let logging block or delay the session.
+Per lore-spec's feedback log: when you challenge usage with an existing entry, append a `surfaced` event keyed `glossary.md#<Term>` (or `<area>/terms.md#<Term>` after a split; `CONTEXT.md#<Term>` when the external glossary is canonical), then reconcile it — `heeded` (the wording changed to follow it, or the entry was sharpened), `redundant` (usage already matched), or `ignored` (the user overrode it). Never let logging block or delay the session.
 
 ## Guardrail
 
