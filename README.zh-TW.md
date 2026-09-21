@@ -1,6 +1,6 @@
 # muki-ai-plugins
 
-給 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的 plugin marketplace — 視覺回歸測試、測試體檢，與專案知識記錄。
+給 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的 plugin marketplace — 視覺回歸測試、測試體檢、專案知識記錄，與 Jev 網頁搜尋。
 
 ## Plugins
 
@@ -9,6 +9,7 @@
 | [figma-visual-reviewer](plugins/figma-visual-reviewer/) | 視覺回歸測試 — 比對 Figma 設計稿與實際網頁 |
 | [review-tests](plugins/review-tests/) | 測試體檢 — 找出測試盲點，產出 self-contained 的 HTML 報告 |
 | [lore](plugins/lore/) | 專案 lore — 建立、查閱、記錄、守門、維護、體檢程式碼講不出來的隱性知識，並對齊團隊的通用語言 |
+| [jev-search](https://github.com/mukiwu/jev-search-mcp) | Jev 網頁搜尋：內建 WebSearch 改由 Jev 回答並排序，Jev 答不出來自動退回內建 |
 
 ## 安裝
 
@@ -20,6 +21,7 @@
 /plugin install figma-visual-reviewer
 /plugin install review-tests
 /plugin install lore
+/plugin install jev-search
 ```
 
 ## Plugin 總覽
@@ -56,6 +58,17 @@
 - 標記優先於刪除——以前對、現在過期的知識，那個教訓還留著
 
 [詳細說明 →](plugins/lore/README.zh-TW.md)
+
+### jev-search
+
+把 Claude Code 內建的 WebSearch 交給 [Jev Search](https://github.com/superagents-lab/jev-search) 回答：Jev 讀懂一句話的請求，自己挑來源和時間範圍，每筆結果都打相關度分數排序。Jev 答不出來時，內建搜尋照常執行。程式碼放在獨立 repo，因為它同時是 npm 套件
+
+- 用 function hook 攔 `WebSearch`，你和模型的搜尋方式都不用改
+- 附 `jev_search` MCP 工具，要硬鎖 `sources` 或 `window` 時用，另有一個 skill 教模型何時該用
+- 也能脫離 Claude Code 當 MCP server 或 CLI 用，`npx jev-search-mcp`
+- Function hooks 是 early access 功能，settings 的 `env` 要設 `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1`
+
+[詳細說明 →](https://github.com/mukiwu/jev-search-mcp)
 
 ## 授權
 

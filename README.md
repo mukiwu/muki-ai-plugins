@@ -2,7 +2,7 @@
 
 [繁體中文版](README.zh-TW.md)
 
-A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin marketplace — visual regression testing, test review, and project knowledge capture.
+A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin marketplace — visual regression testing, test review, project knowledge capture, and Jev-powered web search.
 
 ## Plugins
 
@@ -11,6 +11,7 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin marketpla
 | [figma-visual-reviewer](plugins/figma-visual-reviewer/) | Visual regression testing — compare Figma designs against live web pages |
 | [review-tests](plugins/review-tests/) | Test review doctor — diagnose a test file for blind spots, output a self-contained HTML report |
 | [lore](plugins/lore/) | Project lore — scaffold, consult, capture, guard, maintain, health-check, and language-align the implicit knowledge your codebase can't show |
+| [jev-search](https://github.com/mukiwu/jev-search-mcp) | Web search through Jev Search: answers the built-in WebSearch with Jev-ranked results and falls back to the built-in tool when Jev cannot answer |
 
 ## Install
 
@@ -22,6 +23,7 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin marketpla
 /plugin install figma-visual-reviewer
 /plugin install review-tests
 /plugin install lore
+/plugin install jev-search
 ```
 
 ## Plugin Overview
@@ -58,6 +60,17 @@ Scaffold, consult, capture, guard, maintain, health-check, and language-align pr
 - Mark over delete — outdated-but-once-true knowledge keeps its lesson
 
 [Read more →](plugins/lore/README.md)
+
+### jev-search
+
+Answers Claude Code's built-in WebSearch with [Jev Search](https://github.com/superagents-lab/jev-search): Jev reads the request in plain language, picks the sources and time window, and ranks every result by relevance. When Jev cannot answer, the built-in search runs as before. The code lives in its own repository because it is also an npm package.
+
+- Function hook on `WebSearch`, nothing changes in how you or the model search
+- `jev_search` MCP tool for explicit `sources` / `window` filters, plus a skill on when to reach for it
+- Also usable outside Claude Code as an MCP server or CLI via `npx jev-search-mcp`
+- Function hooks are early access: set `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1` in your settings `env`
+
+[Read more →](https://github.com/mukiwu/jev-search-mcp)
 
 ## License
 
