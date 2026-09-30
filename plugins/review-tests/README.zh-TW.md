@@ -11,6 +11,14 @@
 /plugin install review-tests
 ```
 
+Codex、Cursor、Gemini CLI 等其他工具：
+
+```bash
+npx skills add mukiwu/muki-ai-plugins
+```
+
+安裝時會列出所有 skill，勾選 `review-tests`
+
 ## 快速開始
 
 指定一份測試檔（或給 source 檔，它會自己找對應測試）：

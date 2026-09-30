@@ -13,6 +13,14 @@ It's a **diagnosis tool, not a fixer**. It points out gaps; you decide what to f
 /plugin install review-tests
 ```
 
+For Codex, Cursor, Gemini CLI, and other agents:
+
+```bash
+npx skills add mukiwu/muki-ai-plugins
+```
+
+When the installer lists the skills, pick `review-tests`.
+
 ## Quick Start
 
 Point it at a test file (or the source file — it will find the matching test):

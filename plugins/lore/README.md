@@ -69,6 +69,14 @@ If your project already keeps its vocabulary in a root `CONTEXT.md` / `CONTEXT-M
 /plugin install lore
 ```
 
+For Codex, Cursor, Gemini CLI, and other agents:
+
+```bash
+npx skills add mukiwu/muki-ai-plugins
+```
+
+When the installer lists the skills, pick all seven `lore-*` skills. This installs the skills only; the session-start reminder and pre-commit check hooks come with the Claude Code plugin.
+
 Then, in the project you want to track:
 
 1. Run `lore-init` to scaffold `docs/lore/`.

@@ -11,6 +11,14 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin that read
 /plugin install session-review
 ```
 
+For Codex, Cursor, Gemini CLI, and other agents:
+
+```bash
+npx skills add mukiwu/muki-ai-plugins
+```
+
+When the installer lists the skills, pick `session-review`.
+
 ## Quick Start
 
 ```

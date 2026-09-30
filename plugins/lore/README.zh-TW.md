@@ -67,6 +67,14 @@ docs/lore/
 /plugin install lore
 ```
 
+Codex、Cursor、Gemini CLI 等其他工具：
+
+```bash
+npx skills add mukiwu/muki-ai-plugins
+```
+
+安裝時會列出所有 skill，勾選 全部 7 個 `lore-*` skill；這個方式只會裝 skill，開新對話時的提醒和 commit 前的檢查只有 Claude Code plugin 版才有
+
 接著，在你要記錄的專案裡：
 
 1. 跑 `lore-init` 把 `docs/lore/` 建起來。

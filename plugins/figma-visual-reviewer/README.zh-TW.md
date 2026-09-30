@@ -9,6 +9,14 @@
 /plugin install figma-visual-reviewer
 ```
 
+Codex、Cursor、Gemini CLI 等其他工具：
+
+```bash
+npx skills add mukiwu/muki-ai-plugins
+```
+
+安裝時會列出所有 skill，勾選 `figma-export` 和 `pixel-diff`
+
 ## 快速開始
 
 ```bash

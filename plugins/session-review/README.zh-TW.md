@@ -11,6 +11,14 @@
 /plugin install session-review
 ```
 
+Codex、Cursor、Gemini CLI 等其他工具：
+
+```bash
+npx skills add mukiwu/muki-ai-plugins
+```
+
+安裝時會列出所有 skill，勾選 `session-review`
+
 ## 用法
 
 ```

@@ -11,6 +11,14 @@ Visual regression testing plugin for [Claude Code](https://docs.anthropic.com/en
 /plugin install figma-visual-reviewer
 ```
 
+For Codex, Cursor, Gemini CLI, and other agents:
+
+```bash
+npx skills add mukiwu/muki-ai-plugins
+```
+
+When the installer lists the skills, pick `figma-export` and `pixel-diff`.
+
 ## Quick Start
 
 ```bash
