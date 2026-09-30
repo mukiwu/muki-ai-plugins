@@ -252,23 +252,41 @@ def main():
 
     for f, cwd, rows in codex_sessions(roots, a.since):
         proj = project_of(cwd, roots)
+        meta = next(((x.get('payload') or {}) for x in rows if x.get('type') == 'session_meta'), {})
+        src = meta.get('source')
+        # exec = scripted run, dict = subagent / guardian spawned by another thread: not a human conversation
+        if src == 'exec' or isinstance(src, dict):
+            automated[proj] += 1
+            continue
         ts = [x['timestamp'] for x in rows if x.get('timestamp')]
         sid = 'codex-' + os.path.basename(f)[-13:-6]
         s = {'id': sid, 'source': 'codex', 'project': proj, 'cwd': cwd, 'start': min(ts), 'end': max(ts), 'title': None,
              'n': 0, 'images': 0, 'interrupts': 0, 'commits': 0, 'skills': [], 'agents': []}
         for d in rows:
             p = d.get('payload') or {}
-            if d.get('type') == 'event_msg' and p.get('type') == 'user_message':
-                t = (p.get('message') or '').strip()
-                if not t:
-                    continue
-                s['n'] += 1; days[(d.get('timestamp') or '')[:10]] += 1
-                msgs.append({'sid': sid, 'project': proj, 'ts': d.get('timestamp'), 'kind': 'text', 'text': t,
-                             'image': bool(p.get('images'))})
+            if d.get('type') == 'response_item' and p.get('type') == 'message' and p.get('role') == 'user':
+                items = p.get('content') or []
+                img = any(isinstance(x, dict) and x.get('type') == 'input_image' for x in items)
+                for x in items:
+                    t = (x.get('text') or '').strip() if isinstance(x, dict) else ''
+                    if not t or t.startswith(('<', '# AGENTS.md')):
+                        continue
+                    if '## My request:' in t:
+                        t = t.split('## My request:', 1)[1].strip()
+                    elif t.startswith(('# Files mentioned', '# Files pasted')):
+                        continue
+                    for n in re.findall(r'\[\$([\w:.-]+)\]\(', t):
+                        skill[n] += 1; skill_via[n]['user'] += 1
+                        skill_sess[n].add(sid); skill_proj[n].add(proj); s['skills'].append(n)
+                    s['n'] += 1; s['images'] += 1 if img else 0
+                    days[(d.get('timestamp') or '')[:10]] += 1
+                    msgs.append({'sid': sid, 'project': proj, 'ts': d.get('timestamp'), 'kind': 'text', 'text': t, 'image': img})
             if d.get('type') == 'response_item' and p.get('type') in ('function_call', 'custom_tool_call'):
                 args = p.get('arguments') or p.get('input') or ''
                 if 'git commit' in str(args):
                     s['commits'] += 1
+        if s['n'] == 0:
+            continue
         sessions.append(s)
 
     sessions.sort(key=lambda x: x['start'])

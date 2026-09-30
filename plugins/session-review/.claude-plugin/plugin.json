@@ -1,7 +1,7 @@
 {
   "name": "session-review",
   "description": "Review every AI session (Claude Code + Codex) of one or more projects and turn it into an interactive HTML report: skill usage ranking, your real workflow as diagrams, how you talk to AI when building and debugging, repeated routines worth turning into custom skills (with a user/project scope call for each), and installed skills you could remove.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": {
     "name": "Muki Wu"
   },

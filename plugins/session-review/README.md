@@ -55,6 +55,7 @@ Every suggested skill gets a scope call:
 
 - Python 3.9+ (for `collect.py`)
 - Node.js (optional, to syntax-check the report's script)
+- Google Chrome, Chromium, or Edge (for the pre-publish layout check at 1280 / 900 / 600 / 390 px; set `CHROME` if it is not in a standard location)
 
 ## Privacy
 

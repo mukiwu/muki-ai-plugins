@@ -55,6 +55,7 @@
 
 - Python 3.9 以上（跑 `collect.py`）
 - Node.js（選用，用來檢查報告的 script）
+- Google Chrome、Chromium 或 Edge（發布前在 1280、900、600、390 四種寬度檢查跑版，不在預設位置就設定 `CHROME` 環境變數）
 
 ## 隱私
 

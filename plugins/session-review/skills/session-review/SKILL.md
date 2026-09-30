@@ -105,7 +105,20 @@ python3 <這個 skill 的目錄>/scripts/collect.py --out <scratchpad>/session-r
 - 有 Artifact 工具時先跑它的 quickstart（intent 用 other）取得頁面規範，圖用 `/diagram-design` 的色票與規則，沒裝就用 [references/diagram-fallback.md](references/diagram-fallback.md) 內建的同一套
 - 版型與互動照 [references/report-spec.md](references/report-spec.md) 的頁面結構做，色票與字體沿用 diagram-design（或 fallback 裡的 token 表），整頁維持同一套 token
 - 環境有 Artifact 工具就發布成 artifact，沒有就只產生本機檔並用瀏覽器打開；本機檔存到 `~/Desktop/<專案名>-ai-review.html`（多專案用 `multi-project-ai-review.html`），本機版要自己補上 doctype、head、body
+- 頁面最後一定要內嵌 [assets/layout-guard.js](assets/layout-guard.js)（放在自己的 script 之後），它會自動縮小或截斷塞不進節點的流程圖文字，也提供檢查模式
+- 動手寫版面前先讀 report-spec.md 的版面防呆規則
 - 發布前用 node 檢查一次內嵌 script 能不能解析
+
+### 7. 發布前的版面檢查（不能跳過）
+
+```bash
+python3 <這個 skill 的目錄>/scripts/check_layout.py <報告.html> --shots <scratchpad>/session-review/shots
+```
+
+- 腳本會用背景 Chrome 在 1280、900、600、390 四種寬度打開報告，找出：文字互相重疊、圖表壓到標題、元素跑出卡片、文字超出容器、欄位被擠到一行只剩幾個字、流程圖文字超出節點或被自動縮小截斷、整頁橫向捲動
+- 有任何問題就修，修完重跑，直到四種寬度都是 0 個問題才可以發布
+- 通過後至少看一張截圖（建議 600px），確認沒有腳本抓不到的怪異排版
+- 找不到 Chrome 時（exit code 2），告訴使用者檢查沒有跑，並請他設定 `CHROME` 環境變數，不要當作通過
 
 ## 寫作規則
 
