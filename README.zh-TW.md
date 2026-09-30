@@ -26,6 +26,16 @@
 /plugin install jev-search
 ```
 
+### Codex、Cursor、Gemini CLI 等其他工具
+
+```bash
+npx skills add mukiwu/muki-ai-plugins
+```
+
+安裝時會讓你選要裝哪些 skill、裝到哪些工具，以及只給目前專案用還是所有專案都能用。在 Codex 裡叫用 skill 要打 `$名稱`（例如 `$session-review`），不是 `/名稱`
+
+這個方式只會裝 skill 資料夾，lore 開新對話時的提醒、commit 前的檢查這類 plugin 附帶功能不會一起裝，所以 Claude Code 使用者建議還是用 `/plugin install`；jev-search 放在獨立的 repo，不在這份清單裡
+
 ## Plugin 總覽
 
 ### figma-visual-reviewer

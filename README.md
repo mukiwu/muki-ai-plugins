@@ -28,6 +28,16 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin marketpla
 /plugin install jev-search
 ```
 
+### Codex, Cursor, Gemini CLI, and other agents
+
+```bash
+npx skills add mukiwu/muki-ai-plugins
+```
+
+The installer asks which skills to install, which agents to install them to, and whether to install for the current project or for every project. In Codex, invoke a skill with `$name` (for example `$session-review`) instead of `/name`.
+
+This installs the skill folders only. Plugin extras such as lore's session-start reminder and pre-commit check are not included, so Claude Code users should prefer `/plugin install`. jev-search lives in its own repository and is not part of this list.
+
 ## Plugin Overview
 
 ### figma-visual-reviewer
