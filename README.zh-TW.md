@@ -68,6 +68,7 @@
 - `/session-review [路徑 ...]`，沒寫路徑就用目前專案，寫多個會合併成一份
 - skill 排行分成你自己打的和 AI 自己叫的，工作流程畫成圖，開發與除錯時的溝通方式都附原話
 - 找出一直重複的流程，建議做成客製 skill，附 SKILL.md 草稿與 user 或 project scope 的判斷
+- 列出裝了但這段期間沒用過、對話也沒提過相關需求的 skill，附上移除指令
 - 排除 SDK 自動執行的對話、去掉回溯造成的重複訊息，沒裝 `diagram-design` 時改用內建畫圖規則
 
 [詳細說明 →](plugins/session-review/README.zh-TW.md)

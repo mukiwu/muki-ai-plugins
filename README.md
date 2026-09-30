@@ -70,6 +70,7 @@ Reads every AI session you had in one or more projects (Claude Code and Codex) a
 - `/session-review [path ...]` — defaults to the current project; several paths are merged into one report
 - Skill ranking split by who invoked it (you vs. the model), your real workflow drawn as diagrams, and verbatim quotes on how you build and debug with AI
 - Suggests custom skills for routines that keep repeating, each with a `SKILL.md` draft and a user/project scope call
+- Flags installed skills you never used and never needed in these sessions, with the command to remove each
 - Skips automated SDK sessions and de-duplicates rewound messages; falls back to built-in diagram rules without `diagram-design`
 
 [Read more →](plugins/session-review/README.md)

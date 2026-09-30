@@ -4,7 +4,8 @@
 Usage:
   python3 collect.py --out DIR [--since YYYY-MM-DD] [PROJECT_PATH ...]
 No PROJECT_PATH -> current working directory. Several paths -> merged into one dataset.
-Outputs in DIR: summary.json, messages.json, messages.txt
+Outputs in DIR: summary.json (incl. installed_skills inventory + usage), messages.json, messages.txt
+--no-global skips the scan of all projects used to tell whether an unused skill is used elsewhere.
 """
 import argparse, collections, glob, json, os, re, statistics, sys
 
@@ -79,11 +80,109 @@ def codex_sessions(roots, since):
 def project_of(cwd, roots):
     return max((r for r in roots if under(cwd, [r])), key=len)
 
+def frontmatter(path):
+    try:
+        txt = open(path, encoding='utf-8', errors='ignore').read()
+    except Exception:
+        return {}
+    m = re.match(r'---\s*\n(.*?)\n---', txt, re.S)
+    if not m:
+        return {}
+    out, key = {}, None
+    for line in m.group(1).splitlines():
+        km = re.match(r'^([A-Za-z_-]+):\s*(.*)$', line)
+        if km:
+            key = km.group(1); val = km.group(2).strip()
+            out[key] = '' if val in ('>', '|', '>-', '|-') else val.strip('"\'')
+        elif key and line.startswith((' ', '\t')):
+            out[key] = (out[key] + ' ' + line.strip()).strip()
+    return out
+
+def mtime(p):
+    import datetime
+    try:
+        return datetime.date.fromtimestamp(os.stat(os.path.realpath(p)).st_mtime).isoformat()
+    except Exception:
+        return None
+
+def load_json(p):
+    try:
+        return json.load(open(os.path.expanduser(p)))
+    except Exception:
+        return {}
+
+def installed_skills(roots):
+    """Skills the user can currently invoke: user scope, project scope, and plugin skills."""
+    items = []
+    def add(sk_md, scope, source, prefix='', enabled=True, installed=None):
+        fm = frontmatter(sk_md)
+        folder = os.path.basename(os.path.dirname(sk_md))
+        name = fm.get('name') or folder
+        items.append({'name': name, 'invoke': (prefix + ':' + name) if prefix else name, 'scope': scope,
+                      'source': source, 'path': os.path.dirname(sk_md),
+                      'symlink_to': os.path.realpath(os.path.dirname(sk_md)) if os.path.islink(os.path.dirname(sk_md)) else None,
+                      'enabled': enabled, 'installed_at': installed or mtime(sk_md), 'internal': str(fm.get('user-invocable', '')).lower() == 'false',
+                      'description': (fm.get('description') or '')[:400]})
+    for f in sorted(glob.glob(os.path.expanduser('~/.claude/skills/*/SKILL.md'))):
+        add(f, 'user', '~/.claude/skills')
+    for r in roots:
+        for f in sorted(glob.glob(os.path.join(r, '.claude/skills/*/SKILL.md'))):
+            add(f, 'project', r)
+    enabled = {}
+    for sp in ['~/.claude/settings.json'] + [os.path.join(r, '.claude', n) for r in roots for n in ('settings.json', 'settings.local.json')]:
+        enabled.update(load_json(sp).get('enabledPlugins') or {})
+    reg = load_json('~/.claude/plugins/installed_plugins.json').get('plugins') or {}
+    for pid, installs in reg.items():
+        if not installs:
+            continue
+        inst = installs[-1]; path = inst.get('installPath') or ''
+        pname = pid.split('@')[0]
+        for f in sorted(glob.glob(os.path.join(path, 'skills/*/SKILL.md'))):
+            add(f, 'plugin', pid, prefix=pname, enabled=bool(enabled.get(pid, False)), installed=(inst.get('installedAt') or '')[:10] or None)
+        for f in sorted(glob.glob(os.path.join(path, 'commands/*.md'))):
+            fm = frontmatter(f); n = os.path.splitext(os.path.basename(f))[0]
+            items.append({'name': n, 'invoke': pname + ':' + n, 'scope': 'plugin', 'source': pid, 'path': f,
+                          'symlink_to': None, 'enabled': bool(enabled.get(pid, False)), 'kind': 'command',
+                          'installed_at': (inst.get('installedAt') or '')[:10] or mtime(f),
+                          'description': (fm.get('description') or '')[:400]})
+    return items
+
+def global_usage(names):
+    """Count invocations of each skill across ALL Claude Code projects (raw text scan, no JSON parse)."""
+    pat = re.compile(r'"skill":\s*"([^"]+)"|<command-name>/?([^<]+)</command-name>')
+    tsp = re.compile(r'"timestamp":"([^"]+)"')
+    cnt = collections.Counter(); last = {}; projs = collections.defaultdict(set)
+    base = os.path.expanduser('~/.claude/projects')
+    for f in glob.glob(os.path.join(base, '*', '*.jsonl')):
+        proj = os.path.basename(os.path.dirname(f))
+        try:
+            fh = open(f, encoding='utf-8', errors='ignore')
+        except Exception:
+            continue
+        seen = set()
+        for line in fh:
+            if '"skill"' not in line and '<command-name>' not in line:
+                continue
+            um = re.search(r'"uuid":"([^"]+)"', line)
+            if um and um.group(1) in seen:
+                continue
+            if um:
+                seen.add(um.group(1))
+            for a, b in pat.findall(line):
+                n = (a or b).strip()
+                if n in names:
+                    cnt[n] += 1; projs[n].add(proj)
+                    t = tsp.search(line)
+                    if t and t.group(1) > last.get(n, ''):
+                        last[n] = t.group(1)
+    return cnt, last, projs
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('paths', nargs='*')
     ap.add_argument('--out', required=True)
     ap.add_argument('--since')
+    ap.add_argument('--no-global', action='store_true', help='skip scanning all projects for skill usage')
     a = ap.parse_args()
     roots = [os.path.abspath(os.path.expanduser(p)).rstrip('/') for p in (a.paths or [os.getcwd()])]
     os.makedirs(a.out, exist_ok=True)
@@ -192,6 +291,21 @@ def main():
                      {'skills': collections.Counter(s['skills']).most_common(),
                       'agents': collections.Counter(s['agents']).most_common()} for s in sessions],
     }
+
+    inv = installed_skills(roots)
+    local = {k: v for k, v in skill.items()}
+    names = {i['invoke'] for i in inv} | {i['name'] for i in inv}
+    g_cnt, g_last, g_proj = ({}, {}, {}) if a.no_global else global_usage(names)
+    for i in inv:
+        keys = {i['invoke'], i['name']}
+        i['uses_here'] = sum(local.get(k, 0) for k in keys)
+        if not a.no_global:
+            i['uses_global'] = sum(g_cnt.get(k, 0) for k in keys)
+            i['last_used_global'] = max((g_last.get(k, '') for k in keys), default='') or None
+            i['projects_global'] = len(set().union(*(g_proj.get(k, set()) for k in keys)))
+    inv.sort(key=lambda x: (x['uses_here'], x.get('uses_global', 0), x['invoke']))
+    summary['installed_skills'] = inv
+    summary['unused_here'] = [i['invoke'] for i in inv if i['uses_here'] == 0 and i['enabled'] and not i.get('internal')]
     json.dump(summary, open(os.path.join(a.out, 'summary.json'), 'w'), ensure_ascii=False, indent=1)
     json.dump(msgs, open(os.path.join(a.out, 'messages.json'), 'w'), ensure_ascii=False)
     with open(os.path.join(a.out, 'messages.txt'), 'w') as w:
@@ -206,6 +320,7 @@ def main():
     c = summary['counts']
     print(f"roots={roots}\nhuman={c['human_sessions']} codex={c['codex_sessions']} automated={c['automated_sessions']} messages={c['messages']}")
     print('top skills:', [(s['name'], s['total']) for s in summary['skills'][:10]])
+    print(f"installed skills={len(summary['installed_skills'])} unused here={len(summary['unused_here'])}")
     print('out:', a.out)
 
 if __name__ == '__main__':
