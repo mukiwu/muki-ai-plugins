@@ -2,7 +2,7 @@
 
 [繁體中文版](README.zh-TW.md)
 
-A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin marketplace — visual regression testing, test review, project knowledge capture, and Jev-powered web search.
+A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin marketplace — visual regression testing, test review, project knowledge capture, AI session review, and Jev-powered web search.
 
 ## Plugins
 
@@ -11,6 +11,7 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin marketpla
 | [figma-visual-reviewer](plugins/figma-visual-reviewer/) | Visual regression testing — compare Figma designs against live web pages |
 | [review-tests](plugins/review-tests/) | Test review doctor — diagnose a test file for blind spots, output a self-contained HTML report |
 | [lore](plugins/lore/) | Project lore — scaffold, consult, capture, guard, maintain, health-check, and language-align the implicit knowledge your codebase can't show |
+| [session-review](plugins/session-review/) | AI session review — turn every Claude Code and Codex session of a project into an interactive report on how you work with AI, and which routines to make into skills |
 | [jev-search](https://github.com/mukiwu/jev-search-mcp) | Web search through Jev Search: answers the built-in WebSearch with Jev-ranked results and falls back to the built-in tool when Jev cannot answer |
 
 ## Install
@@ -23,6 +24,7 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin marketpla
 /plugin install figma-visual-reviewer
 /plugin install review-tests
 /plugin install lore
+/plugin install session-review
 /plugin install jev-search
 ```
 
@@ -60,6 +62,17 @@ Scaffold, consult, capture, guard, maintain, health-check, and language-align pr
 - Mark over delete — outdated-but-once-true knowledge keeps its lesson
 
 [Read more →](plugins/lore/README.md)
+
+### session-review
+
+Reads every AI session you had in one or more projects (Claude Code and Codex) and turns it into one interactive HTML report.
+
+- `/session-review [path ...]` — defaults to the current project; several paths are merged into one report
+- Skill ranking split by who invoked it (you vs. the model), your real workflow drawn as diagrams, and verbatim quotes on how you build and debug with AI
+- Suggests custom skills for routines that keep repeating, each with a `SKILL.md` draft and a user/project scope call
+- Skips automated SDK sessions and de-duplicates rewound messages; falls back to built-in diagram rules without `diagram-design`
+
+[Read more →](plugins/session-review/README.md)
 
 ### jev-search
 

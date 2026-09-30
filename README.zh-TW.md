@@ -1,6 +1,6 @@
 # muki-ai-plugins
 
-給 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的 plugin marketplace — 視覺回歸測試、測試體檢、專案知識記錄，與 Jev 網頁搜尋。
+給 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的 plugin marketplace — 視覺回歸測試、測試體檢、專案知識記錄、AI session 回顧，與 Jev 網頁搜尋。
 
 ## Plugins
 
@@ -9,6 +9,7 @@
 | [figma-visual-reviewer](plugins/figma-visual-reviewer/) | 視覺回歸測試 — 比對 Figma 設計稿與實際網頁 |
 | [review-tests](plugins/review-tests/) | 測試體檢 — 找出測試盲點，產出 self-contained 的 HTML 報告 |
 | [lore](plugins/lore/) | 專案 lore — 建立、查閱、記錄、守門、維護、體檢程式碼講不出來的隱性知識，並對齊團隊的通用語言 |
+| [session-review](plugins/session-review/) | AI session 回顧：把專案裡所有 Claude Code 與 Codex 對話整理成互動報告，看你怎麼跟 AI 協作、哪些流程值得做成 skill |
 | [jev-search](https://github.com/mukiwu/jev-search-mcp) | Jev 網頁搜尋：內建 WebSearch 改由 Jev 回答並排序，Jev 答不出來自動退回內建 |
 
 ## 安裝
@@ -21,6 +22,7 @@
 /plugin install figma-visual-reviewer
 /plugin install review-tests
 /plugin install lore
+/plugin install session-review
 /plugin install jev-search
 ```
 
@@ -58,6 +60,17 @@
 - 標記優先於刪除——以前對、現在過期的知識，那個教訓還留著
 
 [詳細說明 →](plugins/lore/README.zh-TW.md)
+
+### session-review
+
+把一個或多個專案裡所有的 AI 對話（Claude Code 與 Codex）翻過一遍，整理成一份可互動的 HTML 報告
+
+- `/session-review [路徑 ...]`，沒寫路徑就用目前專案，寫多個會合併成一份
+- skill 排行分成你自己打的和 AI 自己叫的，工作流程畫成圖，開發與除錯時的溝通方式都附原話
+- 找出一直重複的流程，建議做成客製 skill，附 SKILL.md 草稿與 user 或 project scope 的判斷
+- 排除 SDK 自動執行的對話、去掉回溯造成的重複訊息，沒裝 `diagram-design` 時改用內建畫圖規則
+
+[詳細說明 →](plugins/session-review/README.zh-TW.md)
 
 ### jev-search
 

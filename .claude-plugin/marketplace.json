@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "muki-ai-plugins",
-  "description": "Muki's Claude Code plugins — project lore knowledge base, test quality review, visual regression testing, and Jev-powered web search.",
+  "description": "Muki's Claude Code plugins — project lore knowledge base, test quality review, visual regression testing, AI session review, and Jev-powered web search.",
   "owner": {
     "name": "Muki Wu"
   },
@@ -23,6 +23,12 @@
       "description": "Capture, consult, guard, scaffold, maintain, health-check, and language-align project lore — the implicit knowledge (business rules, API maps, pitfalls, decision rationale) that code, types, and git history can't reveal.",
       "source": "./plugins/lore",
       "category": "documentation"
+    },
+    {
+      "name": "session-review",
+      "description": "Review every AI session (Claude Code + Codex) of one or more projects and get an interactive HTML report: skill ranking, your real workflow as diagrams, how you talk to AI when building and debugging, and repeated routines worth turning into custom skills with a user/project scope call.",
+      "source": "./plugins/session-review",
+      "category": "productivity"
     },
     {
       "name": "jev-search",
