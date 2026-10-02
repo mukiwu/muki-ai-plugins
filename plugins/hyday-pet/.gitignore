@@ -1,0 +1,3 @@
+# Claude Code 載入 mod 時自動產生的型別和 tsconfig
+.claude-plugin/types/
+tsconfig.json

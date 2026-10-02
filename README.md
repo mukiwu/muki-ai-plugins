@@ -13,6 +13,7 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin marketpla
 | [lore](plugins/lore/) | Project lore — scaffold, consult, capture, guard, maintain, health-check, and language-align the implicit knowledge your codebase can't show |
 | [session-review](plugins/session-review/) | AI session review — turn every Claude Code and Codex session of a project into an interactive report on how you work with AI, and which routines to make into skills |
 | [jev-search](https://github.com/mukiwu/jev-search-mcp) | Web search through Jev Search: answers the built-in WebSearch with Jev-ranked results and falls back to the built-in tool when Jev cannot answer |
+| [hyday-pet](plugins/hyday-pet/) | Virtual pet above your prompt: the work Claude does decides its species, tool errors make it sick, plus mini games and a shop |
 
 ## Install
 
@@ -26,6 +27,7 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin marketpla
 /plugin install lore
 /plugin install session-review
 /plugin install jev-search
+/plugin install hyday-pet
 ```
 
 ### Codex, Cursor, Gemini CLI, and other agents
@@ -36,7 +38,7 @@ npx skills add mukiwu/muki-ai-plugins
 
 The installer asks which skills to install, which agents to install them to, and whether to install for the current project or for every project. In Codex, invoke a skill with `$name` (for example `$session-review`) instead of `/name`.
 
-This installs the skill folders only. Plugin extras such as lore's session-start reminder and pre-commit check are not included, so Claude Code users should prefer `/plugin install`. jev-search lives in its own repository and is not part of this list.
+This installs the skill folders only. Plugin extras such as lore's session-start reminder and pre-commit check are not included, so Claude Code users should prefer `/plugin install`. jev-search lives in its own repository and is not part of this list; hyday-pet is a Claude Code mod with no skill to install.
 
 ## Plugin Overview
 
@@ -95,6 +97,18 @@ Answers Claude Code's built-in WebSearch with [Jev Search](https://github.com/su
 - Function hooks are early access: set `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1` in your settings `env`
 
 [Read more →](https://github.com/mukiwu/jev-search-mcp)
+
+### hyday-pet
+
+A virtual pet above your Claude Code prompt that feeds on the work you and Claude do together
+
+- Every tool call and finished turn gives it XP, from egg to adult
+- Whether Claude mostly edits files, runs commands or looks things up decides if it grows into a mole, otter, owl or chimera, and it branches again as an adult
+- Tool errors give it germs; green tests make it well
+- The side pane has an animated ASCII pet, rock paper scissors and guess the number, a coin shop for premium food and color styles, and a detail page
+- Function hooks are early access: set `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1` in the `env` of your settings
+
+[Read more →](plugins/hyday-pet/README.md)
 
 ## License
 

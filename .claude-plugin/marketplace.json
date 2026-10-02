@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "muki-ai-plugins",
-  "description": "Muki's Claude Code plugins — project lore knowledge base, test quality review, visual regression testing, AI session review, and Jev-powered web search.",
+  "description": "Muki's Claude Code plugins — project lore knowledge base, test quality review, visual regression testing, AI session review, Jev-powered web search, and a virtual pet that grows from your Claude Code work.",
   "owner": {
     "name": "Muki Wu"
   },
@@ -39,6 +39,12 @@
       },
       "homepage": "https://github.com/mukiwu/jev-search-mcp",
       "category": "search"
+    },
+    {
+      "name": "hyday-pet",
+      "description": "A virtual pet above your prompt that grows from the work Claude does: evolves by what Claude does most, gets sick from tool errors, plays mini games, and spends coins in a shop. Requires CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1.",
+      "source": "./plugins/hyday-pet",
+      "category": "fun"
     }
   ]
 }

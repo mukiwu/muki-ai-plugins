@@ -11,6 +11,7 @@
 | [lore](plugins/lore/) | 專案 lore — 建立、查閱、記錄、守門、維護、體檢程式碼講不出來的隱性知識，並對齊團隊的通用語言 |
 | [session-review](plugins/session-review/) | AI session 回顧：把專案裡所有 Claude Code 與 Codex 對話整理成互動報告，看你怎麼跟 AI 協作、哪些流程值得做成 skill |
 | [jev-search](https://github.com/mukiwu/jev-search-mcp) | Jev 網頁搜尋：內建 WebSearch 改由 Jev 回答並排序，Jev 答不出來自動退回內建 |
+| [hyday-pet](plugins/hyday-pet/) | 電子雞：在提示框上方養一隻寵物，Claude 做什麼工作決定牠變成什麼物種，報錯會生病，還有小遊戲和商店 |
 
 ## 安裝
 
@@ -24,6 +25,7 @@
 /plugin install lore
 /plugin install session-review
 /plugin install jev-search
+/plugin install hyday-pet
 ```
 
 ### Codex、Cursor、Gemini CLI 等其他工具
@@ -34,7 +36,7 @@ npx skills add mukiwu/muki-ai-plugins
 
 安裝時會讓你選要裝哪些 skill、裝到哪些工具，以及只給目前專案用還是所有專案都能用。在 Codex 裡叫用 skill 要打 `$名稱`（例如 `$session-review`），不是 `/名稱`
 
-這個方式只會裝 skill 資料夾，lore 開新對話時的提醒、commit 前的檢查這類 plugin 附帶功能不會一起裝，所以 Claude Code 使用者建議還是用 `/plugin install`；jev-search 放在獨立的 repo，不在這份清單裡
+這個方式只會裝 skill 資料夾，lore 開新對話時的提醒、commit 前的檢查這類 plugin 附帶功能不會一起裝，所以 Claude Code 使用者建議還是用 `/plugin install`；jev-search 放在獨立的 repo，不在這份清單裡；hyday-pet 是 Claude Code 的 mod，沒有 skill 可以裝
 
 ## Plugin 總覽
 
@@ -93,6 +95,18 @@ npx skills add mukiwu/muki-ai-plugins
 - Function hooks 是 early access 功能，settings 的 `env` 要設 `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1`
 
 [詳細說明 →](https://github.com/mukiwu/jev-search-mcp)
+
+### hyday-pet
+
+在 Claude Code 的提示框上方養一隻電子雞，牠吃的是你跟 Claude 一起做的工作
+
+- Claude 每用一次工具、每做完一輪對話，牠就長經驗，從蛋孵化到成熟期
+- 平常最常改檔案、跑指令還是查資料，決定牠長成鼴鼠、水獺、貓頭鷹或奇美拉，成熟期再分化一次
+- 工具報錯會長病菌，讓測試變綠牠就康復
+- 側邊欄有會動的 ASCII 寵物、猜拳和猜數字、用金幣買高級食物和顏色樣式的商店，以及細節頁
+- Function hooks 是 early access 功能，settings 的 `env` 要設 `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1`
+
+[詳細說明 →](plugins/hyday-pet/README.zh-TW.md)
 
 ## 授權
 
