@@ -68,6 +68,7 @@ claude plugin install world-news@muki-ai-plugins
 | 指令 | 作用 |
 | --- | --- |
 | `/world-news` | 看設定和最近 15 則標題，含連結 |
+| `/world-news open`、`close` | 打開或收起新聞側邊欄，點標題就會開啟那篇新聞 |
 | `/world-news 14ace` | 選分類，數字是版面、字母是地區 |
 | `/world-news cd 15` | 冷卻時間改成幾分鐘，預設 30，最少 5 |
 | `/world-news now` | 馬上查一次 |
@@ -86,7 +87,7 @@ claude plugin install world-news@muki-ai-plugins
 - 只會向 Google 新聞讀取固定的 feed 網址，不會送出你的訊息
 - 不會塞進給模型的 prompt，所以不吃 token，也不影響 prompt 快取
 - 只有你送訊息時才會查，不是推播服務
-- 狀態列只放得下一則標題，其他的用 `/world-news` 看
+- 狀態列只放得下一則標題，也放不了連結；要點開新聞用 `/world-news open`
 
 ## 存檔
 

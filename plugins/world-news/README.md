@@ -70,6 +70,7 @@ International news split by region, each a search of the last day (Google News h
 | Command | What it does |
 | --- | --- |
 | `/world-news` | Show the settings and the latest 15 headlines with links |
+| `/world-news open`, `close` | Open or close a side pane of the latest headlines; click one to read it |
 | `/world-news 14ace` | Pick categories: digits for sections, letters for regions |
 | `/world-news cd 15` | Set the cooldown in minutes (default 30, at least 5) |
 | `/world-news now` | Check right away |
@@ -88,7 +89,7 @@ International news split by region, each a search of the last day (Google News h
 - Only the fixed feed addresses are requested from Google News, never your messages
 - Nothing is added to the model's prompt, so it costs no tokens and leaves the prompt cache alone
 - It only checks when you send a message; it is not a push service
-- The status line fits one headline; use `/world-news` for the rest
+- The status line fits one headline and cannot hold a link; use `/world-news open` for clickable headlines
 
 ## Save data
 

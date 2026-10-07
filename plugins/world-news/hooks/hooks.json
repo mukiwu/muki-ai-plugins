@@ -1,6 +1,6 @@
 {
   "description": "Registers /world-news at session.start, and at prompt.submit starts a background Jev Search check once the cooldown has passed, pinning the newest unseen headline with $.ui.status. The prompt itself is passed on untouched.",
   "modules": [
-    "./world-news.ts"
+    "./world-news.tsx"
   ]
 }

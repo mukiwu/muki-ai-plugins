@@ -117,6 +117,8 @@ export type Command =
   | { kind: 'categories'; ids: string[] }
   | { kind: 'cooldown'; minutes: number }
   | { kind: 'refresh' }
+  | { kind: 'open' }
+  | { kind: 'close' }
   | { kind: 'on' }
   | { kind: 'off' }
   | { kind: 'error'; message: string }
@@ -126,6 +128,8 @@ export const parseArgs = (args: string): Command => {
   const text = args.trim().toLowerCase()
   if (!text || text === 'list') return { kind: 'show' }
   if (text === 'now' || text === 'refresh') return { kind: 'refresh' }
+  if (text === 'open' || text === 'o') return { kind: 'open' }
+  if (text === 'close') return { kind: 'close' }
   if (text === 'on') return { kind: 'on' }
   if (text === 'off') return { kind: 'off' }
   const cooldown = /^(?:cd|cooldown)\s+(\d+)$/.exec(text)
@@ -221,7 +225,7 @@ export const afterCheck = (state: State, fresh: Headline[], now: number): State 
   latest: [...fresh, ...state.latest].slice(0, LATEST_LIMIT),
 })
 
-const labelOf = (id: string) => CATEGORIES.find((c) => c.id === id)?.label ?? '?'
+export const labelOf = (id: string) => CATEGORIES.find((c) => c.id === id)?.label ?? '?'
 
 export const clock = (ms: number): string => {
   const d = new Date(ms)
@@ -250,7 +254,7 @@ export const describeSettings = (state: State): string => {
     `狀態：${state.enabled ? '開啟' : '關閉'} · 冷卻 ${state.cooldownMin} 分鐘 · 上次查 ${state.lastCheck ? clock(state.lastCheck) : '還沒查過'}`,
     `分類：${menu('1', '9')}`,
     `國際地區：${menu('a', 'z')}`,
-    '用法：/world-news 14ace 選分類 · /world-news cd 15 改冷卻 · /world-news now 立刻查 · /world-news off 關閉',
+    '用法：/world-news open 打開可點的新聞列表 · 14ace 選分類 · cd 15 改冷卻 · now 立刻查 · off 關閉',
   ].join('\n')
 }
 

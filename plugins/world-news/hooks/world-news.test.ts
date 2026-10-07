@@ -51,6 +51,12 @@ describe('指令參數', () => {
     expect(parseArgs('1 A, c')).toEqual({ kind: 'categories', ids: ['1', 'a', 'c'] })
   })
 
+  test('open 打開側邊欄，close 收起', () => {
+    expect(parseArgs('open')).toEqual({ kind: 'open' })
+    expect(parseArgs('o')).toEqual({ kind: 'open' })
+    expect(parseArgs('close')).toEqual({ kind: 'close' })
+  })
+
   test('沒有的分類會被擋下', () => {
     expect(parseArgs('19').kind).toBe('error')
     expect(parseArgs('1z')).toEqual({ kind: 'error', message: '看不懂「1z」' })

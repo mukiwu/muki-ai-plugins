@@ -23,6 +23,8 @@ import {
   CATEGORIES,
   PER_CATEGORY,
   afterCheck,
+  clock,
+  labelOf,
   byPreference,
   describeLatest,
   describeSettings,
@@ -38,6 +40,7 @@ import {
 import type { Headline, State } from './policy.ts'
 
 const COMMAND = 'world-news'
+const PANE = 'world-news'
 const STORE_KEY = 'state'
 const REQUEST_TIMEOUT_MS = 15_000
 const MAX_REDIRECTS = 3
@@ -107,6 +110,7 @@ async function runCheck($: EngineInterface): Promise<number> {
   const next = afterCheck(await load($), fresh, await $.clock.now())
   await save($, next)
   $.ui.status(statusLine(next, fresh.length))
+  $.ui.invalidate('ui.render')
   return fresh.length
 }
 
@@ -114,6 +118,21 @@ async function runCheck($: EngineInterface): Promise<number> {
 function check($: EngineInterface): Promise<number> {
   if (!running) running = runCheck($).finally(() => (running = null))
   return running
+}
+
+async function openPane($: EngineInterface): Promise<boolean> {
+  const opened = await $.ui.open({ id: PANE, title: '新聞大事', columns: 48, focus: true })
+  return 'value' in opened
+}
+
+/** A link target the engine accepts, or null: https and printable ASCII only. */
+function safeHref(url: string): string | null {
+  try {
+    const href = new URL(url).href
+    return href.startsWith('https://') && /^[\x21-\x7e]+$/.test(href) && href.length <= 2048 ? href : null
+  } catch {
+    return null
+  }
 }
 
 async function onStart($: EngineInterface): Promise<void> {
@@ -140,6 +159,11 @@ async function onCommand($: EngineInterface, args: string): Promise<{ text: stri
       return { text: `${command.message}\n\n${describeSettings(state)}` }
     case 'show':
       return { text: `${describeSettings(state)}\n\n最新標題：\n${describeLatest(state)}` }
+    case 'open':
+      return { text: (await openPane($)) ? '已打開新聞側邊欄，點標題就會開啟那篇新聞' : '這個介面打不開側邊欄' }
+    case 'close':
+      await $.ui.close({ id: PANE })
+      return { text: '已收起新聞側邊欄' }
     case 'refresh': {
       if (state.categories.length === 0) return { text: `還沒選分類\n\n${describeSettings(state)}` }
       const count = await check($)
@@ -178,4 +202,29 @@ export const register: Register = (on) => {
   })
 
   on('command.run', { command: COMMAND }, ($, e) => onCommand($, e.args))
+
+  on('ui.render', { component: 'Pane', requestId: PANE }, async ($, e) => {
+    const { Box, Link, Text } = $.ui.resolve(e)
+    const state = await load($)
+    if (state.latest.length === 0) return <Text dimColor>還沒有新聞，送出一則訊息或執行 /world-news now</Text>
+    return (
+      <Box flexDirection="column" rowGap={1}>
+        {state.latest.map((h) => {
+          const href = safeHref(h.url)
+          return (
+            <Box key={h.url} flexDirection="column">
+              <Text>
+                <Text dimColor>[{labelOf(h.category)}] </Text>
+                {href ? <Link href={href}>{h.title}</Link> : h.title}
+              </Text>
+              <Text dimColor>
+                {h.source}・{clock(h.publishedAt)}
+              </Text>
+            </Box>
+          )
+        })}
+        <Text dimColor>{state.lastCheck ? `${clock(state.lastCheck)} 查過` : ''}</Text>
+      </Box>
+    )
+  })
 }
