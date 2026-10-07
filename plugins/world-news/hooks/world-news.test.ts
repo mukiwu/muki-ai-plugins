@@ -77,6 +77,12 @@ describe('Google 新聞', () => {
     expect(parsed.url).toBe('https://news.google.com/a')
   })
 
+  test('標題裡的控制字元和方向覆寫字元不會印到終端機', () => {
+    const [parsed] = parseFeed(feed(item('紅&#27;[2J字&#x9b;31m&#8238;反', 'UDN&#7;', 'https://g/esc')))
+    expect(parsed.title).toBe('紅 [2J字 31m 反')
+    expect(parsed.source).toBe('UDN')
+  })
+
   test('照 Google 的順序，只留一天內、連結和標題都沒看過的', () => {
     const items = parseFeed(
       feed(

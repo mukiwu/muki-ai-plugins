@@ -159,8 +159,17 @@ export const decodeXml = (text: string): string =>
 
 export type FeedItem = { title: string; url: string; source: string; publishedAt: number }
 
+/**
+ * Feed text is printed to the terminal, so control characters (an escape
+ * decoded from `&#27;` could start a terminal sequence) and bidi overrides
+ * are replaced with spaces.
+ */
+// biome-ignore lint/suspicious/noControlCharactersInRegex: matching them is the point
+const UNSAFE = /[\u0000-\u001f\u007f-\u009f\u200e\u200f\u202a-\u202e\u2066-\u2069]/g
+export const sanitize = (text: string): string => text.replace(UNSAFE, ' ').replace(/\s+/g, ' ').trim()
+
 const tag = (item: string, name: string): string =>
-  decodeXml(new RegExp(`<${name}[^>]*>([\\s\\S]*?)</${name}>`).exec(item)?.[1] ?? '').trim()
+  sanitize(decodeXml(new RegExp(`<${name}[^>]*>([\\s\\S]*?)</${name}>`).exec(item)?.[1] ?? ''))
 
 /** The items of a Google News RSS feed, in Google's order. */
 export const parseFeed = (xml: string): FeedItem[] =>
