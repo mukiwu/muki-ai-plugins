@@ -257,14 +257,12 @@ export const clock = (ms: number): string => {
 
 /**
  * The pinned line under the prompt: this session's headline (from `claim`),
- * marked 🆕 when the last check found it, so a reload or a quiet check never
- * hides news that is already in.
+ * so a reload or a quiet check never hides news that is already in.
  */
 export const statusLine = (state: State, shown: Headline | undefined): string | undefined => {
   if (!state.enabled || state.categories.length === 0) return undefined
-  if (!shown) return state.lastCheck ? `🌐 還沒有新聞 · ${clock(state.lastCheck)} 查過` : '🌐 等你送出第一則訊息後開始追新聞'
-  const isFresh = shown.foundAt === state.lastCheck
-  return `${isFresh ? '🆕' : '📰'} [${labelOf(shown.category)}] ${shown.title}（${shown.source}）`
+  if (!shown) return state.lastCheck ? `還沒有新聞 · ${clock(state.lastCheck)} 查過` : '等你送出第一則訊息後開始追新聞'
+  return `[${labelOf(shown.category)}] ${shown.title}（${shown.source}）`
 }
 
 export const describeSettings = (state: State): string => {

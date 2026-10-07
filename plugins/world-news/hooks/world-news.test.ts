@@ -144,13 +144,13 @@ describe('冷卻與狀態列', () => {
     expect(isDue({ ...state, enabled: false }, 60 * MINUTE)).toBe(false)
   })
 
-  test('有新的標 🆕，之後沒查到新的改標 📰，看過的不會再出現', () => {
+  test('顯示這個 session 的那則，之後沒查到新的也繼續顯示，看過的不會再出現', () => {
     const items = parseFeed(feed(item('央行升息半碼', '中央社', 'https://g/1')))
     const state = afterCheck(initialState(), pickNews(items, '3', new Set(), NOW), NOW)
     const { headline } = claim(state)
-    expect(statusLine(state, headline)).toBe('🆕 [財經] 央行升息半碼（中央社）')
+    expect(statusLine(state, headline)).toBe('[財經] 央行升息半碼（中央社）')
     expect(pickNews(items, '3', new Set(state.seen), NOW)).toEqual([])
-    expect(statusLine(afterCheck(state, [], NOW + MINUTE), headline)).toBe('📰 [財經] 央行升息半碼（中央社）')
+    expect(statusLine(afterCheck(state, [], NOW + MINUTE), headline)).toBe('[財經] 央行升息半碼（中央社）')
   })
 
   test('還沒查過、查過但沒有任何新聞，各自有提示', () => {

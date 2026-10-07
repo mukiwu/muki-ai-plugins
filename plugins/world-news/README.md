@@ -5,7 +5,7 @@
 Taiwan's top news pinned under your Claude Code prompt. Each time you send a message, it checks whether the cooldown has passed and, if so, reads the Taiwan edition of [Google News](https://news.google.com/home?hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant) for the categories you picked. The feeds load in the background, so your message never waits for them
 
 ```
-⚠ world-news: 🆕 [國際] 法國學運燒遍全國！逾25萬人上街 單日488人被捕（Yahoo新聞） · 另 4 則
+⚠ world-news: [國際] 法國學運燒遍全國！逾25萬人上街 單日488人被捕（Yahoo新聞）
 ```
 
 The interface is in Traditional Chinese
@@ -33,10 +33,9 @@ Claude Code only; `npx skills add` does not install this plugin
 
 | Line | Meaning |
 | --- | --- |
-| `🆕 [科技] headline（outlet） · 另 2 則` | New headlines since the last check; Google's top story is shown |
-| `📰 [國際] headline（outlet）` | Nothing new on the last check; the newest headline stays |
-| `🌐 等你送出第一則訊息後開始追新聞` | Not checked yet |
-| `🌐 Google 新聞暫時連不上，下則訊息再試` | Every feed failed; the next message tries again |
+| `[科技] headline（outlet）` | This session's headline; it stays until a check brings new ones |
+| `等你送出第一則訊息後開始追新聞` | Not checked yet |
+| `Google 新聞暫時連不上，下則訊息再試` | Every feed failed; the next message tries again |
 
 ## One headline per session
 

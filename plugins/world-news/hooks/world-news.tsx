@@ -117,7 +117,7 @@ async function runCheck($: EngineInterface): Promise<number> {
   }
   // Every search failed: keep lastCheck so the next message tries again.
   if (answered === 0) {
-    $.ui.status('🌐 Google 新聞暫時連不上，下則訊息再試')
+    $.ui.status('Google 新聞暫時連不上，下則訊息再試')
     return 0
   }
   fresh.sort(byPreference)
