@@ -21,7 +21,6 @@
 import type { EngineInterface, Register } from 'claude-code'
 import {
   CATEGORIES,
-  WRAP_VARIANTS,
   PER_CATEGORY,
   afterCheck,
   claim,
@@ -179,11 +178,6 @@ async function onCommand($: EngineInterface, args: string): Promise<{ text: stri
       return { text: `${command.message}\n\n${describeSettings(state)}` }
     case 'show':
       return { text: `${describeSettings(state)}\n\n最新標題：\n${describeLatest(state)}` }
-    case 'wrap': {
-      const variant = WRAP_VARIANTS[command.variant - 1]
-      $.ui.status(`第一行（${variant.name}）${variant.text}第二行：這行應該在下面${variant.text}第三行`)
-      return { text: `狀態列已換成第 ${command.variant} 種：${variant.name}，看它有沒有分成三行` }
-    }
     case 'open':
       return { text: await openPane($) }
     case 'close':

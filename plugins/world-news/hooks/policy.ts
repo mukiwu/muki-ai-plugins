@@ -121,7 +121,6 @@ export type Command =
   | { kind: 'categories'; ids: string[] }
   | { kind: 'cooldown'; minutes: number }
   | { kind: 'refresh' }
-  | { kind: 'wrap'; variant: number }
   | { kind: 'open' }
   | { kind: 'close' }
   | { kind: 'on' }
@@ -133,8 +132,6 @@ export const parseArgs = (args: string): Command => {
   const text = args.trim().toLowerCase()
   if (!text || text === 'list') return { kind: 'show' }
   if (text === 'now' || text === 'refresh') return { kind: 'refresh' }
-  const wrap = /^wrap\s+([1-5])$/.exec(text)
-  if (wrap) return { kind: 'wrap', variant: Number(wrap[1]) }
   if (text === 'open' || text === 'o') return { kind: 'open' }
   if (text === 'close') return { kind: 'close' }
   if (text === 'on') return { kind: 'on' }
@@ -290,12 +287,3 @@ export const describeLatest = (state: State): string => {
     .map((h, i) => `${i + 1}. [${labelOf(h.category)}] ${h.title}（${h.source}・${clock(h.publishedAt)}）\n   ${h.url}`)
     .join('\n')
 }
-
-/** Temporary: the line breaks /world-news wrap N tries on the status line. */
-export const WRAP_VARIANTS: readonly { name: string; text: string }[] = [
-  { name: 'LF \\n', text: '\n' },
-  { name: 'CRLF \\r\\n', text: '\r\n' },
-  { name: 'LINE SEPARATOR U+2028', text: '\u2028' },
-  { name: 'NEXT LINE U+0085', text: '\u0085' },
-  { name: 'PARAGRAPH SEPARATOR U+2029', text: '\u2029' },
-]
