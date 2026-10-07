@@ -109,7 +109,7 @@ async function runCheck($: EngineInterface): Promise<number> {
   fresh.sort(byPreference)
   const next = afterCheck(await load($), fresh, await $.clock.now())
   await save($, next)
-  $.ui.status(statusLine(next, fresh.length))
+  $.ui.status(statusLine(next))
   $.ui.invalidate('ui.render')
   return fresh.length
 }
@@ -146,7 +146,7 @@ async function onStart($: EngineInterface): Promise<void> {
     argumentHint: '[分類如 14ace | cd 分鐘 | now | on | off]',
     immediate: true,
   })
-  $.ui.status(statusLine(await load($), null))
+  $.ui.status(statusLine(await load($)))
 }
 
 async function onSubmit($: EngineInterface): Promise<void> {
@@ -188,7 +188,7 @@ async function onCommand($: EngineInterface, args: string): Promise<{ text: stri
       break
   }
   await save($, state)
-  $.ui.status(statusLine(state, null))
+  $.ui.status(statusLine(state))
   const note = command.kind === 'categories' ? '\n下一則訊息送出時會用新分類查一次' : ''
   return { text: `已更新${note}\n\n${describeSettings(state)}` }
 }

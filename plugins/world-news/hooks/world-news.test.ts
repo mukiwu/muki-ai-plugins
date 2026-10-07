@@ -147,9 +147,15 @@ describe('冷卻與狀態列', () => {
     const items = parseFeed(feed(item('央行升息半碼', '中央社', 'https://g/1')))
     const fresh = pickNews(items, '3', new Set(), NOW)
     const state = afterCheck(initialState(), fresh, NOW)
-    expect(statusLine(state, 1)).toBe('🆕 [財經] 央行升息半碼（中央社）')
+    expect(statusLine(state)).toBe('🆕 [財經] 央行升息半碼（中央社）')
     expect(pickNews(items, '3', new Set(state.seen), NOW)).toEqual([])
-    expect(statusLine(afterCheck(state, [], NOW), 0)).toContain('沒有新的大事')
+    // 下一次沒查到新的，或重新載入，仍然顯示最新那則，只是不標 🆕
+    expect(statusLine(afterCheck(state, [], NOW + MINUTE))).toBe('📰 [財經] 央行升息半碼（中央社）')
+  })
+
+  test('還沒查過、查過但沒有任何新聞，各自有提示', () => {
+    expect(statusLine(initialState())).toContain('等你送出第一則訊息')
+    expect(statusLine(afterCheck(initialState(), [], NOW))).toContain('還沒有新聞')
   })
 })
 

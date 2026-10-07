@@ -232,16 +232,18 @@ export const clock = (ms: number): string => {
   return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
 }
 
-/** The pinned line under the prompt. */
-export const statusLine = (state: State, freshCount: number | null): string | undefined => {
+/**
+ * The pinned line under the prompt: always the newest headline, marked 🆕
+ * when the last check found it, so a reload or a quiet check never hides
+ * news that is already in.
+ */
+export const statusLine = (state: State): string | undefined => {
   if (!state.enabled || state.categories.length === 0) return undefined
   const top = state.latest[0]
-  if (freshCount && top) {
-    const more = freshCount > 1 ? ` · 另 ${freshCount - 1} 則` : ''
-    return `🆕 [${labelOf(top.category)}] ${top.title}（${top.source}）${more}`
-  }
-  if (!state.lastCheck) return '🌐 等你送出第一則訊息後開始追新聞'
-  return `🌐 沒有新的大事 · ${clock(state.lastCheck)} 查過`
+  if (!top) return state.lastCheck ? `🌐 還沒有新聞 · ${clock(state.lastCheck)} 查過` : '🌐 等你送出第一則訊息後開始追新聞'
+  const fresh = state.latest.filter((h) => h.foundAt === state.lastCheck).length
+  const more = fresh > 1 ? ` · 另 ${fresh - 1} 則新的` : ''
+  return `${fresh ? '🆕' : '📰'} [${labelOf(top.category)}] ${top.title}（${top.source}）${more}`
 }
 
 export const describeSettings = (state: State): string => {

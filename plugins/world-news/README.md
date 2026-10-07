@@ -34,7 +34,7 @@ Claude Code only; `npx skills add` does not install this plugin
 | Line | Meaning |
 | --- | --- |
 | `🆕 [科技] headline（outlet） · 另 2 則` | New headlines since the last check; Google's top story is shown |
-| `🌐 沒有新的大事 · 08:54 查過` | Checked, nothing new |
+| `📰 [國際] headline（outlet）` | Nothing new on the last check; the newest headline stays |
 | `🌐 等你送出第一則訊息後開始追新聞` | Not checked yet |
 | `🌐 Google 新聞暫時連不上，下則訊息再試` | Every feed failed; the next message tries again |
 
