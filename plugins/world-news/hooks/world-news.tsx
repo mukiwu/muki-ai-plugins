@@ -120,9 +120,13 @@ function check($: EngineInterface): Promise<number> {
   return running
 }
 
-async function openPane($: EngineInterface): Promise<boolean> {
-  const opened = await $.ui.open({ id: PANE, title: '新聞大事', columns: 48, focus: true })
-  return 'value' in opened
+/** Opens the pane and says where it ended up, from the engine's own record of it. */
+async function openPane($: EngineInterface): Promise<string> {
+  await $.ui.open({ id: PANE, title: '新聞大事', columns: 48, focus: true })
+  const pane = (await $.ui.panes()).find((p) => p.id === PANE)
+  if (!pane) return '這個介面打不開側邊欄'
+  if (!pane.isPlaced) return '側邊欄已開，但終端機太窄放不下，把視窗拉寬一點就會出現'
+  return '已打開新聞側邊欄，點標題就會開啟那篇新聞'
 }
 
 /** A link target the engine accepts, or null: https and printable ASCII only. */
@@ -160,7 +164,7 @@ async function onCommand($: EngineInterface, args: string): Promise<{ text: stri
     case 'show':
       return { text: `${describeSettings(state)}\n\n最新標題：\n${describeLatest(state)}` }
     case 'open':
-      return { text: (await openPane($)) ? '已打開新聞側邊欄，點標題就會開啟那篇新聞' : '這個介面打不開側邊欄' }
+      return { text: await openPane($) }
     case 'close':
       await $.ui.close({ id: PANE })
       return { text: '已收起新聞側邊欄' }

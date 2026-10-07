@@ -1,6 +1,6 @@
 {
   "name": "world-news",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Major news from the Taiwan edition of Google News, pinned under your prompt: each time you send a message it reads the feeds of the categories you picked in the background (at most once per cooldown, 30 minutes by default) and shows the newest headline. /world-news picks the categories and the cooldown and lists the latest headlines. Requires CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1.",
   "author": {
     "name": "Muki Wu"
