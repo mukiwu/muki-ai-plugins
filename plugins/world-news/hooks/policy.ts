@@ -73,6 +73,8 @@ export type State = {
   lastCheck: number
   seen: string[]
   latest: Headline[]
+  /** Which of `latest` the next session to ask gets, so open sessions show different headlines. */
+  cursor: number
 }
 
 export const initialState = (): State => ({
@@ -82,6 +84,7 @@ export const initialState = (): State => ({
   lastCheck: 0,
   seen: [],
   latest: [],
+  cursor: 0,
 })
 
 const isHeadline = (h: unknown): h is Headline => {
@@ -106,6 +109,7 @@ export const readState = (raw: unknown): State => {
     latest: Array.isArray(r.latest)
       ? r.latest.filter(isHeadline).map((h) => ({ ...h, category: String(h.category) }))
       : [],
+    cursor: typeof r.cursor === 'number' && r.cursor >= 0 ? Math.floor(r.cursor) : 0,
   }
 }
 
@@ -223,7 +227,19 @@ export const afterCheck = (state: State, fresh: Headline[], now: number): State 
   lastCheck: now,
   seen: [...fresh.flatMap((h) => [h.url, seenKey(h.title)]), ...state.seen].slice(0, SEEN_LIMIT),
   latest: [...fresh, ...state.latest].slice(0, LATEST_LIMIT),
+  // New headlines come first, so hand them out from the top again.
+  cursor: fresh.length ? 0 : state.cursor,
 })
+
+/**
+ * Takes the next headline for one session and moves the shared cursor on,
+ * so each session that asks gets a different one until they run out.
+ */
+export const claim = (state: State): { state: State; headline: Headline | undefined } => {
+  if (state.latest.length === 0) return { state, headline: undefined }
+  const index = state.cursor % state.latest.length
+  return { state: { ...state, cursor: index + 1 }, headline: state.latest[index] }
+}
 
 export const labelOf = (id: string) => CATEGORIES.find((c) => c.id === id)?.label ?? '?'
 
@@ -233,17 +249,15 @@ export const clock = (ms: number): string => {
 }
 
 /**
- * The pinned line under the prompt: always the newest headline, marked 🆕
- * when the last check found it, so a reload or a quiet check never hides
- * news that is already in.
+ * The pinned line under the prompt: this session's headline (from `claim`),
+ * marked 🆕 when the last check found it, so a reload or a quiet check never
+ * hides news that is already in.
  */
-export const statusLine = (state: State): string | undefined => {
+export const statusLine = (state: State, shown: Headline | undefined): string | undefined => {
   if (!state.enabled || state.categories.length === 0) return undefined
-  const top = state.latest[0]
-  if (!top) return state.lastCheck ? `🌐 還沒有新聞 · ${clock(state.lastCheck)} 查過` : '🌐 等你送出第一則訊息後開始追新聞'
-  const fresh = state.latest.filter((h) => h.foundAt === state.lastCheck).length
-  const more = fresh > 1 ? ` · 另 ${fresh - 1} 則新的` : ''
-  return `${fresh ? '🆕' : '📰'} [${labelOf(top.category)}] ${top.title}（${top.source}）${more}`
+  if (!shown) return state.lastCheck ? `🌐 還沒有新聞 · ${clock(state.lastCheck)} 查過` : '🌐 等你送出第一則訊息後開始追新聞'
+  const isFresh = shown.foundAt === state.lastCheck
+  return `${isFresh ? '🆕' : '📰'} [${labelOf(shown.category)}] ${shown.title}（${shown.source}）`
 }
 
 export const describeSettings = (state: State): string => {

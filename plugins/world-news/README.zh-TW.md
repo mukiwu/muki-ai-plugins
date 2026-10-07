@@ -36,6 +36,10 @@ claude plugin install world-news@muki-ai-plugins
 | `🌐 等你送出第一則訊息後開始追新聞` | 還沒查過 |
 | `🌐 Google 新聞暫時連不上，下則訊息再試` | 這次全部讀取都失敗，下一則訊息會再試 |
 
+## 每個 session 一則
+
+每個開著的 session 會從最新的新聞裡各拿一則，所以兩個 session 並排時顯示的是不同的新聞。查到新的時候，會從最新那則重新開始分
+
 ## 分類
 
 | 編號 | 分類 | 對應的 Google 新聞 |

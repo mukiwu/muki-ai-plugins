@@ -23,6 +23,7 @@ import {
   CATEGORIES,
   PER_CATEGORY,
   afterCheck,
+  claim,
   clock,
   labelOf,
   byPreference,
@@ -47,6 +48,9 @@ const MAX_REDIRECTS = 3
 
 /** The check in flight, so a second message does not start another. */
 let running: Promise<number> | null = null
+/** This session's headline, and the check it came from: each session shows its own. */
+let shown: Headline | undefined
+let shownCheck = -1
 
 async function load($: EngineInterface): Promise<State> {
   return readState(await $.store.get(STORE_KEY))
@@ -54,6 +58,15 @@ async function load($: EngineInterface): Promise<State> {
 
 async function save($: EngineInterface, state: State): Promise<void> {
   await $.store.set(STORE_KEY, state)
+}
+
+/** Takes this session's next headline from the shared cursor and pins it. */
+async function showNext($: EngineInterface, state: State): Promise<void> {
+  const claimed = claim(state)
+  await save($, claimed.state)
+  shown = claimed.headline
+  shownCheck = state.lastCheck
+  $.ui.status(statusLine(claimed.state, shown))
 }
 
 /** One feed's XML, following Google's redirects, or null on error, timeout or a non-2xx. */
@@ -108,8 +121,7 @@ async function runCheck($: EngineInterface): Promise<number> {
   }
   fresh.sort(byPreference)
   const next = afterCheck(await load($), fresh, await $.clock.now())
-  await save($, next)
-  $.ui.status(statusLine(next))
+  await showNext($, next)
   $.ui.invalidate('ui.render')
   return fresh.length
 }
@@ -146,11 +158,13 @@ async function onStart($: EngineInterface): Promise<void> {
     argumentHint: '[分類如 14ace | cd 分鐘 | now | on | off]',
     immediate: true,
   })
-  $.ui.status(statusLine(await load($)))
+  await showNext($, await load($))
 }
 
 async function onSubmit($: EngineInterface): Promise<void> {
   const state = await load($)
+  // Another session found news since this one last looked: take a new headline too.
+  if (state.lastCheck !== shownCheck) await showNext($, state)
   // Started, not awaited: the prompt goes on while the feeds load.
   if (isDue(state, await $.clock.now())) $.clock.after(0, () => void check($))
 }
@@ -188,7 +202,7 @@ async function onCommand($: EngineInterface, args: string): Promise<{ text: stri
       break
   }
   await save($, state)
-  $.ui.status(statusLine(state))
+  $.ui.status(statusLine(state, shown))
   const note = command.kind === 'categories' ? '\n下一則訊息送出時會用新分類查一次' : ''
   return { text: `已更新${note}\n\n${describeSettings(state)}` }
 }

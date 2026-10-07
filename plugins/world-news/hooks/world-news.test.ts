@@ -6,6 +6,7 @@ import {
   CATEGORIES,
   afterCheck,
   byPreference,
+  claim,
   feedUrl,
   initialState,
   isDue,
@@ -143,19 +144,44 @@ describe('冷卻與狀態列', () => {
     expect(isDue({ ...state, enabled: false }, 60 * MINUTE)).toBe(false)
   })
 
-  test('有新的顯示最新標題和媒體，看過的不會再出現', () => {
+  test('有新的標 🆕，之後沒查到新的改標 📰，看過的不會再出現', () => {
     const items = parseFeed(feed(item('央行升息半碼', '中央社', 'https://g/1')))
-    const fresh = pickNews(items, '3', new Set(), NOW)
-    const state = afterCheck(initialState(), fresh, NOW)
-    expect(statusLine(state)).toBe('🆕 [財經] 央行升息半碼（中央社）')
+    const state = afterCheck(initialState(), pickNews(items, '3', new Set(), NOW), NOW)
+    const { headline } = claim(state)
+    expect(statusLine(state, headline)).toBe('🆕 [財經] 央行升息半碼（中央社）')
     expect(pickNews(items, '3', new Set(state.seen), NOW)).toEqual([])
-    // 下一次沒查到新的，或重新載入，仍然顯示最新那則，只是不標 🆕
-    expect(statusLine(afterCheck(state, [], NOW + MINUTE))).toBe('📰 [財經] 央行升息半碼（中央社）')
+    expect(statusLine(afterCheck(state, [], NOW + MINUTE), headline)).toBe('📰 [財經] 央行升息半碼（中央社）')
   })
 
   test('還沒查過、查過但沒有任何新聞，各自有提示', () => {
-    expect(statusLine(initialState())).toContain('等你送出第一則訊息')
-    expect(statusLine(afterCheck(initialState(), [], NOW))).toContain('還沒有新聞')
+    expect(statusLine(initialState(), undefined)).toContain('等你送出第一則訊息')
+    expect(statusLine(afterCheck(initialState(), [], NOW), undefined)).toContain('還沒有新聞')
+  })
+})
+
+describe('每個 session 不同則', () => {
+  const three = parseFeed(feed(item('甲', 'A', 'https://g/a'), item('乙', 'B', 'https://g/b'), item('丙', 'C', 'https://g/c')))
+
+  test('依序開的 session 各拿到不同的一則，用完再從頭輪', () => {
+    let state = afterCheck(initialState(), pickNews(three, '1', new Set(), NOW), NOW)
+    const titles: string[] = []
+    for (let i = 0; i < 4; i++) {
+      const claimed = claim(state)
+      state = claimed.state
+      titles.push(claimed.headline?.title ?? '')
+    }
+    expect(titles).toEqual(['甲', '乙', '丙', '甲'])
+  })
+
+  test('查到新的就從最新那則重新發', () => {
+    let state = afterCheck(initialState(), pickNews(three, '1', new Set(), NOW), NOW)
+    state = claim(claim(state).state).state
+    const fresh = pickNews(parseFeed(feed(item('丁', 'D', 'https://g/d'))), '1', new Set(state.seen), NOW)
+    expect(claim(afterCheck(state, fresh, NOW + MINUTE)).headline?.title).toBe('丁')
+  })
+
+  test('沒有新聞時誰都拿不到', () => {
+    expect(claim(initialState()).headline).toBeUndefined()
   })
 })
 

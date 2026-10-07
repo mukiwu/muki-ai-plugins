@@ -38,6 +38,10 @@ Claude Code only; `npx skills add` does not install this plugin
 | `🌐 等你送出第一則訊息後開始追新聞` | Not checked yet |
 | `🌐 Google 新聞暫時連不上，下則訊息再試` | Every feed failed; the next message tries again |
 
+## One headline per session
+
+Each open session takes its own headline from the latest ones, so two sessions side by side show different news. When a check finds something new, sessions start again from the newest
+
 ## Categories
 
 | # | Category | Google News feed |
