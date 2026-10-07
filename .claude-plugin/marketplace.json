@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "muki-ai-plugins",
-  "description": "Muki's Claude Code plugins — project lore knowledge base, test quality review, visual regression testing, AI session review, Jev-powered web search, and a virtual pet that grows from your Claude Code work.",
+  "description": "Muki's Claude Code plugins — project lore knowledge base, test quality review, visual regression testing, AI session review, Jev-powered web search, a virtual pet that grows from your Claude Code work, and world news under your prompt.",
   "owner": {
     "name": "Muki Wu"
   },
@@ -45,6 +45,12 @@
       "description": "A virtual pet above your prompt that grows from the work Claude does: evolves by what Claude does most, gets sick from tool errors, plays mini games, and spends coins in a shop. Requires CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1.",
       "source": "./plugins/hyday-pet",
       "category": "fun"
+    },
+    {
+      "name": "world-news",
+      "description": "Major news from the Taiwan edition of Google News pinned under your prompt: reads the categories you pick with /world-news in the background when you send a message (once per cooldown, 30 minutes by default). Requires CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1.",
+      "source": "./plugins/world-news",
+      "category": "productivity"
     }
   ]
 }

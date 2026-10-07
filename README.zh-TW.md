@@ -12,6 +12,7 @@
 | [session-review](plugins/session-review/) | AI session 回顧：把專案裡所有 Claude Code 與 Codex 對話整理成互動報告，看你怎麼跟 AI 協作、哪些流程值得做成 skill |
 | [jev-search](https://github.com/mukiwu/jev-search-mcp) | Jev 網頁搜尋：內建 WebSearch 改由 Jev 回答並排序，Jev 答不出來自動退回內建 |
 | [hyday-pet](plugins/hyday-pet/) | 電子雞：在提示框上方養一隻寵物，Claude 做什麼工作決定牠變成什麼物種，報錯會生病，還有小遊戲和商店 |
+| [world-news](plugins/world-news/) | 新聞大事：在背景讀 Google 新聞台灣版裡你選的分類，把最新的標題釘在提示框下方 |
 
 ## 安裝
 
@@ -26,6 +27,7 @@
 /plugin install session-review
 /plugin install jev-search
 /plugin install hyday-pet
+/plugin install world-news
 ```
 
 ### Codex、Cursor、Gemini CLI 等其他工具
@@ -36,7 +38,7 @@ npx skills add mukiwu/muki-ai-plugins
 
 安裝時會讓你選要裝哪些 skill、裝到哪些工具，以及只給目前專案用還是所有專案都能用。在 Codex 裡叫用 skill 要打 `$名稱`（例如 `$session-review`），不是 `/名稱`
 
-這個方式只會裝 skill 資料夾，lore 開新對話時的提醒、commit 前的檢查這類 plugin 附帶功能不會一起裝，所以 Claude Code 使用者建議還是用 `/plugin install`；jev-search 放在獨立的 repo，不在這份清單裡；hyday-pet 是 Claude Code 的 mod，沒有 skill 可以裝
+這個方式只會裝 skill 資料夾，lore 開新對話時的提醒、commit 前的檢查這類 plugin 附帶功能不會一起裝，所以 Claude Code 使用者建議還是用 `/plugin install`；jev-search 放在獨立的 repo，不在這份清單裡；hyday-pet 和 world-news 是 Claude Code 的 mod，沒有 skill 可以裝
 
 ## Plugin 總覽
 
@@ -107,6 +109,18 @@ npx skills add mukiwu/muki-ai-plugins
 - Function hooks 是 early access 功能，settings 的 `env` 要設 `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1`
 
 [詳細說明 →](plugins/hyday-pet/README.zh-TW.md)
+
+### world-news
+
+把台灣的新聞大事釘在 Claude Code 的提示框下方
+
+- 每次送出訊息時看冷卻時間到了沒，預設 30 分鐘，到了就在背景讀 Google 新聞台灣版裡你選的分類
+- 八個版面加七個國際地區，例如 `/world-news 14ace`
+- 只算一天內、沒看過的新聞，照 Google 的排序
+- 不會塞進給模型的 prompt，不吃 token 也不影響快取
+- Function hooks 是 early access 功能，settings 的 `env` 要設 `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1`
+
+[詳細說明 →](plugins/world-news/README.zh-TW.md)
 
 ## 授權
 

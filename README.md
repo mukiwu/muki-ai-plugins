@@ -14,6 +14,7 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin marketpla
 | [session-review](plugins/session-review/) | AI session review — turn every Claude Code and Codex session of a project into an interactive report on how you work with AI, and which routines to make into skills |
 | [jev-search](https://github.com/mukiwu/jev-search-mcp) | Web search through Jev Search: answers the built-in WebSearch with Jev-ranked results and falls back to the built-in tool when Jev cannot answer |
 | [hyday-pet](plugins/hyday-pet/) | Virtual pet above your prompt: the work Claude does decides its species, tool errors make it sick, plus mini games and a shop |
+| [world-news](plugins/world-news/) | News under your prompt: reads the Taiwan edition of Google News for the categories you pick in the background and pins the top headline |
 
 ## Install
 
@@ -28,6 +29,7 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin marketpla
 /plugin install session-review
 /plugin install jev-search
 /plugin install hyday-pet
+/plugin install world-news
 ```
 
 ### Codex, Cursor, Gemini CLI, and other agents
@@ -38,7 +40,7 @@ npx skills add mukiwu/muki-ai-plugins
 
 The installer asks which skills to install, which agents to install them to, and whether to install for the current project or for every project. In Codex, invoke a skill with `$name` (for example `$session-review`) instead of `/name`.
 
-This installs the skill folders only. Plugin extras such as lore's session-start reminder and pre-commit check are not included, so Claude Code users should prefer `/plugin install`. jev-search lives in its own repository and is not part of this list; hyday-pet is a Claude Code mod with no skill to install.
+This installs the skill folders only. Plugin extras such as lore's session-start reminder and pre-commit check are not included, so Claude Code users should prefer `/plugin install`. jev-search lives in its own repository and is not part of this list; hyday-pet and world-news are Claude Code mods with no skill to install.
 
 ## Plugin Overview
 
@@ -109,6 +111,18 @@ A virtual pet above your Claude Code prompt that feeds on the work you and Claud
 - Function hooks are early access: set `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1` in the `env` of your settings
 
 [Read more →](plugins/hyday-pet/README.md)
+
+### world-news
+
+Taiwan's top news pinned under your Claude Code prompt
+
+- Each message you send checks whether the cooldown has passed (30 minutes by default), then reads the Taiwan edition of Google News for your categories, in the background
+- Eight sections plus seven international regions, picked like `/world-news 14ace`
+- Only stories from the last day that you have not seen, in Google's order
+- Nothing is added to the model's prompt, so no tokens and no cache misses
+- Function hooks are early access: set `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1` in the `env` of your settings
+
+[Read more →](plugins/world-news/README.md)
 
 ## License
 
