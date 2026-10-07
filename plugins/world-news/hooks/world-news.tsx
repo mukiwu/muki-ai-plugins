@@ -207,22 +207,23 @@ export const register: Register = (on) => {
 
   on('command.run', { command: COMMAND }, ($, e) => onCommand($, e.args))
 
+  // The JSX factory is `h`, so no variable in a render may be called h.
   on('ui.render', { component: 'Pane', requestId: PANE }, async ($, e) => {
     const { Box, Link, Text } = $.ui.resolve(e)
     const state = await load($)
     if (state.latest.length === 0) return <Text dimColor>還沒有新聞，送出一則訊息或執行 /world-news now</Text>
     return (
       <Box flexDirection="column" rowGap={1}>
-        {state.latest.map((h) => {
-          const href = safeHref(h.url)
+        {state.latest.map((item) => {
+          const href = safeHref(item.url)
           return (
-            <Box key={h.url} flexDirection="column">
+            <Box key={item.url} flexDirection="column">
               <Text>
-                <Text dimColor>[{labelOf(h.category)}] </Text>
-                {href ? <Link href={href}>{h.title}</Link> : h.title}
+                <Text dimColor>[{labelOf(item.category)}] </Text>
+                {href ? <Link href={href}>{item.title}</Link> : item.title}
               </Text>
               <Text dimColor>
-                {h.source}・{clock(h.publishedAt)}
+                {item.source}・{clock(item.publishedAt)}
               </Text>
             </Box>
           )
