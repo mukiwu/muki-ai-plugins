@@ -25,6 +25,7 @@ import {
   afterCheck,
   claim,
   clock,
+  dateTime,
   labelOf,
   byPreference,
   describeLatest,
@@ -242,7 +243,7 @@ export const register: Register = (on) => {
             </Box>
           )
         })}
-        <Text dimColor>{state.lastCheck ? `${clock(state.lastCheck)} 查過` : ''}</Text>
+        <Text dimColor>{state.lastCheck ? `上次更新時間 ${dateTime(state.lastCheck)}` : ''}</Text>
       </Box>
     )
   })

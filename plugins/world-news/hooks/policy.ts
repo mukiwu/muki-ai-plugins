@@ -243,6 +243,13 @@ export const claim = (state: State): { state: State; headline: Headline | undefi
 
 export const labelOf = (id: string) => CATEGORIES.find((c) => c.id === id)?.label ?? '?'
 
+/** `YYYY-MM-DD HH:mm` in local time. */
+export const dateTime = (ms: number): string => {
+  const d = new Date(ms)
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`
+}
+
 export const clock = (ms: number): string => {
   const d = new Date(ms)
   return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`

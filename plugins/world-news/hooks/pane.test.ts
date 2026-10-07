@@ -14,7 +14,7 @@ const headline = {
 describe('新聞側邊欄', () => {
   test('畫出標題，標題是連結', async ($, on) => {
     mock.clock(on, { now: 0 })
-    mock.store(on, { state: { categories: ['1'], latest: [headline], lastCheck: 0 } })
+    mock.store(on, { state: { categories: ['1'], latest: [headline], lastCheck: new Date(2026, 9, 7, 9, 5).getTime() } })
     on('session.start', (_$, e) => ({ cwd: e.cwd }))
     on('command.register', (_$, e) => ({ value: { command: e.name } }))
     on('ui.status', () => ({ value: undefined }))
@@ -35,5 +35,6 @@ describe('新聞側邊欄', () => {
     } as never)
     expect(await ui.findAll({ text: /世衛/ })).not.toEqual([])
     expect(await ui.findAll({ type: 'Link' })).not.toEqual([])
+    expect(await ui.findAll({ text: '上次更新時間 2026-10-07 09:05' })).not.toEqual([])
   })
 })
