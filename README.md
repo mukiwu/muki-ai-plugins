@@ -127,3 +127,9 @@ Taiwan's top news pinned under your Claude Code prompt
 ## License
 
 MIT
+
+## Sponsor
+
+If this project helps you, consider sponsoring to support ongoing development
+
+<a href="https://sponser.muki.tw"><img src="https://sponser.muki.tw/badge/sponsor-button.png" alt="贊助 MUKI" width="240"></a>

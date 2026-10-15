@@ -125,3 +125,9 @@ npx skills add mukiwu/muki-ai-plugins
 ## 授權
 
 MIT
+
+## 贊助
+
+如果這個專案對你有幫助，歡迎贊助支持我持續開發
+
+<a href="https://sponser.muki.tw"><img src="https://sponser.muki.tw/badge/sponsor-button.png" alt="贊助 MUKI" width="240"></a>
