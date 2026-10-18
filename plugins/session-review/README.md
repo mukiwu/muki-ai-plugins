@@ -41,7 +41,7 @@ With no path it uses the git root of the current directory (or the directory its
 | **How you talk to AI** | Patterns for building a feature from zero and for debugging, each backed by verbatim quotes, plus the moments you got frustrated |
 | **Quote library** | Filterable, searchable cards of your own words |
 | **Skills to build** | Routines that repeat across sessions, with evidence counts, what the skill would do, a ready-to-copy `SKILL.md` draft, and whether it belongs in **user** or **project** scope |
-| **Environment fixes** | Checks each repo for guardrails (lint, typecheck, tests, pre-commit, CI), flags rules the AI keeps breaking anyway, and files every suggestion under the layer it belongs in: an automated check, CODING_STANDARDS.md, CLAUDE.md, or a skill |
+| **Environment fixes** | Checks each repo for guardrails (lint, typecheck, tests, pre-commit, CI), flags rules the AI keeps breaking anyway, and files every suggestion under the layer it belongs in: an automated check, CODING_STANDARDS.md, docs/lore, CLAUDE.md, or a skill |
 | **Skills to remove** | Installed skills with zero uses in these sessions *and* no related request anywhere in your messages, grouped into remove / not needed in this project / keep but fix the description / wait and see, with the exact removal command for each |
 
 ## How It Works

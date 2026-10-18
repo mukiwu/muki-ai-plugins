@@ -122,6 +122,7 @@ python3 <這個 skill 的目錄>/scripts/collect.py --out <scratchpad>/session-r
 |---|---|
 | 機械性的錯，有固定樣式可以比對（日期格式、禁用的 API、import 寫法、檔案位置） | 自動檢查：repo 的 lint 規則、pre-commit hook 或 CI job，優先選這個 |
 | 要判斷的事（跨檔一致、符合周圍寫法、測試有沒有貼實作細節） | repo 的 `CODING_STANDARDS.md`，給負責審查的 AI 讀，不給寫程式的 AI |
+| 這個 repo 的業務規則、踩過的坑、決策理由，光讀程式碼看不出來 | repo 的 `docs/lore/`（lore plugin），動工前查、commit 前對照；沒裝 lore 就寫進 repo 的 docs |
 | 每個 session 都要知道的協作習慣（回覆語言、問句不動手、只改點名的範圍） | CLAUDE.md 或它引用的 rules 檔 |
 | 重複出現、有固定步驟的流程 | skill（第 3 步的第 5 項） |
 
@@ -130,6 +131,7 @@ python3 <這個 skill 的目錄>/scripts/collect.py --out <scratchpad>/session-r
 **找沒有作用的規則**
 
 - 讀使用者的 CLAUDE.md 和它 `@` 引用的檔案，找出寫了但對話裡 AI 照樣違反的規則，這類要換更強的手段（自動檢查或 hook）
+- 找出 repo 的 CLAUDE.md 裡其實屬於 lore 的段落（單一功能的業務規則、踩坑紀錄、決策細節），建議搬進 `docs/lore/`，CLAUDE.md 只留紅線與導覽
 - 找出這段期間從來沒派上用場的段落，例如列了一堆 skill 的路由表但多數 0 次，建議縮短或改成需要時才讀
 - 每條都附證據：違反的原話與 session id，或 0 次的統計
 
