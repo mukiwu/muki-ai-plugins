@@ -43,7 +43,7 @@ python3 <這個 skill 的目錄>/scripts/collect.py --out <scratchpad>/session-r
 
 ### 3. 分析內容
 
-報告要回答這六件事，細節見 [references/report-spec.md](references/report-spec.md)
+報告要回答這七件事，細節見 [references/report-spec.md](references/report-spec.md)
 
 1. **Skill 使用排行**：依次數排序的長條圖，可切換全部、使用者手動、AI 自己叫，點長條看說明、session 數、所屬專案，並對照使用者 CLAUDE.md 裡宣稱的工作流程，列出實際有沒有在用
 2. **收斂後的工作流程**：先載入 `/diagram-design`，沒裝就改照 [references/diagram-fallback.md](references/diagram-fallback.md)，至少畫兩張（功能開發的泳道圖、除錯流程圖），搭配文字卡片逐步說明，再加時間軸、每日訊息數等圖表，不要只用一種呈現方式
@@ -51,6 +51,7 @@ python3 <這個 skill 的目錄>/scripts/collect.py --out <scratchpad>/session-r
 4. **除錯時怎麼溝通**：同上，另外整理讓使用者不耐煩的時刻，這些通常是 CLAUDE.md 該補的規則
 5. **可做成客製 skill 的重複流程**：每個建議要有出現次數與 session 數當證據、它會做什麼、SKILL.md 草稿，以及建議放 user 還是 project scope 和理由
 6. **建議移除的 skill**：照第 5 步的標準判斷，每個都要寫出判斷理由與移除方式
+7. **環境可以改進的地方**：照第 6 步檢查守門機制、規則放對層沒有、沒作用的規則，每條建議都要標出該放哪一層
 
 ### 4. 判斷 user 或 project scope
 
@@ -99,8 +100,40 @@ python3 <這個 skill 的目錄>/scripts/collect.py --out <scratchpad>/session-r
 - user scope：刪掉 `~/.claude/skills/<name>`；如果是 symlink（`symlink_to` 有值），只刪捷徑，並提醒正本在哪個 repo，要不要一起刪、要不要 commit
 - project scope：刪掉 `<專案>/.claude/skills/<name>` 並 commit，提醒同事也會少掉這個 skill
 - plugin：沒辦法只刪 plugin 裡的某一個 skill，同一個 plugin 的 skill 全部都符合時才建議 `/plugin uninstall <plugin>@<marketplace>`，只有部分符合就寫明哪幾個用不到、其他仍有在用
+- 用 `npx skills add` 裝的（名字出現在 `~/.agents/.skill-lock.json`）：建議 `npx skills remove -g <name>`，它會一起清掉其他 AI 工具（Codex、Gemini、Cursor 等）的連結與安裝紀錄，只刪 `~/.claude/skills` 的捷徑會留下殘骸
 
-### 6. 做成 HTML 並發布
+### 6. 找環境可以改進的地方
+
+這一步看的是 AI 工作的環境，不是使用者的習慣：同一個錯誤 AI 犯了兩次、同一句話使用者講了兩次，代表環境少了什麼
+
+**檢查守門機制**
+
+對 session 裡有動到的每個 repo 檢查：
+
+- `package.json`（或對應語言的建置檔）有沒有 lint、typecheck、test 指令
+- 有沒有 pre-commit hook（`.husky/`、`lefthook.yml`、`.pre-commit-config.yaml`、`.git/hooks/`）
+- CI workflow 有沒有跑上面那些指令
+
+三樣都沒有，本身就是一條發現；對話裡出現 CI 又失敗、push 後才發現壞掉這類抱怨時，要把原話附上當證據
+
+**每條建議先分類，再決定放哪**
+
+| 錯誤的性質 | 放哪 |
+|---|---|
+| 機械性的錯，有固定樣式可以比對（日期格式、禁用的 API、import 寫法、檔案位置） | 自動檢查：repo 的 lint 規則、pre-commit hook 或 CI job，優先選這個 |
+| 要判斷的事（跨檔一致、符合周圍寫法、測試有沒有貼實作細節） | repo 的 `CODING_STANDARDS.md`，給負責審查的 AI 讀，不給寫程式的 AI |
+| 每個 session 都要知道的協作習慣（回覆語言、問句不動手、只改點名的範圍） | CLAUDE.md 或它引用的 rules 檔 |
+| 重複出現、有固定步驟的流程 | skill（第 3 步的第 5 項） |
+
+能寫成自動檢查就不要寫成文字規則；寫程式的 AI 手上事情最多，規範盡量交給審查那一關
+
+**找沒有作用的規則**
+
+- 讀使用者的 CLAUDE.md 和它 `@` 引用的檔案，找出寫了但對話裡 AI 照樣違反的規則，這類要換更強的手段（自動檢查或 hook）
+- 找出這段期間從來沒派上用場的段落，例如列了一堆 skill 的路由表但多數 0 次，建議縮短或改成需要時才讀
+- 每條都附證據：違反的原話與 session id，或 0 次的統計
+
+### 7. 做成 HTML 並發布
 
 - 有 Artifact 工具時先跑它的 quickstart（intent 用 other）取得頁面規範，圖用 `/diagram-design` 的色票與規則，沒裝就用 [references/diagram-fallback.md](references/diagram-fallback.md) 內建的同一套
 - 版型與互動照 [references/report-spec.md](references/report-spec.md) 的頁面結構做，色票與字體沿用 diagram-design（或 fallback 裡的 token 表），整頁維持同一套 token
@@ -109,7 +142,7 @@ python3 <這個 skill 的目錄>/scripts/collect.py --out <scratchpad>/session-r
 - 動手寫版面前先讀 report-spec.md 的版面防呆規則
 - 發布前用 node 檢查一次內嵌 script 能不能解析
 
-### 7. 發布前的版面檢查（不能跳過）
+### 8. 發布前的版面檢查（不能跳過）
 
 ```bash
 python3 <這個 skill 的目錄>/scripts/check_layout.py <報告.html> --shots <scratchpad>/session-review/shots
