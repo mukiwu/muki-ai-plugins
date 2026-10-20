@@ -31,7 +31,7 @@ docs/lore/
 - `updated:`——最後一次確認這條還成立的日期（ISO 格式）。
 - `status:`——`active`｜`resolved`｜`obsolete`。
 
-## 七個 skill
+## 八個 skill
 
 | Skill | 什麼時候會觸發 |
 |-------|----------------|
@@ -41,11 +41,12 @@ docs/lore/
 | **lore-guard** | commit／PR 前用 diff 對照 lore——把改到的檔案透過 `code:` 連結反查對應 entry，回報這次改動有沒有踩到已記錄的商業規則或坑。 |
 | **lore-maintain** | 隨 lore 長大做整理——找出過期、重複、錯誤的 entry，檢查 `code:` 連結與索引還對不對，清掉沒用的內容。 |
 | **lore-check** | 檢查 lore 到底有沒有在幫你——唯讀體檢，逐面向看覆蓋率、連結健康、新鮮度、entry 品質、採納率，再把要修的交給 lore-maintain／lore-capture。 |
+| **lore-eval** | 量測 lore 到底抓不抓得到錯——把過去踩過的錯（真實 commit 或小型合成 diff）交給不知道答案的 lore-guard 重跑一次，回報這次的抓到率與誤報數，抓不到的交給 lore-maintain。 |
 | **lore-ul** | 建立與對齊通用語言——對話出現模糊詞、同詞異義、code 命名跟你的用詞對不上時把詞煉成詞條；也能替還沒有詞彙表的專案從零 bootstrap 一份。寫進 `docs/lore/glossary.md`；專案根目錄已有 `CONTEXT.md` 時則以它為準、不另建一份。 |
 
 ## 閉環
 
-七個 skill 串成一個迴圈，讓 lore 活著，而不是像多數文件一樣慢慢爛掉：
+八個 skill 串成一個迴圈，讓 lore 活著，而不是像多數文件一樣慢慢爛掉：
 
 1. **capture** 在你學到的當下把知識寫下來（SessionStart hook 會在對的時機提醒）。
 2. **consult** 在下一次做功能、修 bug 前把它讀回來——知識真的影響工作，而不是躺在那裡。
@@ -117,6 +118,10 @@ npx skills add mukiwu/muki-ai-plugins
 採納率是真實使用的訊號。當 `lore-consult` 或 `lore-guard` 撈出一條 entry、或 `lore-maintain` 提一個動作，結果會（best-effort）記進 `docs/lore/.lore-feedback.jsonl`——`heeded`、`redundant` 或 `ignored`，還可以帶一句為什麼。一直被撈出來、卻從沒被採用的 entry 會浮上來變成複查候選。這個 log 放在你的專案裡，預設 gitignore。
 
 每次體檢也會更新一個 gitignore 的 `.lore-last-check` 時間戳；超過約 30 天沒體檢時，SessionStart hook 會主動提醒再跑一次，健康迴圈不用靠任何人記得。
+
+## Eval
+
+`lore-eval` 把 lore 變成一套測驗集。每一條坑都是因為某次改動踩到才記下來的，那次改動就是一道題目：交給不知道答案的 `lore-guard` 重跑，看這條 entry 抓不抓得到。抓不到分成兩種：*撈不到*（guard 根本沒看這條，多半是 `code:` 連結不對）和*判斷錯*（看了卻沒發現違反，多半是內文寫得太模糊）。題目放在 `docs/lore/.lore-eval/cases.jsonl` 並進 git，每次的分數記在 gitignore 的 `results.jsonl`，改寫 entry 之後就知道是真的變好還是變差。
 
 ## 授權
 

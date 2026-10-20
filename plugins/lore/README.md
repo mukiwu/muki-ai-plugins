@@ -33,7 +33,7 @@ Each entry carries a one-line, greppable meta directly under its heading:
 - `updated:` — ISO date the entry was last verified.
 - `status:` — `active` | `resolved` | `obsolete`.
 
-## The Seven Skills
+## The Eight Skills
 
 | Skill | When it triggers |
 |-------|------------------|
@@ -43,11 +43,12 @@ Each entry carries a one-line, greppable meta directly under its heading:
 | **lore-guard** | Check a diff against recorded lore before commit / PR — maps changed files to entries via their `code:` links and reports any business rule or pitfall the change violates. |
 | **lore-maintain** | Clean up as lore grows — find stale, duplicate, or wrong entries, check that code links and the index still hold, and prune obsolete content. |
 | **lore-check** | Audit whether the lore is actually helping — a read-only health report across coverage, link health, freshness, entry quality, and adoption, then hands the fixes to lore-maintain / lore-capture. |
+| **lore-eval** | Measure whether lore actually catches mistakes — replays past violations (real commits or small synthetic diffs) against a blind lore-guard pass, reports the catch rate and false alarms per run, and hands the misses to lore-maintain. |
 | **lore-ul** | Build and align the shared vocabulary — when a conversation hits a vague or overloaded term, when code names disagree with how you talk, or to bootstrap a glossary from scratch. Writes `docs/lore/glossary.md`, or defers to a root `CONTEXT.md` when the project already keeps its vocabulary there. |
 
 ## The Loop
 
-The seven skills close a loop that keeps the lore alive instead of rotting like most docs:
+The eight skills close a loop that keeps the lore alive instead of rotting like most docs:
 
 1. **capture** writes knowledge down as you learn it (the SessionStart hook nudges at the right moments).
 2. **consult** reads it back before the next feature or bug fix — so it actually shapes the work.
@@ -75,7 +76,7 @@ For Codex, Cursor, Gemini CLI, and other agents:
 npx skills add mukiwu/muki-ai-plugins
 ```
 
-When the installer lists the skills, pick all seven `lore-*` skills. This installs the skills only; the session-start reminder and pre-commit check hooks come with the Claude Code plugin.
+When the installer lists the skills, pick all eight `lore-*` skills. This installs the skills only; the session-start reminder and pre-commit check hooks come with the Claude Code plugin.
 
 Then, in the project you want to track:
 
@@ -119,6 +120,10 @@ Step 1 is the one that matters — skip it and Claude Code keeps serving the cac
 Adoption is the real-use signal. When `lore-consult` or `lore-guard` surfaces an entry and when `lore-maintain` proposes an action, the outcome is logged (best-effort) to `docs/lore/.lore-feedback.jsonl` — `heeded`, `redundant`, or `ignored`, with an optional note saying why. Entries that get surfaced again and again but never heeded bubble up as review candidates. The log lives in your project and is gitignored by default.
 
 Each run also refreshes a gitignored `.lore-last-check` stamp; when it's more than ~30 days old, the SessionStart hook suggests a re-check, so the health loop keeps running without anyone remembering to.
+
+## Eval
+
+`lore-eval` turns lore into a test set. Every pitfall was recorded because a change once broke it, so that change becomes a question: replay it against a fresh `lore-guard` that doesn't know the answer, and see whether the entry gets caught. Misses split into *retrieval* (the guard never looked at the entry, usually a bad `code:` link) and *judgement* (it looked but didn't see the violation, usually a vague body). Cases live in `docs/lore/.lore-eval/cases.jsonl` and are committed; per-run scores go to a gitignored `results.jsonl`, so you can tell whether a reword actually helped.
 
 ## License
 

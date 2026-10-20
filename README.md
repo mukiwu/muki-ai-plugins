@@ -10,7 +10,7 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin marketpla
 |--------|-------------|
 | [figma-visual-reviewer](plugins/figma-visual-reviewer/) | Visual regression testing — compare Figma designs against live web pages |
 | [review-tests](plugins/review-tests/) | Test review doctor — diagnose a test file for blind spots, output a self-contained HTML report |
-| [lore](plugins/lore/) | Project lore — scaffold, consult, capture, guard, maintain, health-check, and language-align the implicit knowledge your codebase can't show |
+| [lore](plugins/lore/) | Project lore — scaffold, consult, capture, guard, maintain, health-check, eval, and language-align the implicit knowledge your codebase can't show |
 | [session-review](plugins/session-review/) | AI session review — turn every Claude Code and Codex session of a project into an interactive report on how you work with AI, and which routines to make into skills |
 | [jev-search](https://github.com/mukiwu/jev-search-mcp) | Web search through Jev Search: answers the built-in WebSearch with Jev-ranked results and falls back to the built-in tool when Jev cannot answer |
 | [hyday-pet](plugins/hyday-pet/) | Virtual pet above your prompt: the work Claude does decides its species, tool errors make it sick, plus mini games and a shop |
@@ -70,7 +70,7 @@ Reads an existing test file, finds blind spots, and produces a self-contained HT
 
 Scaffold, consult, capture, guard, maintain, health-check, and language-align project lore — the implicit knowledge your codebase carries but can't show on its own.
 
-- `lore-init` / `lore-consult` / `lore-capture` / `lore-guard` / `lore-check` / `lore-maintain` / `lore-ul` — seven skills covering the full lifecycle
+- `lore-init` / `lore-consult` / `lore-capture` / `lore-guard` / `lore-check` / `lore-eval` / `lore-maintain` / `lore-ul` — eight skills covering the full lifecycle
 - Stores business rules, pitfalls, API maps, a shared glossary, and the *why* behind decisions under `docs/lore/`
 - Consult before planning or bug-fixing; capture what you learn as you go; guard your diff against recorded lore before commit
 - Mark over delete — outdated-but-once-true knowledge keeps its lesson
