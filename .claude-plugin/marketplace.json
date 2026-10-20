@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "muki-ai-plugins",
-  "description": "Muki's Claude Code plugins — project lore knowledge base, test quality review, visual regression testing, AI session review, Jev-powered web search, a virtual pet that grows from your Claude Code work, and world news under your prompt.",
+  "description": "Muki's Claude Code plugins — project lore knowledge base, test quality review, code review with sub-agent voting, visual regression testing, AI session review, Jev-powered web search, a virtual pet that grows from your Claude Code work, and world news under your prompt.",
   "owner": {
     "name": "Muki Wu"
   },
@@ -16,6 +16,12 @@
       "name": "review-tests",
       "description": "Test review doctor — diagnose an existing test file for blind spots and output a self-contained HTML report. Read-only; never modifies code.",
       "source": "./plugins/review-tests",
+      "category": "testing"
+    },
+    {
+      "name": "review-code",
+      "description": "Code review across standards, spec, and bugs in parallel sub-agents; important findings are confirmed by independent votes. Read-only; never modifies code.",
+      "source": "./plugins/review-code",
       "category": "testing"
     },
     {

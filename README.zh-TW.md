@@ -8,6 +8,7 @@
 |--------|------|
 | [figma-visual-reviewer](plugins/figma-visual-reviewer/) | 視覺回歸測試 — 比對 Figma 設計稿與實際網頁 |
 | [review-tests](plugins/review-tests/) | 測試體檢 — 找出測試盲點，產出 self-contained 的 HTML 報告 |
+| [review-code](plugins/review-code/) | 程式碼審查 — 規範、需求、bug 三個角度平行審查，重要發現經獨立子代理投票確認 |
 | [lore](plugins/lore/) | 專案 lore — 建立、查閱、記錄、守門、維護、體檢、評測程式碼講不出來的隱性知識，並對齊團隊的通用語言 |
 | [session-review](plugins/session-review/) | AI session 回顧：把專案裡所有 Claude Code 與 Codex 對話整理成互動報告，看你怎麼跟 AI 協作、哪些流程值得做成 skill |
 | [jev-search](https://github.com/mukiwu/jev-search-mcp) | Jev 網頁搜尋：內建 WebSearch 改由 Jev 回答並排序，Jev 答不出來自動退回內建 |
@@ -23,6 +24,7 @@
 # 安裝個別 plugin
 /plugin install figma-visual-reviewer
 /plugin install review-tests
+/plugin install review-code
 /plugin install lore
 /plugin install session-review
 /plugin install jev-search
@@ -63,6 +65,17 @@ npx skills add mukiwu/muki-ai-plugins
 - 只診斷，補測試交給 TDD
 
 [詳細說明 →](plugins/review-tests/README.zh-TW.md)
+
+### review-code
+
+對照基準點的 diff，從三個角度各派一個子代理審查，重要的發現再交給獨立的子代理投票確認，全程唯讀，不碰你的程式碼
+
+- 規範、需求、bug 平行審查，分開報告
+- 每條發現標上 Important、Nit 或 Pre-existing
+- 每條重要發現由兩個新的子代理投票，意見分歧再加第三票
+- 再審時只看新的 diff，最多審三輪
+
+[詳細說明 →](plugins/review-code/README.zh-TW.md)
 
 ### lore
 

@@ -10,6 +10,7 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin marketpla
 |--------|-------------|
 | [figma-visual-reviewer](plugins/figma-visual-reviewer/) | Visual regression testing — compare Figma designs against live web pages |
 | [review-tests](plugins/review-tests/) | Test review doctor — diagnose a test file for blind spots, output a self-contained HTML report |
+| [review-code](plugins/review-code/) | Code review — standards, spec, and bugs in parallel sub-agents, important findings confirmed by independent votes |
 | [lore](plugins/lore/) | Project lore — scaffold, consult, capture, guard, maintain, health-check, eval, and language-align the implicit knowledge your codebase can't show |
 | [session-review](plugins/session-review/) | AI session review — turn every Claude Code and Codex session of a project into an interactive report on how you work with AI, and which routines to make into skills |
 | [jev-search](https://github.com/mukiwu/jev-search-mcp) | Web search through Jev Search: answers the built-in WebSearch with Jev-ranked results and falls back to the built-in tool when Jev cannot answer |
@@ -25,6 +26,7 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin marketpla
 # Install individual plugins
 /plugin install figma-visual-reviewer
 /plugin install review-tests
+/plugin install review-code
 /plugin install lore
 /plugin install session-review
 /plugin install jev-search
@@ -65,6 +67,17 @@ Reads an existing test file, finds blind spots, and produces a self-contained HT
 - Diagnose only — fixes are left to TDD
 
 [Read more →](plugins/review-tests/README.md)
+
+### review-code
+
+Reviews the diff since a fixed point along three axes, each in its own sub-agent, then confirms important findings with independent votes — read-only, never touches your code.
+
+- Standards, spec, and bugs reviewed in parallel, reported separately
+- Findings labelled Important, Nit, or Pre-existing
+- Two fresh sub-agents vote on each important finding; a split gets a third
+- Re-reviews only look at the new diff and stop after three rounds
+
+[Read more →](plugins/review-code/README.md)
 
 ### lore
 
