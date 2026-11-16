@@ -26,7 +26,7 @@ description: 程式碼審查（code review / review a branch, PR, commit, or wor
 
 ## 輸入
 
-- **基準點**：commit SHA、分支、tag、`main`、`HEAD~3` 都可以；使用者沒給就先問，不要自己猜
+- **基準點**：commit SHA、分支、tag、`main`、`HEAD~3` 都可以；使用者沒給就先問，不要自己猜。要審的是還沒 commit 的改動時，基準點是 `HEAD`
 - **需求來源**：可以直接給路徑；沒給就照第 2 步去找
 - `--quick`：跳過投票，只跑三個角度的審查，適合小改動或還在來回修的時候
 
@@ -37,6 +37,8 @@ description: 程式碼審查（code review / review a branch, PR, commit, or wor
 - 先用 `git rev-parse <基準點>` 確認基準點存在
 - 用 `git diff <基準點>...HEAD`（三個點，對照分岔點）取得 diff，用 `git log <基準點>..HEAD --oneline` 列出 commit
 - diff 是空的就在這裡停下來告訴使用者，不要派子代理去審空的東西
+- 待審內容包含還沒 commit 的改動時，先固定成一份快照：把 `git diff <基準點>` 與未追蹤新檔的內容存成 repo 外的一個 diff 檔，之後給子代理的都是這個檔的路徑，不是 diff 指令
+- 快照建立後到所有子代理回報前，待審的檔案維持不動，發現等全部回報後一次處理。子代理會讀工作目錄對照，檔案在審查途中變動，它的行號與結論就對不上快照；中途一定要改時，改完重新建立快照，從這一步重來
 
 ### 2. 找需求來源
 
@@ -72,7 +74,7 @@ description: 程式碼審查（code review / review a branch, PR, commit, or wor
 
 ### 4. 三個角度平行審查
 
-在同一則訊息裡派三個 `general-purpose` 子代理，彼此看不到對方的 context。每個子代理的 prompt 都要包含 diff 指令、commit 清單，以及下面的共同要求：
+在同一則訊息裡派三個 `general-purpose` 子代理，彼此看不到對方的 context。每個子代理的 prompt 都要包含 diff 指令（第 1 步建立了快照時改給快照檔的路徑）、commit 清單，以及下面的共同要求：
 
 - 每條發現寫明檔案與行號、引用相關程式碼、說明為什麼是問題、修正方向
 - 每條標上類別：
@@ -95,7 +97,7 @@ description: 程式碼審查（code review / review a branch, PR, commit, or wor
 用 `--quick` 時跳過這一步，並在報告開頭註明沒有經過投票
 
 - 對每條 `Important` 發現，派 2 個新的 `general-purpose` 子代理獨立判斷，可以平行派出
-- 給投票子代理的只有：這條發現的描述、檔案與行號、diff 指令；不給原本子代理的推理過程，也不告訴它別人怎麼投
+- 給投票子代理的只有：這條發現的描述、檔案與行號、diff 指令或快照檔的路徑；不給原本子代理的推理過程，也不告訴它別人怎麼投
 - 要求它自己讀程式碼後回答：成立、不成立或無法判斷，附上一句依據
 - 兩票都成立就保留；兩票都不成立就丟掉；意見分歧時再派第 3 個子代理決定
 - 投票子代理指出原本的描述有誤但問題仍成立時，用修正後的描述

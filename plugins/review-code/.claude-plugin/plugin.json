@@ -1,7 +1,7 @@
 {
   "name": "review-code",
   "description": "Code review across three axes — standards, spec, and bugs — each in its own sub-agent, with important findings confirmed by independent sub-agent votes before they reach the report. Read-only; never modifies code.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": {
     "name": "Muki Wu"
   },

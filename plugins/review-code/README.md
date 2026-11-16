@@ -26,6 +26,8 @@ review-code HEAD~3 --quick
 
 Give it a fixed point (commit, branch, tag). `--quick` skips the voting step for small changes or mid-iteration rounds.
 
+Reviewing work you haven't committed yet? Use `HEAD` as the fixed point. The skill freezes the pending changes into a diff file first, and the files under review stay untouched until every sub-agent has reported.
+
 ## How it works
 
 1. **Three axes in parallel**
